@@ -1,15 +1,17 @@
-Logic 逻辑
-Proof Assistants 证明助理
+Logic 逻辑学
+Proof Assistants 计算机辅助证明
 Functional Programming 函数式编程
-Program Verification 程序验证
+Program Verification 软件形式化验证
 Type System 类型系统
 Enum 枚举
 Boolean 布尔
-Case Analysis 案例分析
-Notation 记号法
-Case 案例
+Case Analysis 分类讨论
+Notation 记号
+Case 分类
+Pair 序对
 List 列表
 Formal 形式化
+Bag 包
 Option 可选值
 Pair 二元组
 Partial Application 偏应用
