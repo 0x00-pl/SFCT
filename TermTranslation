@@ -12,3 +12,11 @@ Pair 序对
 List 列表
 Formal 形式化
 Bag 包
+Option 可选值
+Pair 二元组
+Partial Application 偏应用
+Curry 柯里化
+Filter 过滤
+Map 映射
+Fold 归约
+Tactic 策略
