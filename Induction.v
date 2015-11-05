@@ -113,21 +113,17 @@ Proof.
 (* ###################################################################### *)
 (** * 用归纳法来证明 *)
 
-(** We proved in the last chapter that [0] is a neutral element
-    for [+] on the left using a simple argument.  The fact that it is
-    also a neutral element on the _right_... *)
+(** 我们在上一章简单地证明了[0]对于[+]是一个左单位元。实际上它也是个右单位元…… *)
 
 Theorem plus_0_r_firsttry : forall n:nat,
   n + 0 = n.
 
-(** ... cannot be proved in the same simple way.  Just applying
-  [reflexivity] doesn't work: the [n] in [n + 0] is an arbitrary
-  unknown number, so the [match] in the definition of [+] can't be
-  simplified.  *)
+(** …… 它不能用同样简单的方式证明。只用[reflexivity]不起作用：这里的[n]在[n + 0]
+  中是一个任意的未知数，所以[+]的定义中的[match]不能被化简。*)
 
 Proof.
   intros n.
-  simpl. (* Does nothing! *)
+  simpl. (* 毫无变化！ *)
 Abort.
 
 (** *** *)
@@ -144,9 +140,9 @@ Theorem plus_0_r_secondtry : forall n:nat,
 Proof.
   intros n. destruct n as [| n'].
   Case "n = 0".
-    reflexivity. (* so far so good... *)
+    reflexivity. (* 目前看上去还没什么问题…… *)
   Case "n = S n'".
-    simpl.       (* ...but here we are stuck again *)
+    simpl.       (* ……但是在这里我们又卡住了 *)
 Abort.
 
 (** *** *)
@@ -192,7 +188,7 @@ Proof.
 Theorem minus_diag : forall n,
   minus n n = 0.
 Proof.
-  (* WORKED IN CLASS *)
+  (* 课堂任务 *)
   intros n. induction n as [| n'].
   Case "n = 0".
     simpl. reflexivity.
