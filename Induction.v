@@ -90,7 +90,7 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* 在这里填写代码 *) Admitted.
+  (* 请在这里填写代码 *) Admitted.
 (** [] *)
 
 (** There are no hard and fast rules for how proofs should be
