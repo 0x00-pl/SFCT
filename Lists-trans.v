@@ -79,13 +79,7 @@ Proof.
 Abort.
 
 (** *** *)
-(** We have to expose the structure of [p] so that [simpl] can
-    perform the pattern match in [fst] and [snd].  We can do this with
-    [destruct].
-
-    Notice that, unlike for [nat]s, [destruct] doesn't generate an
-    extra subgoal here.  That's because [natprod]s can only be
-    constructed in one way.  *)
+(** 我们必须要像Coq展示p的具体结构，这样simpl才能对 fst 和 snd 做模式匹配。 通过destruct可以达到这个目的。需要注意的是，不像自然数，destruct不会生成一个额外的子目标，因为只有一种方式可以构造数对 *)
 
 Theorem surjective_pairing : forall (p : natprod),
   p = (fst p, snd p).
@@ -107,52 +101,39 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** * Lists of Numbers *)
+(** * 数的列表 *)
 
-(** Generalizing the definition of pairs a little, we can
-    describe the type of _lists_ of numbers like this: "A list is
-    either the empty list or else a pair of a number and another
-    list." *)
+(** 通过稍稍推广一下我们对数对的定义，我们像可以这样描述数的列表：『一个列表要么是空的，不然就应该是一个数和另一个列表的对子』 *)
 
 Inductive natlist : Type :=
   | nil : natlist
   | cons : nat -> natlist -> natlist.
 
-(** For example, here is a three-element list: *)
+(** 比如说，这是一个有三个元素的列表 *)
 
 Definition mylist := cons 1 (cons 2 (cons 3 nil)).
 
 
 (** *** *)
-(** As with pairs, it is more convenient to write lists in
-    familiar programming notation.  The following two declarations
-    allow us to use [::] as an infix [cons] operator and square
-    brackets as an "outfix" notation for constructing lists. *)
+(** 结项对子一样，用我们已经熟悉的编程的记号来写下一个列表会显得更为方便。下面两个声明让我们可以用『::』来作中缀cons操作符，用方括号来做『外缀』符号来构造列表 *)
 
 Notation "x :: l" := (cons x l) (at level 60, right associativity).
 Notation "[ ]" := nil.
 Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
 
-(** It is not necessary to fully understand these declarations,
-    but in case you are interested, here is roughly what's going on.
-
-    The [right associativity] annotation tells Coq how to parenthesize
-    expressions involving several uses of [::] so that, for example,
-    the next three declarations mean exactly the same thing: *)
+(** 完全理解这些声明是不必要的，但是假使你感兴趣的话，接下来我会粗略地介绍到底发生了什么
+    right associativity 告诉 Coq 当遇到多个符号时怎么给表达式加括号。这样下面三个
+    声明做的就是同一件事 *)
 
 Definition mylist1 := 1 :: (2 :: (3 :: nil)).
 Definition mylist2 := 1 :: 2 :: 3 :: nil.
 Definition mylist3 := [1;2;3].
 
-(** The [at level 60] part tells Coq how to parenthesize
-    expressions that involve both [::] and some other infix operator.
-    For example, since we defined [+] as infix notation for the [plus]
-    function at level 50,
+(** [at level 60]这部分告诉Coq当遇到表达式还有其他中缀符号的时应该如何加括号。举个例子，
+    我们已经定义了 [+] 作为 [plus] 的中缀符号，它的level是50。
 Notation "x + y" := (plus x y)  
                     (at level 50, left associativity).
-   The [+] operator will bind tighter than [::], so [1 + 2 :: [3]]
-   will be parsed, as we'd expect, as [(1 + 2) :: [3]] rather than [1
-   + (2 :: [3])].
+    [+] 将会比 [::] 结合的更近，所以 [1 + 2 :: [3]] 会被解析成 [(1 + 2) :: [3]]，就和我们期待的一样，而不是 [1 + (2::[3])]
 
    (By the way, it's worth noting in passing that expressions like "[1
    + 2 :: [3]]" can be a little confusing when you read them in a .v
