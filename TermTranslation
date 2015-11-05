@@ -1,4 +1,4 @@
-Logic 逻辑学
+Logic 逻辑
 Proof Assistants 计算机辅助证明
 Functional Programming 函数式编程
 Program Verification 软件形式化验证
@@ -11,7 +11,7 @@ Case 分类
 Pair 序对
 List 列表
 Formal 形式化
-Bag 包
+Bag 背包
 Option 可选值
 Pair 二元组
 Partial Application 偏应用
@@ -26,3 +26,22 @@ apply 应用
 inversion 翻转
 Hypothesis 前提
 destruct 销毁
+Proposition 命题
+Proof 证明
+Parameterized 参数化
+Relation 关系
+Syntax 语法
+Evaluate 求值
+Tacticals 高阶策略
+Closure 闭包
+Reflexive 自反
+Transitive 传递
+Induction 归纳
+Trusted Computing Base 被信任计算根基
+Object 对象
+Quantification 量化
+Exists 存在
+Implication 蕴含
+Iff 当且仅当
+Falsehood 矛盾式
+Truth 真值
