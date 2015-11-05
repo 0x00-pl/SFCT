@@ -20,6 +20,9 @@ Filter 过滤
 Map 映射
 Fold 归约
 Tactic 策略
-FILL IN HERE 请在这里填写代码
-neutral element == identity element 单位元
-WORKED IN CLASS 课堂任务
+neutral element 单位元
+identity element 单位元
+apply 应用
+inversion 翻转
+Hypothesis 前提
+destruct 销毁
