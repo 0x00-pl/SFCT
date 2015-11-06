@@ -133,26 +133,14 @@ Definition mylist3 := [1;2;3].
     我们已经定义了 [+] 作为 [plus] 的中缀符号，它的level是50。
 Notation "x + y" := (plus x y)  
                     (at level 50, left associativity).
-    [+] 将会比 [::] 结合的更近，所以 [1 + 2 :: [3]] 会被解析成 [(1 + 2) :: [3]]，就和我们期待的一样，而不是 [1 + (2::[3])]
+    [+] 将会比 [::] 结合的更近，所以 [1 + 2 :: [3]] 会被解析成 [(1 + 2) :: [3]]，就和我们期待的一样，而不是 [1 + (2 :: [3])]
 
-   (By the way, it's worth noting in passing that expressions like "[1
-   + 2 :: [3]]" can be a little confusing when you read them in a .v
-   file.  The inner brackets, around 3, indicate a list, but the outer
-   brackets, which are invisible in the HTML rendering, are there to
-   instruct the "coqdoc" tool that the bracketed part should be
-   displayed as Coq code rather than running text.)
+   (值得注意的是，当你在.v文件中看到"[1 + (2 :: [3])]"这样的记号会感到非常异或。里面的那个框住3的方括号，指示了其是一个列表。但是外面那个方括号，在HTML中是看不到的，是用来告诉"coqdoc"这部分要被显示为代码而非普通的文本)
 
-   The second and third [Notation] declarations above introduce the
-   standard square-bracket notation for lists; the right-hand side of
-   the third one illustrates Coq's syntax for declaring n-ary
-   notations and translating them to nested sequences of binary
-   constructors. *)
+   上面第二和第三个[Notation]申明引入了标准的方括号记号来表示列表；第三个声明的右边部分展示了在Coq中申明n元记号的语法以及如何把它们翻译成嵌套的二元构造器的序列 *)
 
 (** *** Repeat *)
-(** A number of functions are useful for manipulating lists.
-    For example, the [repeat] function takes a number [n] and a
-    [count] and returns a list of length [count] where every element
-    is [n]. *)
+(** 很多有用的函数可以用来操作列表。比如[repeat]函数接受一个数[n]和[count]，返回一个长为[count]，每个元素都是[n]的列表 *)
 
 Fixpoint repeat (n count : nat) : natlist := 
   match count with
@@ -161,7 +149,7 @@ Fixpoint repeat (n count : nat) : natlist :=
   end.
 
 (** *** Length *)
-(** The [length] function calculates the length of a list. *)
+(** [length]函数用来计算列表的长度 *)
 
 Fixpoint length (l:natlist) : nat := 
   match l with
@@ -170,7 +158,7 @@ Fixpoint length (l:natlist) : nat :=
   end.
 
 (** *** Append *)
-(** The [app] ("append") function concatenates two lists. *)
+(** [app]函数用来把两个列表连接起来 *)
 
 Fixpoint app (l1 l2 : natlist) : natlist := 
   match l1 with
@@ -178,8 +166,7 @@ Fixpoint app (l1 l2 : natlist) : natlist :=
   | h :: t => h :: (app t l2)
   end.
 
-(** Actually, [app] will be used a lot in some parts of what
-    follows, so it is convenient to have an infix operator for it. *)
+(** 实际上，在接下来的很多地方都会用到[app]，所以如果它有一个中缀操作符的话会很方便 *)
 
 Notation "x ++ y" := (app x y) 
                      (right associativity, at level 60).
@@ -191,12 +178,10 @@ Proof. reflexivity.  Qed.
 Example test_app3:             [1;2;3] ++ nil = [1;2;3].
 Proof. reflexivity.  Qed.
 
-(** Here are two smaller examples of programming with lists.
-    The [hd] function returns the first element (the "head") of the
-    list, while [tl] returns everything but the first
-    element (the "tail").  
-    Of course, the empty list has no first element, so we
-    must pass a default value to be returned in that case.  *)
+(** 我们来看两个小例子，这两个例子都是有关如何编写有关列表的程序。
+    [hd]函数返回列表的第一个元素（"头元素"）。类似的，[tl] 返回除了第一个元素以外
+    的所有元素。
+    当然，空列表没有第一个元素，所以我们必须传入一个默认值，让这个值成为这种情况下的返回值  *)
 
 (** *** Head (with default) and Tail *)
 Definition hd (default:nat) (l:natlist) : nat :=
@@ -219,9 +204,8 @@ Example test_tl:              tl [1;2;3] = [2;3].
 Proof. reflexivity.  Qed.
 
 (** **** Exercise: 2 stars (list_funs)  *)
-(** Complete the definitions of [nonzeros], [oddmembers] and
-    [countoddmembers] below. Have a look at the tests to understand
-    what these functions should do. *)
+(** 完成以下[nonzeros]，[oddmembers]和[countoddmembers]的定义，
+    你可以查看测试函数来理解这些函数应该做什么 *)
 
 Fixpoint nonzeros (l:natlist) : natlist :=
   (* FILL IN HERE *) admit.
@@ -247,17 +231,11 @@ Example test_countoddmembers3:    countoddmembers nil = 0.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (alternate)  *)
-(** Complete the definition of [alternate], which "zips up" two lists
-    into one, alternating between elements taken from the first list
-    and elements from the second.  See the tests below for more
-    specific examples.
+(** 完成[alternate]的定义，它把两个列表两个列表像拉链一样"拉"进一个，
+    从两个列表中交替地取出元素。查看后面的tests来获得更加详细的例子
 
-    Note: one natural and elegant way of writing [alternate] will fail
-    to satisfy Coq's requirement that all [Fixpoint] definitions be
-    "obviously terminating."  If you find yourself in this rut, look
-    for a slightly more verbose solution that considers elements of
-    both lists at the same time.  (One possible solution requires
-    defining a new kind of pairs, but this is not the only way.)  *)
+    注意：一种自然的，优雅的方法来书写[alternate]将无法满足Coq对于[Fixpoint]必须
+    "显然会终止"的要求。如果你发现你被这种解法束缚住了，你可以寻找一种稍微冗长一些的解法：同时考虑两个列表。（一个可行的解法需要定义新的列表，但这不是唯一的方法） *)
 
 
 Fixpoint alternate (l1 l2 : natlist) : natlist :=
@@ -277,38 +255,29 @@ Example test_alternate4:        alternate [] [20;30] = [20;30].
 (* ###################################################### *)
 (** ** Bags via Lists *)
 
-(** A [bag] (or [multiset]) is like a set, but each element can appear
-    multiple times instead of just once.  One reasonable
-    implementation of bags is to represent a bag of numbers as a
-    list. *)
+(** [bag]（或者叫[multiset]）就像一个集合，但是每个元素都能够出现若干次，而不是仅仅一次。
+    背包一种合理的实现就是把它作为一个列表。 *)
 
 Definition bag := natlist.  
 
 (** **** Exercise: 3 stars (bag_functions)  *)
-(** Complete the following definitions for the functions
-    [count], [sum], [add], and [member] for bags. *)
+(** 完成下列[count], [sum], [add] 以及 [member] 的定义 *)
 
 Fixpoint count (v:nat) (s:bag) : nat := 
   (* FILL IN HERE *) admit.
 
-(** All these proofs can be done just by [reflexivity]. *)
+(** 这些命题都能通过[reflexivity]来证明。 *)
 
 Example test_count1:              count 1 [1;2;3;1;4;1] = 3.
  (* FILL IN HERE *) Admitted.
 Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
  (* FILL IN HERE *) Admitted.
 
-(** Multiset [sum] is similar to set [union]: [sum a b] contains
-    all the elements of [a] and of [b].  (Mathematicians usually
-    define [union] on multisets a little bit differently, which
-    is why we don't use that name for this operation.)
-    For [sum] we're giving you a header that does not give explicit
-    names to the arguments.  Moreover, it uses the keyword
-    [Definition] instead of [Fixpoint], so even if you had names for
-    the arguments, you wouldn't be able to process them recursively.
-    The point of stating the question this way is to encourage you to
-    think about whether [sum] can be implemented in another way --
-    perhaps by using functions that have already been defined.  *)
+(** 多重集的[sum]非常像集合的[union]:[sum a b]包含了所有[a]和[b]的元素。（数学家对
+    多重集上的[sum]的定义常常不大一样，这也是为什么我们没有使用这个名字。
+    对于[sum]来说，我们给你的声明中没有给参数显式的名字。除此以外，它使用[Definition]
+    而不是[Fixpont]，所以即使你给参数安排了名字，你也不能递归的处理他们。如此给出这个问题的意义
+    在于鼓励你思考[sum]是否能用另一种方法实现——可能通过使用那些你已经定义过的函数.  *)
 
 Definition sum : bag -> bag -> bag := 
   (* FILL IN HERE *) admit.
@@ -334,11 +303,10 @@ Example test_member2:             member 2 [1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (bag_more_functions)  *)
-(** Here are some more bag functions for you to practice with. *)
+(** 你可以把下面这些和[bag]有关的函数当做额外的联系 *)
 
 Fixpoint remove_one (v:nat) (s:bag) : bag :=
-  (* When remove_one is applied to a bag without the number to remove,
-     it should return the same bag unchanged. *)
+  (* 当[remove_one]被应用到一个没有书可以移除的背包时，它应该返回原来的那个，不做任何改变。 *)
   (* FILL IN HERE *) admit.
 
 Example test_remove_one1:         count 5 (remove_one 5 [2;1;5;4;1]) = 0.
@@ -372,18 +340,15 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars (bag_theorem)  *)
-(** Write down an interesting theorem [bag_theorem] about bags involving
-    the functions [count] and [add], and prove it.  Note that, since this
-    problem is somewhat open-ended, it's possible that you may come up
-    with a theorem which is true, but whose proof requires techniques
-    you haven't learned yet.  Feel free to ask for help if you get
-    stuck! *)
+(** 写下一个你认为有趣的关于[bags]的定理[bag_theorem]，要涉及到[count]和[add]。
+    证明他。注意，这个问题是开放的，很有可能你会遇到你写下了正确的定理，
+    但是其证明涉及到了你现在还没有学到的技巧。如果你陷入麻烦了，欢迎提问。 *)
 
 (* FILL IN HERE *)
 (** [] *)
 
 (* ###################################################### *)
-(** * Reasoning About Lists *)
+(** * 有关列表的推理 *)
 
 (** Just as with numbers, simple facts about list-processing
     functions can sometimes be proved entirely by simplification. For
