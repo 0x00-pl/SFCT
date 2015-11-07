@@ -5,7 +5,7 @@
 
 Require Export Basics.
 
-(** 为了让它起作用，你需要用 [coqc]把[Basics.v]编译成[Basics.vo]。
+(** 为了让它起作用，你需要用[coqc]把[Basics.v]编译成[Basics.vo]。
     （这就好像你把.java文件编译成.class文件，或者把.c文件编译成.o文件。）
 
     有两种方式编译文件：
