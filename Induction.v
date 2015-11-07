@@ -381,7 +381,7 @@ Proof.
   (* 请在这里填写代码 *) Admitted.
 (** [] *)
 
-(** **** 练习: 2星, optional (plus_swap')  *)
+(** **** 练习: 2星, 可选 (plus_swap')  *)
 (** The [replace] tactic allows you to specify a particular subterm to
    rewrite and what you want it rewritten to.  More precisely,
    [replace (t) with (u)] replaces (all copies of) expression [t] in
