@@ -350,22 +350,16 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 (* ###################################################### *)
 (** * 有关列表的推理 *)
 
-(** Just as with numbers, simple facts about list-processing
-    functions can sometimes be proved entirely by simplification. For
-    example, the simplification performed by [reflexivity] is enough
-    for this theorem... *)
+(** 就像数字一样，一些简单的有关处理列表事实，有时也能仅仅通过化简来证明。
+    比方说，对于下面这个例子，[reflexivity]中所做的简化就已经足够了…… *)
 
 Theorem nil_app : forall l:natlist,
   [] ++ l = l.
 Proof. reflexivity. Qed.
 
-(** ... because the [[]] is substituted into the match position
-    in the definition of [app], allowing the match itself to be
-    simplified. *)
+(** ……由于[[]]被替换进了[app]定义中的相应的match分支，这就使得整个[match]得以被简化并证明目标 *)
 
-(** Also, as with numbers, it is sometimes helpful to perform case
-    analysis on the possible shapes (empty or non-empty) of an unknown
-    list. *)
+(** 并且，和数一样，又是对一个列表做分类讨论（是否是空）是非常有用的。 *)
 
 Theorem tl_length_pred : forall l:natlist,
   pred (length l) = length (tl l).
@@ -376,23 +370,16 @@ Proof.
   Case "l = cons n l'". 
     reflexivity.  Qed.
 
-(** Here, the [nil] case works because we've chosen to define
-    [tl nil = nil]. Notice that the [as] annotation on the [destruct]
-    tactic here introduces two names, [n] and [l'], corresponding to
-    the fact that the [cons] constructor for lists takes two
-    arguments (the head and tail of the list it is constructing). *)
+(** 这里，如此解决[nil]这种情况是因为我们定义了[tl nil = nil]。至于[destruct]策略中的[as]注解
+    引入了两个名字，[n]和[l']， 分别对应了[cons]构造子的两个参数（正在构造的列表的头和尾） *)
 
-(** Usually, though, interesting theorems about lists require
-    induction for their proofs. *)
+(** 经常，如果你不是那么相信的话，要证明关于列表的有趣的定理需要用到归纳法 *)
 
 (* ###################################################### *)
-(** ** Micro-Sermon *)
+(** ** 一点点说教 *)
 
-(** Simply reading example proof scripts will not get you very far!
-    It is very important to work through the details of each one,
-    using Coq and thinking about what each step achieves.  Otherwise
-    it is more or less guaranteed that the exercises will make no
-    sense... *)
+(** 知识阅读示例证明脚本的话，你不会获得什么特别有用的东西。搞清楚每一个的细节是非常重要的
+    使用Coq并思考有关每一步是如何得到的。否则这或多或少保证了联系题讲一点都没有用 *)
 
 (* ###################################################### *)
 (** ** Induction on Lists *)
