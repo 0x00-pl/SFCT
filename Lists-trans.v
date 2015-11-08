@@ -382,35 +382,25 @@ Proof.
     使用Coq并思考有关每一步是如何得到的。否则这或多或少保证了联系题讲一点都没有用 *)
 
 (* ###################################################### *)
-(** ** Induction on Lists *)
+(** ** 列表上的归纳 *)
 
-(** Proofs by induction over datatypes like [natlist] are
-    perhaps a little less familiar than standard natural number
-    induction, but the basic idea is equally simple.  Each [Inductive]
-    declaration defines a set of data values that can be built up from
-    the declared constructors: a boolean can be either [true] or
-    [false]; a number can be either [O] or [S] applied to a number; a
-    list can be either [nil] or [cons] applied to a number and a list.
+(** 读者对在像[natlist]这样的数据类型上通过归纳进行证明和对自然数归纳相比可能没有name熟悉，
+    但是基本的想法是一样简单的。每个[Inductive]的声明定义了一集值，这些值可以用那些被声明
+    的构造器来构建：布尔值可以是[true]或者室[false]；自然数可以使[O]或[S]应用到另一个自然数上；
+    列表可以使[nil]或者是[cons]应用到一个自然数和另一个列表。
 
-    Moreover, applications of the declared constructors to one another
-    are the _only_ possible shapes that elements of an inductively
-    defined set can have, and this fact directly gives rise to a way
-    of reasoning about inductively defined sets: a number is either
-    [O] or else it is [S] applied to some _smaller_ number; a list is
-    either [nil] or else it is [cons] applied to some number and some
-    _smaller_ list; etc. So, if we have in mind some proposition [P]
-    that mentions a list [l] and we want to argue that [P] holds for
-    _all_ lists, we can reason as follows:
+    除此以外，把声明的构造子应用到别的项上面是的归纳定义的项的_唯一_可能的形状，并且这个是个事实
+    直接就给出了一种用来推理归纳定义集的方法：一个自然数要么是[O]不然就是[S]应用到某个_更小_的
+    自然数；一个列表要么是[nil]不然就是[cons]应用到某个自然数和某个_更小_的列表上；等等。所以，
+    如果我们有某个命题[P]提到了列表[l]并且我们想证明[P]对_一切_列表都成立，我们可以像这样推理：
 
-      - First, show that [P] is true of [l] when [l] is [nil].
+      - 首先，证明 [P] 当 [l] 是 [nil] 时对 [l] 成立 .
 
-      - Then show that [P] is true of [l] when [l] is [cons n l'] for
-        some number [n] and some smaller list [l'], assuming that [P]
-        is true for [l'].
+      - 然后证明 [P] 当 [l] 是 [cons n l']成立， 其中 [n] 是某个自然数，[l'] 是某个更小的列表
+        ，假设 [P] 对 [l'] 成立.
 
-    Since larger lists can only be built up from smaller ones,
-    eventually reaching [nil], these two things together establish the
-    truth of [P] for all lists [l].  Here's a concrete example: *)
+    由于较大的列表只可能通过较小的列表构建起来，最终这个较小的列表会变成[nil]，这两点一起就完成了
+    [P] 对一切列表 [l] 成立的证明。 下面是一个具体的例子。 *)
 
 Theorem app_assoc : forall l1 l2 l3 : natlist, 
   (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).   
