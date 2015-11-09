@@ -23,7 +23,7 @@ Tactic 策略
 neutral element 单位元
 identity element 单位元
 apply 应用
-inversion 翻转
+inversion 反演
 Hypothesis 前提
 destruct 销毁
 Proposition 命题
