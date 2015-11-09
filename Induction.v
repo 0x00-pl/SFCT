@@ -80,7 +80,7 @@ Qed.
     们会发现这个分类在我们引入的地方完成了。 另外，这还起到了使纠错更清晰的作用。比方说
     我们试着运行一个新的[Case]策略，然而上一个分类的字符串还在上下文里，显然我们有哪里
     出错了。
-    
+
     对于嵌套的分类讨论（比方说，我们用了[destruct]之后在分支里又用了一个[destruct]，
     这时我们应该用[SCase]（subcase）策略来代替[Case]。*)
 
@@ -90,7 +90,7 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** 在Coq中的证明没有固定书写格式 ———— 比方说分行书写，并且用缩进来表示嵌套结构。
@@ -144,7 +144,7 @@ Abort.
         - 证明[P(0)]成立；
         - 证明对于任意的[n']，如果[P(n')]成立，那么[P(S n')]也成立；
         - 综上：对任意的[n]，[P(n)]都成立。
-    
+
     在Coq里，思路是一样的，不过顺序要反过来：我们先设定目标为证明[P(n)]对任意的[n]成
     立，然后把这个目标分解成两个子目标（使用[induction]策略）：先证明[P(O)]再证明
     [P(n') -> P(S n')]。现在我们就试着用归纳法证明这个定理。*)
@@ -167,7 +167,7 @@ Proof.
 Theorem minus_diag : forall n,
   minus n n = 0.
 Proof.
-  (* 课堂任务 *)
+  (* WORKED IN CLASS *)
   intros n. induction n as [| n'].
   Case "n = 0".
     simpl. reflexivity.
@@ -181,24 +181,24 @@ Proof.
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem plus_n_Sm : forall n m : nat,
   S (n + m) = n + (S m).
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** 练习: 2星 (double_plus)  *)
@@ -215,14 +215,14 @@ Fixpoint double (n:nat) :=
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 
 (** **** 练习: 1星 (destruct_induction)  *)
 (** 请简洁地解释策略[destruct]与[induction]的不同。
 
-(* 请在这里填写代码 *)
+(* FILL IN HERE *)
 
 *)
 (** [] *)
@@ -249,7 +249,7 @@ Proof.
   reflexivity.  Qed.
 
 (** [assert]策略引入了两个子目标。第一个是断言本身——在他前面加上了[H:]，给他命名为[H]。
-    （注意我们也可以像上面用[destruct]和[induction]那样用[as]，比方说[assert (0 
+    （注意我们也可以像上面用[destruct]和[induction]那样用[as]，比方说[assert (0
     + n = n) as H]。另外注意下我们也用[Case]给这个断言的证明做了个标记。这样既增加了
     可读性，又可以判断什么时候我们对断言的证明结束了——观察["Proof of assertion"]何时
     从上下文消失。）第二个目标和我们加入[assert]之前的那个目标相同，唯一不同的是，上下文
@@ -291,7 +291,7 @@ Proof.
 Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 
 (** 现在证明乘法的交换律。（你可能需要定义并证明一个独立的子定理以用在这个定理的证明中。）
@@ -300,7 +300,7 @@ Proof.
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, optional (evenb_n__oddb_Sn)  *)
@@ -310,7 +310,7 @@ Proof.
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (* ###################################################################### *)
@@ -324,31 +324,31 @@ Proof.
 Theorem ble_nat_refl : forall n:nat,
   true = ble_nat n n.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem plus_ble_compat_l : forall n m p : nat,
   ble_nat n m = true -> ble_nat (p + n) (p + m) = true.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem mult_1_l : forall n:nat, 1 * n = n.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem all3_spec : forall b c : bool,
     orb
@@ -357,17 +357,17 @@ Theorem all3_spec : forall b c : bool,
                (negb c))
   = true.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem mult_plus_distr_r : forall n m p : nat,
   (n + m) * p = (n * p) + (m * p).
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 
 Theorem mult_assoc : forall n m p : nat,
   n * (m * p) = (n * m) * p.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, 可选 (beq_nat_refl)  *)
@@ -378,63 +378,48 @@ Proof.
 Theorem beq_nat_refl : forall n : nat,
   true = beq_nat n n.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, 可选 (plus_swap')  *)
-(** The [replace] tactic allows you to specify a particular subterm to
-   rewrite and what you want it rewritten to.  More precisely,
-   [replace (t) with (u)] replaces (all copies of) expression [t] in
-   the goal by expression [u], and generates [t = u] as an additional
-   subgoal. This is often useful when a plain [rewrite] acts on the wrong
-   part of the goal.
+(** [replace]策略允许你指定一个特定的子项或者你想重写的地方来重写。想要更精确一点，
+    你可以用[replace (t) with (u)]来替换目标表达式[u]中出现的所有表达式[t]，并
+    生成[t = u]作为一个额外的子目标。当一个简单的[rewrite]出错的时候这会非常有用。
 
-   Use the [replace] tactic to do a proof of [plus_swap'], just like
-   [plus_swap] but without needing [assert (n + m = m + n)].
-*)
+    使用[replace]策略来证明[plus_swap']，参考[plus_swap]但是不要用[assert (
+    n + m = m + n)]。 *)
 
 Theorem plus_swap' : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 
 (** **** 练习: 3星 (binary_commute)  *)
-(** Recall the [increment] and [binary-to-unary] functions that you
-    wrote for the [binary] exercise in the [Basics] chapter.  Prove
-    that these functions commute -- that is, incrementing a binary
-    number and then converting it to unary yields the same result as
-    first converting it to unary and then incrementing.
-    Name your theorem [bin_to_nat_pres_incr].
+(** 回想一下你在[Basics]章节中为[binary]练习写下的[increment]和[binary-to-unary]
+    函数。证明这些函数是可交换的——给一个二进制加一数再转换成一进制和先转换成一进制
+    再加一结果相同。
+    把你的这个定理叫做[bin_to_nat_pres_incr]。
 
-    (Before you start working on this exercise, please copy the
-    definitions from your solution to the [binary] exercise here so
-    that this file can be graded on its own.  If you find yourself
-    wanting to change your original definitions to make the property
-    easier to prove, feel free to do so.) *)
+    （在你开始解决这个练习之前，请把你的[binary]练习答案复制到这，这样这个文件可以
+    单独打分。如果你发现你想改一下你一开始的定义来让证明更容易，尽管做吧！） *)
 
-(* 请在这里填写代码 *)
+(* FILL IN HERE *)
 (** [] *)
 
 
 (** **** 练习: 5星, advanced (binary_inverse)  *)
-(** This exercise is a continuation of the previous exercise about
-    binary numbers.  You will need your definitions and theorems from
-    the previous exercise to complete this one.
+(** 这个练习承接着之前的关于二进制数的练习。你需要你之前的定义与定理来完成这个练习。
 
-    (a) First, write a function to convert natural numbers to binary
-        numbers.  Then prove that starting with any natural number,
-        converting to binary, then converting back yields the same
-        natural number you started with.
+    (a) 首先，写一个函数把自然数转换成二进制数。然后证明把任一自然数转换成二进制再
+        转换回自然数，结果和开始的自然数相同。
 
-    (b) You might naturally think that we should also prove the
-        opposite direction: that starting with a binary number,
-        converting to a natural, and then back to binary yields the
-        same number we started with.  However, it is not true!
-        Explain what the problem is.
+    (b) 你可能很自然地想到我们可以反方向证明：先把二进制数转换成自然数再转换回二进
+        制，结果和开始的二进制数相同。但是，这是错的！解释下会出现什么问题。
 
-    (c) Define a "direct" normalization function -- i.e., a function
+    (c) 定义一个“直接的”正规化函数——一个函数
+        Define a "direct" normalization function -- i.e., a function
         [normalize] from binary numbers to binary numbers such that,
         for any binary number b, converting to a natural and then back
         to binary yields [(normalize b)].  Prove it.  (Warning: This
@@ -444,15 +429,16 @@ Proof.
     here.
 *)
 
-(* 请在这里填写代码 *)
+(* FILL IN HERE *)
 (** [] *)
 
 (* ###################################################################### *)
 (** * 对比形式化和非形式化证明（高级内容） *)
 
-(** "Informal proofs are algorithms; formal proofs are code." *)
+(** ”非形式化证明是算法，形式化证明是代码。” *)
 
-(** The question of what, exactly, constitutes a "proof" of a
+(** 
+    The question of what, exactly, constitutes a "proof" of a
     mathematical claim has challenged philosophers for millennia.  A
     rough and ready definition, though, could be this: a proof of a
     mathematical proposition [P] is a written (or spoken) text that
@@ -562,7 +548,7 @@ Proof.
 
     Theorem: [true = beq_nat n n] for any [n].
 
-    Proof: (* 请在这里填写代码 *)
+    Proof: (* FILL IN HERE *)
 [] *)
 
 (** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
