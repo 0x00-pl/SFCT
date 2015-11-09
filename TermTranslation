@@ -45,3 +45,6 @@ Implication 蕴含
 Iff 当且仅当
 Falsehood 矛盾式
 Truth 真值
+assert 断言
+commute 可交换的
+normalization 正规化
