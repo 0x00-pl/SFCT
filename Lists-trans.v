@@ -411,40 +411,35 @@ Proof.
   Case "l1 = cons n l1'".
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
-(** Again, this Coq proof is not especially illuminating as a
-    static written document -- it is easy to see what's going on if
-    you are reading the proof in an interactive Coq session and you
-    can see the current goal and context at each point, but this state
-    is not visible in the written-down parts of the Coq proof.  So a
-    natural-language proof -- one written for human readers -- will
-    need to include more explicit signposts; in particular, it will
-    help the reader stay oriented if we remind them exactly what the
-    induction hypothesis is in the second case.  *)
+(** 再一次强调，当你把Coq的证明当做静态的文档的话你可能不会获得特别多的其实——如果你
+    通过一个交互式的Coq会话来阅读证明的话你可以看到当前的目标和上下文，但是这些状态
+    对于写下的部分来说是不可见的。所以一份用自然语言写成的证明——写给人看的——会
+    需要包含更多地提示，比如提醒他们第二种情况下的归纳假设到底是什么，来帮助读者明白当前的情况 *)
 
-(** *** Informal version *)
+(** *** 非形式化的版本 *)
 
-(** _Theorem_: For all lists [l1], [l2], and [l3], 
-   [(l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3)].
+(** _定理_: 对所有的列表 [l1], [l2], 和 [l3]， 
+   [(l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3)]。
 
-   _Proof_: By induction on [l1].
+   _证明_: 通过对 [l1] 使用归纳法。
 
-   - First, suppose [l1 = []].  We must show
+   - 首先, 假设 [l1 = []]。  我们要证明：
        ([] ++ l2) ++ l3 = [] ++ (l2 ++ l3),
-     which follows directly from the definition of [++].
+     这可以通过展开 [++] 的定义得到.
 
-   - Next, suppose [l1 = n::l1'], with
+   - 然后, 假设 [l1 = n::l1']， 有：
        (l1' ++ l2) ++ l3 = l1' ++ (l2 ++ l3)
-     (the induction hypothesis). We must show
+     (归纳假设)。 我们必须证明
        ((n :: l1') ++ l2) ++ l3 = (n :: l1') ++ (l2 ++ l3).
 ]]  
-     By the definition of [++], this follows from
+     根据 [++] 的定义, 上面就等价于：
        n :: ((l1' ++ l2) ++ l3) = n :: (l1' ++ (l2 ++ l3)),
-     which is immediate from the induction hypothesis.  []
+     这可以通过我们的归纳假设立马得到。  []
 *)
 
-(** *** Another example *)
+(** *** 另一个例子 *)
 (**
-  Here is a similar example to be worked together in class: *)
+  这里是一个用来在课堂上一起完成的类似的例子 *)
 
 Theorem app_length : forall l1 l2 : natlist, 
   length (l1 ++ l2) = (length l1) + (length l2).
