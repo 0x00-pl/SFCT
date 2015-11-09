@@ -418,15 +418,11 @@ Proof.
     (b) 你可能很自然地想到我们可以反方向证明：先把二进制数转换成自然数再转换回二进
         制，结果和开始的二进制数相同。但是，这是错的！解释下会出现什么问题。
 
-    (c) 定义一个“直接的”正规化函数——一个函数
-        Define a "direct" normalization function -- i.e., a function
-        [normalize] from binary numbers to binary numbers such that,
-        for any binary number b, converting to a natural and then back
-        to binary yields [(normalize b)].  Prove it.  (Warning: This
-        part is tricky!)
+    (c) 定义一个“直接的”正规化函数——换言之，一个把二进制数正规化成二进制数的函数：
+        对任意的二进制数b，转换成自然数再转换回二进制会生成[(normalize b)]。请证
+        明。（注意：这部分很有技巧！）
 
-    Again, feel free to change your earlier definitions if this helps
-    here.
+    再说一遍，之前的定义随便改！
 *)
 
 (* FILL IN HERE *)
@@ -437,63 +433,42 @@ Proof.
 
 (** ”非形式化证明是算法，形式化证明是代码。” *)
 
-(** 
-    The question of what, exactly, constitutes a "proof" of a
-    mathematical claim has challenged philosophers for millennia.  A
-    rough and ready definition, though, could be this: a proof of a
-    mathematical proposition [P] is a written (or spoken) text that
-    instills in the reader or hearer the certainty that [P] is true.
-    That is, a proof is an act of communication.
+(** 到底是什么构成了一个数学断言的“证明”？这个问题已经困扰了哲学家一千多年。
+    一个不那么精确的现成的定义是这样：一个数学命题的证明[P]是一段被写出来或
+    者被说出来的话，用来使读者或听众确信[P]是正确的。也就是说，证明是一种沟
+    通行为。
 
-    Now, acts of communication may involve different sorts of readers.
-    On one hand, the "reader" can be a program like Coq, in which case
-    the "belief" that is instilled is a simple mechanical check that
-    [P] can be derived from a certain set of formal logical rules, and
-    the proof is a recipe that guides the program in performing this
-    check.  Such recipes are _formal_ proofs.
+    现在，沟通行为可能包含不同类型的读者。一方面，这个“读者”可能是一段程序——比如
+    说Coq——它对证明的“信任”来源于简单的机械化检查：[P]能够从一组确定的形式化逻
+    辑规则导出。这种情况下，证明就是一份指导程序如何运用这些逻辑规则的说明书。这
+    份说明书就是形式化证明。
 
-    Alternatively, the reader can be a human being, in which case the
-    proof will be written in English or some other natural language,
-    thus necessarily _informal_.  Here, the criteria for success are
-    less clearly specified.  A "good" proof is one that makes the
-    reader believe [P].  But the same proof may be read by many
-    different readers, some of whom may be convinced by a particular
-    way of phrasing the argument, while others may not be.  One reader
-    may be particularly pedantic, inexperienced, or just plain
-    thick-headed; the only way to convince them will be to make the
-    argument in painstaking detail.  But another reader, more familiar
-    in the area, may find all this detail so overwhelming that they
-    lose the overall thread.  All they want is to be told the main
-    ideas, because it is easier to fill in the details for themselves.
-    Ultimately, there is no universal standard, because there is no
-    single way of writing an informal proof that is guaranteed to
-    convince every conceivable reader.  In practice, however,
-    mathematicians have developed a rich set of conventions and idioms
-    for writing about complex mathematical objects that, within a
-    certain community, make communication fairly reliable.  The
-    conventions of this stylized form of communication give a fairly
-    clear standard for judging proofs good or bad.
+    另一方面，读者也可能是个人类，这时证明会用汉语或其他自然语言书写，这就是非形
+    式化证明。这种情况下，证明成功的准则就不是那么精确了。一个“好的”证明是让读者
+    相信[P]。但是同一份证明可能会被许多读者阅读，有一些人可能会因为某种特定的论
+    证方式而信服，另一些则不会。一个读者可能是很迂腐的，可能是没什么经验的，也可
+    能非常蠢；让他们都心服口服的惟一的方式就是不辞劳苦地把每一处论证细节都写出来。
+    但是对另外一些更熟悉这个领域的读者，可能发现这些细枝末节太繁复了以致于无法抓
+    住主干。他们只希望被告知主旨，因为对他们来说补充这些细节轻而易举。最终，根本
+    没有一个通用的标准，因为没有一个单一的方式来书写非形式化证明来劝服每一个可说
+    服的读者（有些人说什么都没用）。但是实际上，数学家已经发展出一套丰富的规范与
+    习语以书写复杂的数学对象并在特定的圈子里可靠的交流。这些从交流中发展出的规范
+    能给出一个相当清晰的评判证明好坏的标准。
 
-    Because we are using Coq in this course, we will be working
-    heavily with formal proofs.  But this doesn't mean we can ignore
-    the informal ones!  Formal proofs are useful in many ways, but
-    they are _not_ very efficient ways of communicating ideas between
-    human beings. *)
+    因为我们在这门课上用Coq，所以我们主攻形式化证明。但是我们也不会忽视非形式化
+    证明！形式化证明在许多领域都很有用，不过在人类之间交流想法的时候它不是很有效
+    率。 *)
 
-(** For example, here is a proof that addition is associative: *)
+(** 比方说，这是另一个结合律的证明： *)
 
 Theorem plus_assoc' : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof. intros n m p. induction n as [| n']. reflexivity.
   simpl. rewrite -> IHn'. reflexivity.  Qed.
 
-(** Coq is perfectly happy with this as a proof.  For a human,
-    however, it is difficult to make much sense of it.  If you're used
-    to Coq you can probably step through the tactics one after the
-    other in your mind and imagine the state of the context and goal
-    stack at each point, but if the proof were even a little bit more
-    complicated this would be next to impossible.  Instead, a
-    mathematician might write it something like this: *)
+(** Coq看到这个证明会很开心。然而对于一个人来说，这有点难以理解。如果你习惯了用
+    Coq你可能会人脑模拟每一步的运行过程，不过要是证明优点复杂，你会发现这几乎不
+    可能做到。相反，一个数学家可能会这样写证明： *)
 (** - _Theorem_: For any [n], [m] and [p],
       n + (m + p) = (n + m) + p.
     _Proof_: By induction on [n].
@@ -511,16 +486,11 @@ Proof. intros n m p. induction n as [| n']. reflexivity.
       which is immediate from the induction hypothesis. *)
 (** _Qed_ *)
 
-(** The overall form of the proof is basically similar.  This is
-    no accident: Coq has been designed so that its [induction] tactic
-    generates the same sub-goals, in the same order, as the bullet
-    points that a mathematician would write.  But there are
-    significant differences of detail: the formal proof is much more
-    explicit in some ways (e.g., the use of [reflexivity]) but much
-    less explicit in others (in particular, the "proof state" at any
-    given point in the Coq proof is completely implicit, whereas the
-    informal proof reminds the reader several times where things
-    stand). *)
+(** 证明的整个形式基本相同。这在意料之中：Coq被精心设计过所以他的[induction]
+    策略会以同样的顺序生成同样的子目标，就像数学家着重标记那些句子。可是细节上
+    有明显不同：某些情况下形式化证明更明确（例如，[rewrite]的使用）但是另一些
+    时候更不明确（Coq证明中，每一处的”证明状态”都非常不清晰，一般非形式化证明
+    会多次提醒读者现在的状态） *)
 
 (** 这有个结构看上去更清晰的形式化证明： *)
 
