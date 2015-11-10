@@ -46,3 +46,8 @@ Iff 当且仅当
 Falsehood 矛盾式
 Truth 真值
 Extraction 提取
+Congruence 合同
+Program Transformation 程序转换
+Soundness 可靠性
+Hoare Logic 霍尔逻辑
+Hoare Triple 霍爾三元組
