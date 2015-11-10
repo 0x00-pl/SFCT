@@ -1,18 +1,18 @@
-(** * 归纳法: 用归纳法证明 *)
+(** * Induction: 用归纳法证明 *)
 
 
 (** 下面这行代码会导入你在之前章节做的所有定义 *)
 
 Require Export Basics.
 
-(** 为了让它起作用，你需要用 [coqc] 把 [Basics.v] 编译成 [Basics.vo]。
+(** 为了让它起作用，你需要用[coqc]把[Basics.v]编译成[Basics.vo]。
     （这就好像你把.java文件编译成.class文件，或者把.c文件编译成.o文件。）
 
     有两种方式编译文件：
 
      - CoqIDE:
 
-         打开 [Basics.v].
+         打开[Basics.v].
          在 "Compile" 菜单, 点击 "Compile Buffer".
 
      - 命令行:
@@ -27,12 +27,12 @@ Require Export Basics.
 (** 现在有个问题是没有一个明确的命令让证明从一个分类跳到另一个分类，这让证明
     脚本很难阅读。在一个极长的有很多分支的证明中，你甚至会迷失方向。（想象一下，
     你试着记住一个内部分类的前五个子目标，这个分类的外边又有七个分类……）条理清晰
-    地使用缩进与注释可能会有点帮助，但是更好的方法还是使用 [Case] 策略。*)
+    地使用缩进与注释可能会有点帮助，但是更好的方法还是使用[Case]策略。*)
 
-(** [Case] 不是Coq内置的策略：我们需要自己定义。
+(** [Case]不是Coq内置的策略：我们需要自己定义。
     现在还没必要理解它是怎么运作的 ———— 你可以跳过下面的示例定义 ———— 这里用了
     一些我们还没提到的Coq的功能：字符串库 （用在引用字符串的具体语法上）和
-    [Ltac] 命令 ———— 用来让我们自定义策略。感谢Aaron Bohannon做的这些工作！*)
+    [Ltac]命令 ———— 用来让我们自定义策略。感谢Aaron Bohannon做的这些工作！*)
 
 Require String. Open Scope string_scope.
 
@@ -60,7 +60,7 @@ Tactic Notation "SSSSCase" constr(name) := Case_aux SSSSCase name.
 Tactic Notation "SSSSSCase" constr(name) := Case_aux SSSSSCase name.
 Tactic Notation "SSSSSSCase" constr(name) := Case_aux SSSSSSCase name.
 Tactic Notation "SSSSSSSCase" constr(name) := Case_aux SSSSSSSCase name.
-(** 这是一个 [Case] 的例子。一步一步运行然后观察上下文的变化（CoqIde的右上角）*)
+(** 这是一个[Case]的例子。一步一步运行然后观察上下文的变化（CoqIde的右上角）*)
 
 Theorem andb_true_elim1 : forall b c : bool,
   andb b c = true -> b = true.
@@ -74,41 +74,33 @@ Proof.
     reflexivity.
 Qed.
 
-(** [Case] 的作用非常直接：它简单地在当前目标的上下文里加上一个我们选择的字符串
+(** [Case]的作用非常直接：它简单地在当前目标的上下文里加上一个我们选择的字符串
     （之前用标识符“Case”标注的）。当子目标生成的时候，这个字符串会被带进目标的上下文。
     当最后一个子目标证明完毕、下一个顶级目标被激活，这个字符串就会在上下文中消失然后我
     们会发现这个分类在我们引入的地方完成了。 另外，这还起到了使纠错更清晰的作用。比方说
     我们试着运行一个新的[Case]策略，然而上一个分类的字符串还在上下文里，显然我们有哪里
     出错了。
-    
+
     对于嵌套的分类讨论（比方说，我们用了[destruct]之后在分支里又用了一个[destruct]，
     这时我们应该用[SCase]（subcase）策略来代替[Case]。*)
 
 (** **** 练习: 2星 (andb_true_elim2)  *)
-(** 证明 [andb_true_elim2], 当你使用[destruct]时用[Case]（或[SCase]）来标记*)
+(** 证明[andb_true_elim2], 当你使用[destruct]时用[Case]（或[SCase]）来标记*)
 
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* 请在这里填写代码 *) Admitted.
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** There are no hard and fast rules for how proofs should be
-    formatted in Coq -- in particular, where lines should be broken
-    and how sections of the proof should be indented to indicate their
-    nested structure.  However, if the places where multiple subgoals
-    are generated are marked with explicit [Case] tactics placed at
-    the beginning of lines, then the proof will be readable almost no
-    matter what choices are made about other aspects of layout.
+(** 在Coq中的证明没有固定书写格式 ———— 比方说分行书写，并且用缩进来表示嵌套结构。
+    但是在有多个子目标的情况下你把[Case]策略放到每个子目标的行首做一个清晰的标记，
+    那样不管你的嵌套有多么复杂，证明看上去都一目了然。
 
-    This is a good place to mention one other piece of (possibly
-    obvious) advice about line lengths.  Beginning Coq users sometimes
-    tend to the extremes, either writing each tactic on its own line
-    or entire proofs on one line.  Good style lies somewhere in the
-    middle.  In particular, one reasonable convention is to limit
-    yourself to 80-character lines.  Lines longer than this are hard
-    to read and can be inconvenient to display and print.  Many
-    editors have features that help enforce this. *)
+    关于每行的长度，在这里我也想给出一点建议（可能你早就知道了）。Coq的初学者有时
+    会走极端，要么一行只写一个策略，要么整个证明都挤到一行。一个好的风格应该是折中的。
+    特别地，一个合理的习惯是每行不要超过80个字符。超过80个字符的话一行将会非常难
+    读并且不方便显示与打印。许多文本编辑器都有辅助你控制行长度的功能。*)
 
 (* ###################################################################### *)
 (** * 用归纳法来证明 *)
@@ -128,17 +120,14 @@ Abort.
 
 (** *** *)
 
-(** And reasoning by cases using [destruct n] doesn't get us much
-   further: the branch of the case analysis where we assume [n = 0]
-   goes through, but in the branch where [n = S n'] for some [n'] we
-   get stuck in exactly the same way.  We could use [destruct n'] to
-   get one step further, but since [n] can be arbitrarily large, if we
-   try to keep on like this we'll never be done. *)
+(** 使用[destruct n]来分类推理不会让我们更进一步：分类讨论的[n = 0]分支可以通过，
+   不过在[n = S n']分支，对于[n']我们会遇到同样的问题。我们可以继续用[destruct n']，
+   但是[n]是一个任意大的数，要是我们如此反复，那我们永远也证明不完。*)
 
 Theorem plus_0_r_secondtry : forall n:nat,
   n + 0 = n.
 Proof.
-  intros n. destruct n as [| n'].
+  intros n. destruct n as[| n'].
   Case "n = 0".
     reflexivity. (* 目前看上去还没什么问题…… *)
   Case "n = S n'".
@@ -147,25 +136,18 @@ Abort.
 
 (** *** *)
 
-(** To prove such facts -- indeed, to prove most interesting
-    facts about numbers, lists, and other inductively defined sets --
-    we need a more powerful reasoning principle: _induction_.
+(** 为了证明这个定理 ———— 事实上，为了证明大多数跟数、列表以及其他归纳定义的集合有关
+    的有趣的定理 ———— 我们需要一个更强大的推理规则：_归纳法_。
 
-    Recall (from high school) the principle of induction over natural
-    numbers: If [P(n)] is some proposition involving a natural number
-    [n] and we want to show that P holds for _all_ numbers [n], we can
-    reason like this:
-         - show that [P(O)] holds;
-         - show that, for any [n'], if [P(n')] holds, then so does
-           [P(S n')];
-         - conclude that [P(n)] holds for all [n].
+    回忆一下（高中学到的）自然数的归纳规则：如果[P(n)]是某个包含自然数[n]的命题，然
+    后我们想证明P对_所有的_自然数[n]成立，我们可以像这样来推理：
+        - 证明[P(0)]成立；
+        - 证明对于任意的[n']，如果[P(n')]成立，那么[P(S n')]也成立；
+        - 综上：对任意的[n]，[P(n)]都成立。
 
-    In Coq, the steps are the same but the order is backwards: we
-    begin with the goal of proving [P(n)] for all [n] and break it
-    down (by applying the [induction] tactic) into two separate
-    subgoals: first showing [P(O)] and then showing [P(n') -> P(S
-    n')].  Here's how this works for the theorem we are trying to
-    prove at the moment: *)
+    在Coq里，思路是一样的，不过顺序要反过来：我们先设定目标为证明[P(n)]对任意的[n]成
+    立，然后把这个目标分解成两个子目标（使用[induction]策略）：先证明[P(O)]再证明
+    [P(n') -> P(S n')]。现在我们就试着用归纳法证明这个定理。*)
 
 (** *** *)
 
@@ -175,30 +157,26 @@ Proof.
   Case "n = 0".     reflexivity.
   Case "n = S n'".  simpl. rewrite -> IHn'. reflexivity.  Qed.
 
-(** Like [destruct], the [induction] tactic takes an [as...]
-    clause that specifies the names of the variables to be introduced
-    in the subgoals.  In the first branch, [n] is replaced by [0] and
-    the goal becomes [0 + 0 = 0], which follows by simplification.  In
-    the second, [n] is replaced by [S n'] and the assumption [n' + 0 =
-    n'] is added to the context (with the name [IHn'], i.e., the
-    Induction Hypothesis for [n']).  The goal in this case becomes [(S
-    n') + 0 = S n'], which simplifies to [S (n' + 0) = S n'], which in
-    turn follows from the induction hypothesis. *)
+(** 就像[destruct]，[induction]策略使用[as ...]从句来指定引入子目标的变量名。在
+    第一个分支，[n]被[0]代替，于是目标变成了[0 + 0 = 0]，这直接化简就可以证明。第二
+    部分中，[n]被替换成[S n']，这样假设[n' + 0 = n']被加入上下文中（这个假设被命名
+    为IHn'，也就是“the Induction Hypothesis for [n]”（n的归纳假设））。在这个
+    分支中的目标变成了[(S n') + 0 = S n']，化简后变为[S (n' + 0) = S n']。这
+    很容易从归纳假设中得出。 *)
 
 Theorem minus_diag : forall n,
   minus n n = 0.
 Proof.
-  (* 课堂任务 *)
+  (* WORKED IN CLASS *)
   intros n. induction n as [| n'].
   Case "n = 0".
     simpl. reflexivity.
   Case "n = S n'".
     simpl. rewrite -> IHn'. reflexivity.  Qed.
 
-(** **** Exercise: 2 stars (basic_induction)  *)
+(** **** 练习: 2星 (basic_induction)  *)
 
-(** Prove the following lemmas using induction. You might need
-    previously proven results. *)
+(** 用归纳法证明下面的引理。你可能需要用到之前证明的结果。 *)
 
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
@@ -223,9 +201,9 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars (double_plus)  *)
+(** **** 练习: 2星 (double_plus)  *)
 
-(** Consider the following function, which doubles its argument: *)
+(** 考虑下面的函数，它把它的参数翻倍： *)
 
 Fixpoint double (n:nat) :=
   match n with
@@ -233,7 +211,7 @@ Fixpoint double (n:nat) :=
   | S n' => S (S (double n'))
   end.
 
-(** Use induction to prove this simple fact about [double]: *)
+(** 使用归纳法来证明这个关于[double]的简单事实： *)
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
@@ -241,9 +219,8 @@ Proof.
 (** [] *)
 
 
-(** **** Exercise: 1 star (destruct_induction)  *)
-(** Briefly explain the difference between the tactics
-    [destruct] and [induction].
+(** **** 练习: 1星 (destruct_induction)  *)
+(** 请简洁地解释策略[destruct]与[induction]的不同。
 
 (* FILL IN HERE *)
 
@@ -255,17 +232,12 @@ Proof.
 (** * 证明里的证明 *)
 
 
-(** In Coq, as in informal mathematics, large proofs are very
-    often broken into a sequence of theorems, with later proofs
-    referring to earlier theorems.  Occasionally, however, a proof
-    will need some miscellaneous fact that is too trivial (and of too
-    little general interest) to bother giving it its own top-level
-    name.  In such cases, it is convenient to be able to simply state
-    and prove the needed "sub-theorem" right at the point where it is
-    used.  The [assert] tactic allows us to do this.  For example, our
-    earlier proof of the [mult_0_plus] theorem referred to a previous
-    theorem named [plus_O_n].  We can also use [assert] to state and
-    prove [plus_O_n] in-line: *)
+(** 在Coq中，就像在非形式化的数学中，一个冗长的证明经常被拆分成一系列小定理然后再证明。
+    但是有时一个证明需要各式各样的甚至有点琐碎的（适用面太狭窄）依据以致于给他们分别起
+    名字实在是太烦人了。在这种情况下，在用到它们的地方能简单地提出并证明一些“子定理”
+    就显得非常方便了。[assert]策略就能帮我们做到这点。举个例子，我们早些时候证明的
+    [mult_0_plus]定理用到了一个在它之前的[plus_O_n]定理。我们可以用[assert]策略
+    把[plus_O_n]的声明和证明内嵌进去： *)
 
 Theorem mult_0_plus' : forall n m : nat,
   (0 + n) * m = n * m.
@@ -276,48 +248,33 @@ Proof.
   rewrite -> H.
   reflexivity.  Qed.
 
-(** The [assert] tactic introduces two sub-goals.  The first is
-    the assertion itself; by prefixing it with [H:] we name the
-    assertion [H].  (Note that we could also name the assertion with
-    [as] just as we did above with [destruct] and [induction], i.e.,
-    [assert (0 + n = n) as H].  Also note that we mark the proof of
-    this assertion with a [Case], both for readability and so that,
-    when using Coq interactively, we can see when we're finished
-    proving the assertion by observing when the ["Proof of assertion"]
-    string disappears from the context.)  The second goal is the same
-    as the one at the point where we invoke [assert], except that, in
-    the context, we have the assumption [H] that [0 + n = n].  That
-    is, [assert] generates one subgoal where we must prove the
-    asserted fact and a second subgoal where we can use the asserted
-    fact to make progress on whatever we were trying to prove in the
-    first place. *)
+(** [assert]策略引入了两个子目标。第一个是断言本身——在他前面加上了[H:]，给他命名为[H]。
+    （注意我们也可以像上面用[destruct]和[induction]那样用[as]，比方说[assert (0
+    + n = n) as H]。另外注意下我们也用[Case]给这个断言的证明做了个标记。这样既增加了
+    可读性，又可以判断什么时候我们对断言的证明结束了——观察["Proof of assertion"]何时
+    从上下文消失。）第二个目标和我们加入[assert]之前的那个目标相同，唯一不同的是，上下文
+    里多了一个假设[H]，它告诉我们[0 + n = n]。于是，[assert]生成了一个子目标——我们必
+    须证明的断言，和另一个子目标——我们最初要证明的那个目标，附带着已经证毕的断言。 *)
 
-(** Actually, [assert] will turn out to be handy in many sorts of
-    situations.  For example, suppose we want to prove that [(n + m)
-    + (p + q) = (m + n) + (p + q)]. The only difference between the
-    two sides of the [=] is that the arguments [m] and [n] to the
-    first inner [+] are swapped, so it seems we should be able to
-    use the commutativity of addition ([plus_comm]) to rewrite one
-    into the other.  However, the [rewrite] tactic is a little stupid
-    about _where_ it applies the rewrite.  There are three uses of
-    [+] here, and it turns out that doing [rewrite -> plus_comm]
-    will affect only the _outer_ one. *)
+(** [assert]在许多情况下都非常顺手。比方说，假设我们想证明[(n + m) + (p + q) = (m
+    + n) + (p + q)]。[=]两边唯一的不同就是第一个括号里[+]两边的参数[m]和[n]的位置
+    交换了。看上去我们可以用加法交换律（[plus_comm]）把等式左边重写成右边的形式。但是
+    [rewrite]策略对它能重写的位置有些捉急。原式（等号左边的或右边的）用了三个[+]，但是
+    使用[rewrite -> plus_comm]只会改变最外边的那个。 *)
 
 Theorem plus_rearrange_firsttry : forall n m p q : nat,
   (n + m) + (p + q) = (m + n) + (p + q).
 Proof.
   intros n m p q.
-  (* We just need to swap (n + m) for (m + n)...
-     it seems like plus_comm should do the trick! *)
+  (* 我们只是需要交换[n + m]变成[m + n]……
+     貌似plus_comm应该搞些小技巧！ *)
   rewrite -> plus_comm.
-  (* Doesn't work...Coq rewrote the wrong plus! *)
+  (* 没作用……Coq重写了错误的加法式！ *)
 Abort.
 
-(** To get [plus_comm] to apply at the point where we want it, we can
-    introduce a local lemma stating that [n + m = m + n] (for
-    the particular [m] and [n] that we are talking about here), prove
-    this lemma using [plus_comm], and then use this lemma to do the
-    desired rewrite. *)
+(** 为了让[plus_comm]作用在我们想让他作用的地方，我们可以引入一个内部引理：[n + m
+    = m + n]（只是针对我们引入的这个[m]和[n]），用[plus_comm]证明这个引理，然后用
+    这个引理来完成我们想要的重写。 *)
 
 Theorem plus_rearrange : forall n m p q : nat,
   (n + m) + (p + q) = (m + n) + (p + q).
@@ -328,9 +285,8 @@ Proof.
     rewrite -> plus_comm. reflexivity.
   rewrite -> H. reflexivity.  Qed.
 
-(** **** Exercise: 4 stars (mult_comm)  *)
-(** Use [assert] to help prove this theorem.  You shouldn't need to
-    use induction. *)
+(** **** 练习: 4星 (mult_comm)  *)
+(** 使用[assert]来辅助这个定理的证明。请不要用归纳法。*)
 
 Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
@@ -338,10 +294,8 @@ Proof.
   (* FILL IN HERE *) Admitted.
 
 
-(** Now prove commutativity of multiplication.  (You will probably
-    need to define and prove a separate subsidiary theorem to be used
-    in the proof of this one.)  You may find that [plus_swap] comes in
-    handy. *)
+(** 现在证明乘法的交换律。（你可能需要定义并证明一个独立的子定理以用在这个定理的证明中。）
+    你可能会发现[plus_swap]很趁手。*)
 
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
@@ -349,9 +303,9 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn)  *)
+(** **** 练习: 2星, optional (evenb_n__oddb_Sn)  *)
 
-(** Prove the following simple fact: *)
+(** 证明下面的简单事实： *)
 
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
@@ -362,14 +316,10 @@ Proof.
 (* ###################################################################### *)
 (** * 更多习题 *)
 
-(** **** Exercise: 3 stars, optional (more_exercises)  *)
-(** Take a piece of paper.  For each of the following theorems, first
-    _think_ about whether (a) it can be proved using only
-    simplification and rewriting, (b) it also requires case
-    analysis ([destruct]), or (c) it also requires induction.  Write
-    down your prediction.  Then fill in the proof.  (There is no need
-    to turn in your piece of paper; this is just to encourage you to
-    reflect before hacking!) *)
+(** **** 练习: 3星, 可选 (more_exercises)  *)
+(** 拿出一张纸。对下列每一个定理，先仔细思考是否(a)它可以只用化简与重写来证明，(b)它还
+    需要分类讨论（[destruct]），或者(c)它还需要归纳法。写下你的预测，然后补上你的证明。
+    （不需要交这张纸。这只是用来鼓励你们干活之前多思考！） *)
 
 Theorem ble_nat_refl : forall n:nat,
   true = ble_nat n n.
@@ -420,12 +370,10 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars, optional (beq_nat_refl)  *)
-(** Prove the following theorem.  Putting [true] on the left-hand side
-of the equality may seem odd, but this is how the theorem is stated in
-the standard library, so we follow suit.  Since rewriting
-works equally well in either direction, we will have no
-problem using the theorem no matter which way we state it. *)
+(** **** 练习: 2星, 可选 (beq_nat_refl)  *)
+(** 证明下列定理。把[true]放到等式的左手边可能很奇怪，但是这是标准库里这个定理的陈述
+    方式，所以我们保持一致。因为不论从左至右重写还是从右至左重写效果都一样，所以不论我
+    们用哪种方式表述它都没问题。 *)
 
 Theorem beq_nat_refl : forall n : nat,
   true = beq_nat n n.
@@ -433,17 +381,13 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars, optional (plus_swap')  *)
-(** The [replace] tactic allows you to specify a particular subterm to
-   rewrite and what you want it rewritten to.  More precisely,
-   [replace (t) with (u)] replaces (all copies of) expression [t] in
-   the goal by expression [u], and generates [t = u] as an additional
-   subgoal. This is often useful when a plain [rewrite] acts on the wrong
-   part of the goal.
+(** **** 练习: 2星, 可选 (plus_swap')  *)
+(** [replace]策略允许你指定一个特定的子项或者你想重写的地方来重写。想要更精确一点，
+    你可以用[replace (t) with (u)]来替换目标表达式[u]中出现的所有表达式[t]，并
+    生成[t = u]作为一个额外的子目标。当一个简单的[rewrite]出错的时候这会非常有用。
 
-   Use the [replace] tactic to do a proof of [plus_swap'], just like
-   [plus_swap] but without needing [assert (n + m = m + n)].
-*)
+    使用[replace]策略来证明[plus_swap']，参考[plus_swap]但是不要用[assert (
+    n + m = m + n)]。 *)
 
 Theorem plus_swap' : forall n m p : nat,
   n + (m + p) = m + (n + p).
@@ -452,114 +396,79 @@ Proof.
 (** [] *)
 
 
-(** **** Exercise: 3 stars (binary_commute)  *)
-(** Recall the [increment] and [binary-to-unary] functions that you
-    wrote for the [binary] exercise in the [Basics] chapter.  Prove
-    that these functions commute -- that is, incrementing a binary
-    number and then converting it to unary yields the same result as
-    first converting it to unary and then incrementing.
-    Name your theorem [bin_to_nat_pres_incr].
+(** **** 练习: 3星 (binary_commute)  *)
+(** 回想一下你在[Basics]章节中为[binary]练习写下的[increment]和[binary-to-unary]
+    函数。证明这些函数是可交换的——给一个二进制加一数再转换成一进制和先转换成一进制
+    再加一结果相同。
+    把你的这个定理叫做[bin_to_nat_pres_incr]。
 
-    (Before you start working on this exercise, please copy the
-    definitions from your solution to the [binary] exercise here so
-    that this file can be graded on its own.  If you find yourself
-    wanting to change your original definitions to make the property
-    easier to prove, feel free to do so.) *)
+    （在你开始解决这个练习之前，请把你的[binary]练习答案复制到这，这样这个文件可以
+    单独打分。如果你发现你想改一下你一开始的定义来让证明更容易，尽管做吧！） *)
 
 (* FILL IN HERE *)
 (** [] *)
 
 
-(** **** Exercise: 5 stars, advanced (binary_inverse)  *)
-(** This exercise is a continuation of the previous exercise about
-    binary numbers.  You will need your definitions and theorems from
-    the previous exercise to complete this one.
+(** **** 练习: 5星, advanced (binary_inverse)  *)
+(** 这个练习承接着之前的关于二进制数的练习。你需要你之前的定义与定理来完成这个练习。
 
-    (a) First, write a function to convert natural numbers to binary
-        numbers.  Then prove that starting with any natural number,
-        converting to binary, then converting back yields the same
-        natural number you started with.
+    (a) 首先，写一个函数把自然数转换成二进制数。然后证明把任一自然数转换成二进制再
+        转换回自然数，结果和开始的自然数相同。
 
-    (b) You might naturally think that we should also prove the
-        opposite direction: that starting with a binary number,
-        converting to a natural, and then back to binary yields the
-        same number we started with.  However, it is not true!
-        Explain what the problem is.
+    (b) 你可能很自然地想到我们可以反方向证明：先把二进制数转换成自然数再转换回二进
+        制，结果和开始的二进制数相同。但是，这是错的！解释下会出现什么问题。
 
-    (c) Define a "direct" normalization function -- i.e., a function
-        [normalize] from binary numbers to binary numbers such that,
-        for any binary number b, converting to a natural and then back
-        to binary yields [(normalize b)].  Prove it.  (Warning: This
-        part is tricky!)
+    (c) 定义一个“直接的”正规化函数——换言之，一个把二进制数正规化成二进制数的函数：
+        对任意的二进制数b，转换成自然数再转换回二进制会生成[(normalize b)]。请证
+        明。（注意：这部分很有技巧！）
 
-    Again, feel free to change your earlier definitions if this helps
-    here.
+    再说一遍，之前的定义随便改！
 *)
 
 (* FILL IN HERE *)
 (** [] *)
 
 (* ###################################################################### *)
-(** * 对比形式化和非形式化证明（高阶） *)
+(** * 对比形式化和非形式化证明（高级内容） *)
 
-(** "Informal proofs are algorithms; formal proofs are code." *)
+(** ”非形式化证明是算法，形式化证明是代码。” *)
 
-(** The question of what, exactly, constitutes a "proof" of a
-    mathematical claim has challenged philosophers for millennia.  A
-    rough and ready definition, though, could be this: a proof of a
-    mathematical proposition [P] is a written (or spoken) text that
-    instills in the reader or hearer the certainty that [P] is true.
-    That is, a proof is an act of communication.
+(** 到底是什么构成了一个数学断言的“证明”？这个问题已经困扰了哲学家一千多年。
+    一个不那么精确的现成的定义是这样：一个数学命题的证明[P]是一段被写出来或
+    者被说出来的话，用来使读者或听众确信[P]是正确的。也就是说，证明是一种沟
+    通行为。
 
-    Now, acts of communication may involve different sorts of readers.
-    On one hand, the "reader" can be a program like Coq, in which case
-    the "belief" that is instilled is a simple mechanical check that
-    [P] can be derived from a certain set of formal logical rules, and
-    the proof is a recipe that guides the program in performing this
-    check.  Such recipes are _formal_ proofs.
+    现在，沟通行为可能包含不同类型的读者。一方面，这个“读者”可能是一段程序——比如
+    说Coq——它对证明的“信任”来源于简单的机械化检查：[P]能够从一组确定的形式化逻
+    辑规则导出。这种情况下，证明就是一份指导程序如何运用这些逻辑规则的说明书。这
+    份说明书就是形式化证明。
 
-    Alternatively, the reader can be a human being, in which case the
-    proof will be written in English or some other natural language,
-    thus necessarily _informal_.  Here, the criteria for success are
-    less clearly specified.  A "good" proof is one that makes the
-    reader believe [P].  But the same proof may be read by many
-    different readers, some of whom may be convinced by a particular
-    way of phrasing the argument, while others may not be.  One reader
-    may be particularly pedantic, inexperienced, or just plain
-    thick-headed; the only way to convince them will be to make the
-    argument in painstaking detail.  But another reader, more familiar
-    in the area, may find all this detail so overwhelming that they
-    lose the overall thread.  All they want is to be told the main
-    ideas, because it is easier to fill in the details for themselves.
-    Ultimately, there is no universal standard, because there is no
-    single way of writing an informal proof that is guaranteed to
-    convince every conceivable reader.  In practice, however,
-    mathematicians have developed a rich set of conventions and idioms
-    for writing about complex mathematical objects that, within a
-    certain community, make communication fairly reliable.  The
-    conventions of this stylized form of communication give a fairly
-    clear standard for judging proofs good or bad.
+    另一方面，读者也可能是个人类，这时证明会用汉语或其他自然语言书写，这就是非形
+    式化证明。这种情况下，证明成功的准则就不是那么精确了。一个“好的”证明是让读者
+    相信[P]。但是同一份证明可能会被许多读者阅读，有一些人可能会因为某种特定的论
+    证方式而信服，另一些则不会。一个读者可能是很迂腐的，可能是没什么经验的，也可
+    能非常蠢；让他们都心服口服的惟一的方式就是不辞劳苦地把每一处论证细节都写出来。
+    但是对另外一些更熟悉这个领域的读者，可能发现这些细枝末节太繁复了以致于无法抓
+    住主干。他们只希望被告知主旨，因为对他们来说补充这些细节轻而易举。最终，根本
+    没有一个通用的标准，因为没有一个单一的方式来书写非形式化证明来劝服每一个可说
+    服的读者（有些人说什么都没用）。但是实际上，数学家已经发展出一套丰富的规范与
+    习语以书写复杂的数学对象并在特定的圈子里可靠的交流。这些从交流中发展出的规范
+    能给出一个相当清晰的评判证明好坏的标准。
 
-    Because we are using Coq in this course, we will be working
-    heavily with formal proofs.  But this doesn't mean we can ignore
-    the informal ones!  Formal proofs are useful in many ways, but
-    they are _not_ very efficient ways of communicating ideas between
-    human beings. *)
+    因为我们在这门课上用Coq，所以我们主攻形式化证明。但是我们也不会忽视非形式化
+    证明！形式化证明在许多领域都很有用，不过在人类之间交流想法的时候它不是很有效
+    率。 *)
 
-(** For example, here is a proof that addition is associative: *)
+(** 比方说，这是另一个结合律的证明： *)
 
 Theorem plus_assoc' : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof. intros n m p. induction n as [| n']. reflexivity.
   simpl. rewrite -> IHn'. reflexivity.  Qed.
 
-(** Coq is perfectly happy with this as a proof.  For a human,
-    however, it is difficult to make much sense of it.  If you're used
-    to Coq you can probably step through the tactics one after the
-    other in your mind and imagine the state of the context and goal
-    stack at each point, but if the proof were even a little bit more
-    complicated this would be next to impossible.  Instead, a
-    mathematician might write it something like this: *)
+(** Coq看到这个证明会很开心。然而对于一个人来说，这有点难以理解。如果你习惯了用
+    Coq你可能会人脑模拟每一步的运行过程，不过要是证明优点复杂，你会发现这几乎不
+    可能做到。相反，一个数学家可能会这样写证明： *)
 (** - _Theorem_: For any [n], [m] and [p],
       n + (m + p) = (n + m) + p.
     _Proof_: By induction on [n].
@@ -577,19 +486,13 @@ Proof. intros n m p. induction n as [| n']. reflexivity.
       which is immediate from the induction hypothesis. *)
 (** _Qed_ *)
 
-(** The overall form of the proof is basically similar.  This is
-    no accident: Coq has been designed so that its [induction] tactic
-    generates the same sub-goals, in the same order, as the bullet
-    points that a mathematician would write.  But there are
-    significant differences of detail: the formal proof is much more
-    explicit in some ways (e.g., the use of [reflexivity]) but much
-    less explicit in others (in particular, the "proof state" at any
-    given point in the Coq proof is completely implicit, whereas the
-    informal proof reminds the reader several times where things
-    stand). *)
+(** 证明的整个形式基本相同。这在意料之中：Coq被精心设计过所以他的[induction]
+    策略会以同样的顺序生成同样的子目标，就像数学家着重标记那些句子。可是细节上
+    有明显不同：某些情况下形式化证明更明确（例如，[rewrite]的使用）但是另一些
+    时候更不明确（Coq证明中，每一处的”证明状态”都非常不清晰，一般非形式化证明
+    会多次提醒读者现在的状态） *)
 
-(** Here is a formal proof that shows the structure more
-    clearly: *)
+(** 这有个结构看上去更清晰的形式化证明： *)
 
 Theorem plus_assoc'' : forall n m p : nat,
   n + (m + p) = (n + m) + p.
@@ -600,19 +503,18 @@ Proof.
   Case "n = S n'".
     simpl. rewrite -> IHn'. reflexivity.   Qed.
 
-(** **** Exercise: 2 stars, advanced (plus_comm_informal)  *)
-(** Translate your solution for [plus_comm] into an informal proof. *)
+(** **** 练习: 2星, 高级内容 (plus_comm_informal)  *)
+(** 把你的[plus_comm]的解翻译成一个非形式化证明。 *)
 
 (** Theorem: Addition is commutative.
 
-    Proof: (* FILL IN HERE *)
+    Proof: (* 请在这里填写证明 *)
 *)
 (** [] *)
 
-(** **** Exercise: 2 stars, optional (beq_nat_refl_informal)  *)
-(** Write an informal proof of the following theorem, using the
-    informal proof of [plus_assoc] as a model.  Don't just
-    paraphrase the Coq tactics into English!
+(** **** 练习: 2星, 可选 (beq_nat_refl_informal)  *)
+(** 写出一个下列定理的非形式化证明，使用[plus_assoc]的非形式化证明作为样板。
+    别只是把Coq的策略翻译成汉语！
 
     Theorem: [true = beq_nat n n] for any [n].
 

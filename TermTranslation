@@ -51,3 +51,6 @@ Program Transformation 程序转换
 Soundness 可靠性
 Hoare Logic 霍尔逻辑
 Hoare Triple 霍爾三元組
+assert 断言
+commute 可交换的
+normalization 正规化
