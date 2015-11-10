@@ -90,7 +90,7 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (** 在Coq中的证明没有固定书写格式 ———— 比方说分行书写，并且用缩进来表示嵌套结构。
@@ -167,7 +167,7 @@ Proof.
 Theorem minus_diag : forall n,
   minus n n = 0.
 Proof.
-  (* WORKED IN CLASS *)
+  (*课堂任务*)
   intros n. induction n as [| n'].
   Case "n = 0".
     simpl. reflexivity.
@@ -181,24 +181,24 @@ Proof.
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem plus_n_Sm : forall n m : nat,
   S (n + m) = n + (S m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (** **** 练习: 2星 (double_plus)  *)
@@ -215,14 +215,14 @@ Fixpoint double (n:nat) :=
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 
 (** **** 练习: 1星 (destruct_induction)  *)
 (** 请简洁地解释策略[destruct]与[induction]的不同。
 
-(* FILL IN HERE *)
+(*在此填写*)
 
 *)
 (** [] *)
@@ -291,7 +291,7 @@ Proof.
 Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 
 (** 现在证明乘法的交换律。（你可能需要定义并证明一个独立的子定理以用在这个定理的证明中。）
@@ -300,7 +300,7 @@ Proof.
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, optional (evenb_n__oddb_Sn)  *)
@@ -310,7 +310,7 @@ Proof.
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (* ###################################################################### *)
@@ -324,31 +324,31 @@ Proof.
 Theorem ble_nat_refl : forall n:nat,
   true = ble_nat n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem plus_ble_compat_l : forall n m p : nat,
   ble_nat n m = true -> ble_nat (p + n) (p + m) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem mult_1_l : forall n:nat, 1 * n = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem all3_spec : forall b c : bool,
     orb
@@ -357,17 +357,17 @@ Theorem all3_spec : forall b c : bool,
                (negb c))
   = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem mult_plus_distr_r : forall n m p : nat,
   (n + m) * p = (n * p) + (m * p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 
 Theorem mult_assoc : forall n m p : nat,
   n * (m * p) = (n * m) * p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, 可选 (beq_nat_refl)  *)
@@ -378,7 +378,7 @@ Proof.
 Theorem beq_nat_refl : forall n : nat,
   true = beq_nat n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 (** **** 练习: 2星, 可选 (plus_swap')  *)
@@ -392,7 +392,7 @@ Proof.
 Theorem plus_swap' : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  (*在此填写*) Admitted.
 (** [] *)
 
 
@@ -405,7 +405,7 @@ Proof.
     （在你开始解决这个练习之前，请把你的[binary]练习答案复制到这，这样这个文件可以
     单独打分。如果你发现你想改一下你一开始的定义来让证明更容易，尽管做吧！） *)
 
-(* FILL IN HERE *)
+(*在此填写*)
 (** [] *)
 
 
@@ -425,7 +425,7 @@ Proof.
     再说一遍，之前的定义随便改！
 *)
 
-(* FILL IN HERE *)
+(*在此填写*)
 (** [] *)
 
 (* ###################################################################### *)
@@ -508,7 +508,7 @@ Proof.
 
 (** Theorem: Addition is commutative.
 
-    Proof: (* FILL IN HERE *)
+    Proof: (*在此填写*)
 *)
 (** [] *)
 
@@ -518,7 +518,7 @@ Proof.
 
     Theorem: [true = beq_nat n n] for any [n].
 
-    Proof: (* FILL IN HERE *)
+    Proof: (*在此填写*)
 [] *)
 
 (** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
