@@ -452,10 +452,9 @@ Proof.
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
 
-(** *** Reversing a list *)
-(** For a slightly more involved example of an inductive proof
-    over lists, suppose we define a "cons on the right" function
-    [snoc] like this... *)
+(** *** 反转列表 *)
+(** 作为一个更为深入的例子，来说明在列表上使用归纳证明，假设我们定义一个"右侧cons"的函数
+    [snoc]。 像这样： *)
 
 Fixpoint snoc (l:natlist) (v:nat) : natlist := 
   match l with
@@ -477,12 +476,11 @@ Proof. reflexivity.  Qed.
 Example test_rev2:            rev nil = nil.
 Proof. reflexivity.  Qed.
 
-(** *** Proofs about reverse *)
-(** Now let's prove some more list theorems using our newly
-    defined [snoc] and [rev].  For something a little more challenging
-    than the inductive proofs we've seen so far, let's prove that
-    reversing a list does not change its length.  Our first attempt at
-    this proof gets stuck in the successor case... *)
+(** *** 有关反转的证明 *)
+(** 现在我们用我们新定义的[snoc]按得[rec]来证明一些列表的定理。
+    比我们现在已经见到过的归纳证明相比，我们来证明一个更具挑战性
+    的定理，就是反转一个列表并不会改变他的长度。当我们初次尝试时
+    我们就发现卡在后继这个情形 *)
 
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
