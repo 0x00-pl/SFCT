@@ -480,7 +480,7 @@ Proof. reflexivity.  Qed.
 (** 现在我们用我们新定义的[snoc]按得[rec]来证明一些列表的定理。
     比我们现在已经见到过的归纳证明相比，我们来证明一个更具挑战性
     的定理，就是反转一个列表并不会改变他的长度。当我们初次尝试时
-    我们就发现卡在后继这个情形 *)
+    我们就发现卡在后继这个情形q *)
 
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
@@ -489,22 +489,17 @@ Proof.
   Case "l = []".
     reflexivity.
   Case "l = n :: l'".
-    (* This is the tricky case.  Let's begin as usual 
-       by simplifying. *)
+    (* 这是一个比较棘手的情况。我们从普通的花间开始。 *)
     simpl. 
-    (* Now we seem to be stuck: the goal is an equality 
-       involving [snoc], but we don't have any equations 
-       in either the immediate context or the global 
-       environment that have anything to do with [snoc]! 
+    (* 现在我们好像卡在什么地方了：目标是要证明涉及[snoc]的等式，
+       但是我们在上下文和全局环境下并没有任何有关[snoc]的等式！
 
-       We can make a little progress by using the IH to 
-       rewrite the goal... *)
+       通过IH来重写目标，我们可以获得一点点进展…… *)
     rewrite <- IHl'.
-    (* ... but now we can't go any further. *)
+    (* ……但也仅此而已 *)
 Abort.
 
-(** So let's take the equation about [snoc] that would have
-    enabled us to make progress and prove it as a separate lemma. 
+(** 所以我们把有关[snoc]的可以推动证明的等式单独拿出来作为一个引理。
 *)
 
 Theorem length_snoc : forall n : nat, forall l : natlist,
@@ -517,15 +512,12 @@ Proof.
     simpl. rewrite -> IHl'. reflexivity.  Qed. 
 
 (**
-    Note that we make the lemma as _general_ as possible: in particular,
-    we quantify over _all_ [natlist]s, not just those that result
-    from an application of [rev]. This should seem natural, 
-    because the truth of the goal clearly doesn't depend on 
-    the list having been reversed.  Moreover, it is much easier
-    to prove the more general property. 
+    注意我们要使得引理尽可能的_通用_：具体来说，我们要对_所有_[natlist]
+    进行全称量化，而不仅仅是那些由[rev]的来的。这很自然，因为这个证明目标
+    显然不依赖于被反转的列表。除此之外，证明一个更普遍的性质更容易。
 *)
     
-(** Now we can complete the original proof. *)
+(** 现在我们可以完成那个一开始的证明。 *)
 
 Theorem rev_length : forall l : natlist,
   length (rev l) = length l.
@@ -537,46 +529,43 @@ Proof.
     simpl. rewrite -> length_snoc. 
     rewrite -> IHl'. reflexivity.  Qed.
 
-(** For comparison, here are informal proofs of these two theorems: 
+(** 用来作对比，下面是这两个定理的非形式化的证明
 
-    _Theorem_: For all numbers [n] and lists [l],
-       [length (snoc l n) = S (length l)].
+    _定理_: 对一切数[n]和列表[l]，
+      [length (snoc l n) = S (length l)]。
  
-    _Proof_: By induction on [l].
+    _证明_: 对[l]进行归纳。
 
-    - First, suppose [l = []].  We must show
-        length (snoc [] n) = S (length []),
-      which follows directly from the definitions of
-      [length] and [snoc].
+    - 首先，假设[l = []]。我们要证明
+       length (snoc [] n) = S (length [])，
+      通过[length]和[snoc]的定义，上式可以显然得到。
 
-    - Next, suppose [l = n'::l'], with
-        length (snoc l' n) = S (length l').
-      We must show
-        length (snoc (n' :: l') n) = S (length (n' :: l')).
-      By the definitions of [length] and [snoc], this
-      follows from
-        S (length (snoc l' n)) = S (S (length l')),
+    - 接下来，假设 [l = n'::l']，并且
+        length (snoc l' n) = S (length l')。
+      我必须要证明
+        length (snoc (n' :: l') n) = S (length (n' :: l'))。
+      通过[length]和[snoc]，只要证明
+        S (length (snoc l' n)) = S (S (length l'))，
 ]] 
-      which is immediate from the induction hypothesis. [] *)
+      而这就是归纳假设。 [] *)
                         
-(** _Theorem_: For all lists [l], [length (rev l) = length l].
+(** _定理_: 对一切列表 [l], [length (rev l) = length l].
     
-    _Proof_: By induction on [l].  
+    _证明_: 对 [l] 进行归纳.  
 
-      - First, suppose [l = []].  We must show
-          length (rev []) = length [],
-        which follows directly from the definitions of [length] 
-        and [rev].
+      - 首先，假设[l = []]，我们要证明，
+          length (rev []) = length []。
+        通过[length]和[rev]的定义，上式可以显然得到。
     
-      - Next, suppose [l = n::l'], with
-          length (rev l') = length l'.
-        We must show
-          length (rev (n :: l')) = length (n :: l').
-        By the definition of [rev], this follows from
-          length (snoc (rev l') n) = S (length l')
-        which, by the previous lemma, is the same as
-          S (length (rev l')) = S (length l').
-        This is immediate from the induction hypothesis. [] *)
+      - 接下来，假设 [l = n'::l']，并且
+        length (rev l') = length l'。
+      我必须要证明
+        length (rev (n' :: l')) = length (n' :: l')。
+      通过[rev]的定义，只要证明
+        length (snoc (rev l') n) = S (length l')
+      根据之前的引理，说的就是
+        S (length (rev l)) = S (length l')。
+      而这就是归纳假设。 [] *)
 
 (** Obviously, the style of these proofs is rather longwinded
     and pedantic.  After the first few, we might find it easier to
