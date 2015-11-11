@@ -105,12 +105,12 @@ Definition next_weekday (d:day) : day :=
     some examples.  There are actually three different ways to do this
     in Coq.  
 
-    First, we can use the command [Eval compute] to evaluate a
+    First, we can use the command [Compute] to evaluate a
     compound expression involving [next_weekday].  *)
 
-Eval compute in (next_weekday friday).
+Compute (next_weekday friday).
    (* ==> monday : day *)
-Eval compute in (next_weekday (next_weekday saturday)).
+Compute (next_weekday (next_weekday saturday)).
    (* ==> tuesday : day *)
 
 (** If you have a computer handy, this would be an excellent
@@ -120,10 +120,6 @@ Eval compute in (next_weekday (next_weekday saturday)).
     find the above example, submit it to Coq, and observe the
     result. *)
 
-(** The keyword [compute] tells Coq precisely how to
-    evaluate the expression we give it.  For the moment, [compute] is
-    the only one we'll need; later on we'll see some alternatives that
-    are sometimes useful. *)
 
 (** Second, we can record what we _expect_ the result to be in
     the form of a Coq example: *)
@@ -203,17 +199,13 @@ Definition orb (b1:bool) (b2:bool) : bool :=
     specification -- a truth table -- for the [orb] function: *)
 
 Example test_orb1:  (orb true  false) = true. 
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_orb2:  (orb false false) = false.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_orb3:  (orb false true)  = true.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_orb4:  (orb true  true)  = true.
-Proof. reflexivity.  Qed.
-
-(** (Note that we've dropped the [simpl] in the proofs.  It's not
-    actually needed because [reflexivity] automatically performs
-    simplification.) *)
+Proof. simpl. reflexivity.  Qed.
 
 (** _A note on notation_: In .v files, we use square brackets to
     delimit fragments of Coq code within comments; this convention,
@@ -238,7 +230,7 @@ Definition nandb (b1:bool) (b2:bool) : bool :=
   (* FILL IN HERE *) admit.
 
 (** Remove "[Admitted.]" and fill in each proof with 
-    "[Proof. reflexivity. Qed.]" *)
+    "[Proof. simpl. reflexivity. Qed.]" *)
 
 Example test_nandb1:               (nandb true false) = true.
 (* FILL IN HERE *) Admitted.
@@ -378,7 +370,7 @@ Definition minustwo (n : nat) : nat :=
     prints numbers in arabic form by default: *)
 
 Check (S (S (S (S O)))).
-Eval compute in (minustwo 4).
+Compute (minustwo 4).
 
 (** The constructor [S] has the type [nat -> nat], just like the
     functions [minustwo] and [pred]: *)
@@ -414,9 +406,9 @@ Fixpoint evenb (n:nat) : bool :=
 Definition oddb (n:nat) : bool   :=   negb (evenb n).
 
 Example test_oddb1:    (oddb (S O)) = true.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_oddb2:    (oddb (S (S (S (S O))))) = false.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 
 (** Naturally, we can also define multi-argument functions by
     recursion.  (Once again, we use a module to avoid polluting the
@@ -432,7 +424,7 @@ Fixpoint plus (n : nat) (m : nat) : nat :=
 
 (** Adding three to two now gives us five, as we'd expect. *)
 
-Eval compute in (plus (S (S (S O))) (S (S O))).
+Compute (plus (S (S (S O))) (S (S O))).
 
 (** The simplification that Coq performs to reach this conclusion can
     be visualized as follows: *)
@@ -456,7 +448,7 @@ Fixpoint mult (n m : nat) : nat :=
   end.
 
 Example test_mult1: (mult 3 3) = 9.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 
 (** You can match two expressions at once by putting a comma
     between them: *)
@@ -559,11 +551,11 @@ Fixpoint ble_nat (n m : nat) : bool :=
   end.
 
 Example test_ble_nat1:             (ble_nat 2 2) = true.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_ble_nat2:             (ble_nat 2 4) = true.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 Example test_ble_nat3:             (ble_nat 4 2) = false.
-Proof. reflexivity.  Qed.
+Proof. simpl. reflexivity.  Qed.
 
 (** **** Exercise: 2 stars (blt_nat)  *)
 (** The [blt_nat] function tests [nat]ural numbers for [l]ess-[t]han,
@@ -590,29 +582,19 @@ Example test_blt_nat3:             (blt_nat 4 2) = false.
     behavior.  Actually, in a sense, we've already started doing this:
     each [Example] in the previous sections makes a precise claim
     about the behavior of some function on some particular inputs.
-    The proofs of these claims were always the same: use [reflexivity] 
-    to check that both sides of the [=] simplify to identical values. 
-
-    (By the way, it will be useful later to know that
-    [reflexivity] actually does somewhat more simplification than [simpl] 
-    does -- for example, it tries "unfolding" defined terms, replacing them with
-    their right-hand sides.  The reason for this difference is that,
-    when reflexivity succeeds, the whole goal is finished and we don't
-    need to look at whatever expanded expressions [reflexivity] has
-    found; by contrast, [simpl] is used in situations where we may
-    have to read and understand the new goal, so we would not want it
-    blindly expanding definitions.) 
+    The proofs of these claims were always the same: use [simpl] to
+    simplify both sides of the equation, then use [reflexivity] to
+    check that both sides contain identical values.
 
     The same sort of "proof by simplification" can be used to prove
     more interesting properties as well.  For example, the fact that
-    [0] is a "neutral element" for [+] on the left can be proved
-    just by observing that [0 + n] reduces to [n] no matter what
-    [n] is, a fact that can be read directly off the definition of [plus].*)
+    [0] is a "neutral element" for [+] on the left can be proved just
+    by observing that [0 + n] reduces to [n] no matter what [n] is, a
+    fact that can be read directly off the definition of [plus].*)
 
 Theorem plus_O_n : forall n : nat, 0 + n = n.
 Proof.
-  intros n. reflexivity.  Qed.
-
+  intros n. simpl. reflexivity.  Qed.
 
 (** (_Note_: You may notice that the above statement looks
     different in the original source file and the final html output. In Coq
@@ -620,8 +602,31 @@ Proof.
     "_forall_" reserved identifier. This gets printed as an
     upside-down "A", the familiar symbol used in logic.)  *)
 
-(** The form of this theorem and proof are almost exactly the
-    same as the examples above; there are just a few differences.
+(** This is a good place to mention that [reflexivity] is
+    actually more powerful than it might look at first sight. In the
+    previous examples, the calls to [simpl] were actually not needed,
+    because [reflexivity] can perform some simplification
+    automatically when checking that two sides are equal; [simpl] was
+    just added for explanation purposes. For instance, here is another
+    proof of the same theorem: *)
+
+Theorem plus_O_n' : forall n : nat, 0 + n = n.
+Proof.
+  intros n. reflexivity. Qed.
+
+(** As a matter of fact, it will be useful later to know that
+    [reflexivity] actually does somewhat more simplification than
+    [simpl] does -- for example, it tries "unfolding" defined terms,
+    replacing them with their right-hand sides.  The reason for this
+    difference is that, when reflexivity succeeds, the whole goal is
+    finished and we don't need to look at whatever expanded
+    expressions [reflexivity] has found; by contrast, [simpl] is used
+    in situations where we may have to read and understand the new
+    goal, so we would not want it blindly expanding definitions. *)
+
+(** The form of the theorem we just stated and its proof are
+    almost exactly the same as the examples above; there are just a
+    few differences.
 
     First, we've used the keyword [Theorem] instead of
     [Example].  Indeed, the difference is purely a matter of
@@ -629,7 +634,7 @@ Proof.
     including [Lemma], [Fact], and [Remark]) mean exactly the same
     thing to Coq.
 
-    Secondly, we've added the quantifier [forall n:nat], so that our
+    Second, we've added the quantifier [forall n:nat], so that our
     theorem talks about _all_ natural numbers [n].  In order to prove
     theorems of this form, we need to to be able to reason by
     _assuming_ the existence of an arbitrary natural number [n].  This
@@ -641,21 +646,9 @@ Proof.
     _tactics_.  A tactic is a command that is used between [Proof] and
     [Qed] to tell Coq how it should check the correctness of some
     claim we are making.  We will see several more tactics in the rest
-    of this lecture, and yet more in future lectures. *)
+    of this lecture, and yet more in future lectures.
 
-(** We could try to prove a similar theorem about [plus] *)
-
-Theorem plus_n_O : forall n, n + 0 = n.
-
-(** However, unlike the previous proof, [simpl] doesn't do anything in
-    this case *)
-
-Proof.
-  simpl. (* Doesn't do anything! *)
-Abort.
-
-(** (Can you explain why this happens?  Step through both proofs with
-    Coq and notice how the goal and context change.) *)
+    Other similar theorems can be proved with the same pattern. *)
 
 Theorem plus_1_l : forall n:nat, 1 + n = S n. 
 Proof.
@@ -668,6 +661,32 @@ Proof.
 (** The [_l] suffix in the names of these theorems is
     pronounced "on the left." *)
 
+(** It is worth stepping through these proofs to observe how the
+context and the goal change. *)
+(** You may want to add calls to [simpl] before [reflexivity] to
+see the simplifications that Coq performs on the terms before checking
+that they are equal. *)
+
+(** Finally, we should mention that, although powerful enough to
+    prove some fairly general facts, there are many statements that
+    cannot be handled by simplification alone. For instance, perhaps
+    surprisingly, we cannot use it to prove that [0] is also a
+    "neutral element" for [+] _on the right_. *)
+
+Theorem plus_n_O : forall n, n + 0 = n.
+Proof.
+  intros n. simpl. (* Doesn't do anything! *)
+
+(** (Can you explain why this happens?  Step through both proofs
+    with Coq and notice how the goal and context change.)
+
+    When stuck in the middle of a proof, we can use the [Abort]
+    command to give up on it momentarily. *)
+
+Abort.
+
+(** In the next chapter, we cover a technique that can be used
+for proving this goal. *)
 
 (* ###################################################################### *)
 (** * Proof by Rewriting *)
@@ -696,9 +715,12 @@ Theorem plus_id_example : forall n m:nat,
     perform this replacement is called [rewrite]. *)
 
 Proof.
-  intros n m.   (* move both quantifiers into the context *)
-  intros H.     (* move the hypothesis into the context *)
-  rewrite -> H. (* Rewrite the goal using the hypothesis *)
+  (* move both quantifiers into the context *)
+  intros n m.
+  (* move the hypothesis into the context *)
+  intros H.
+  (* rewrite the goal using the hypothesis *)
+  rewrite -> H.
   reflexivity.  Qed.
 
 (** The first line of the proof moves the universally quantified
@@ -791,24 +813,55 @@ Theorem plus_1_neq_0 : forall n : nat,
   beq_nat (n + 1) 0 = false.
 Proof.
   intros n. destruct n as [| n'].
-    reflexivity.
-    reflexivity.  Qed.
+  - reflexivity.
+  - reflexivity.  Qed.
 
 (** The [destruct] generates _two_ subgoals, which we must then
     prove, separately, in order to get Coq to accept the theorem as
-    proved.  (No special command is needed for moving from one subgoal
-    to the other.  When the first subgoal has been proved, it just
-    disappears and we are left with the other "in focus.")  In this
-    proof, each of the subgoals is easily proved by a single use of
-    [reflexivity].
-
-    The annotation "[as [| n']]" is called an _intro pattern_.  It
-    tells Coq what variable names to introduce in each subgoal.  In
+    proved. The annotation "[as [| n']]" is called an _intro pattern_.
+    It tells Coq what variable names to introduce in each subgoal.  In
     general, what goes between the square brackets is a _list_ of
     lists of names, separated by [|].  Here, the first component is
     empty, since the [O] constructor is nullary (it doesn't carry any
     data).  The second component gives a single name, [n'], since [S]
     is a unary constructor.
+
+    The [-] signs on the second and third lines are called _bullets_,
+    and delimit parts of the proof that correspond to each generated
+    subgoal. The code that comes after a bullet is the entire proof
+    for a subgoal. In this example, each of the subgoals is easily
+    proved by a single use of [reflexivity] (which itself performs
+    some simplification, as usual -- e.g., the first one simplifies
+    [beq_nat (S n' + 1) 0] to [false] by first rewriting [(S n' + 1)]
+    to [S (n' + 1)], then unfolding [beq_nat], and then simplifying
+    the [match]).
+
+    Marking cases with bullets is entirely optional: if they are not
+    present, Coq simply asks you to prove each subgoal in sequence,
+    one at a time. Even so, it is a good idea to use bullets, mainly
+    for two reasons. First, they make the structure of a proof more
+    apparent, making it more readable. Second, bullets instruct Coq to
+    ensure that a subgoal is complete before trying to verify the next
+    one, preventing proofs for different subgoals from getting mixed
+    up. These issues become especially important in large
+    developments, where fragile proofs lead to long debugging sessions.
+
+    There are no hard and fast rules for how proofs should be
+    formatted in Coq -- in particular, where lines should be broken
+    and how sections of the proof should be indented to indicate their
+    nested structure.  However, if the places where multiple subgoals
+    are generated are marked with explicit bullets placed at the
+    beginning of lines, then the proof will be readable almost no
+    matter what choices are made about other aspects of layout.
+
+    This is a good place to mention one other piece of (possibly
+    obvious) advice about line lengths.  Beginning Coq users sometimes
+    tend to the extremes, either writing each tactic on its own line
+    or entire proofs on one line.  Good style lies somewhere in the
+    middle.  In particular, one reasonable convention is to limit
+    yourself to 80-character lines.  Lines longer than this are hard
+    to read and can be inconvenient to display and print.  Many
+    editors have features that help enforce this.
 
     The [destruct] tactic can be used with any inductively defined
     datatype.  For example, we use it here to prove that boolean
@@ -819,8 +872,8 @@ Theorem negb_involutive : forall b : bool,
   negb (negb b) = b.
 Proof.
   intros b. destruct b.
-    reflexivity.
-    reflexivity.  Qed.
+  - reflexivity.
+  - reflexivity.  Qed.
 
 (** Note that the [destruct] here has no [as] clause because
     none of the subcases of the [destruct] need to bind any variables,
@@ -829,7 +882,78 @@ Proof.
     clause from _any_ [destruct] and Coq will fill in variable names
     automatically.  Although this is convenient, it is arguably bad
     style, since Coq often makes confusing choices of names when left
-    to its own devices. *)
+    to its own devices. 
+
+    It is possible to invoke [destruct] inside a subgoal, generating
+    yet more proof obligations. In this case, we use different bullets
+    to mark goals on different "levels." For example: *)
+
+Theorem andb_commutative : forall b c, andb b c = andb c b.
+Proof.
+  intros b c. destruct b.
+  - destruct c.
+    + reflexivity.
+    + reflexivity.
+  - destruct c.
+    + reflexivity.
+    + reflexivity.
+Qed.
+
+(** Here, each pair of calls to [reflexivity] corresponds to
+    subgoals that were generated after the execution of the [destruct
+    c] line right above it. Using [+] instead of [-] for these
+    subgoals allows Coq to distinguish between different levels of
+    subgoals generated in a proof, making it more robust. Besides [-]
+    and [+], Coq proofs can also use [*] as a third kind of bullet. If
+    we encounter a proof that generates more than three levels of
+    subgoals, we can also enclose individual subgoals with curly
+    braces ([{ ... }]): *)
+
+Theorem andb_commutative' : forall b c, andb b c = andb c b.
+Proof.
+  intros b c. destruct b.
+  { destruct c.
+    { reflexivity. }
+    { reflexivity. } }
+  { destruct c.
+    { reflexivity. }
+    { reflexivity. } }
+Qed.
+
+(** Since curly braces mark both the beginning and the end of a
+    proof, they can appear on multiple subgoal levels at the same
+    time, as this example shows. Furthermore, curly braces allow us to
+    reuse the same bullet shapes at multiple levels in a proof: *)
+
+Theorem andb3_exchange :
+  forall b c d, andb (andb b c) d = andb (andb b d) c.
+Proof.
+  intros b c d. destruct b.
+  - destruct c.
+    { destruct d.
+      - reflexivity.
+      - reflexivity. }
+    { destruct d.
+      - reflexivity.
+      - reflexivity. }
+  - destruct c.
+    { destruct d.
+      - reflexivity.
+      - reflexivity. }
+    { destruct d.
+      - reflexivity.
+      - reflexivity. }
+Qed.
+
+(** **** Exercise: 2 stars (andb_true_elim2)  *)
+(** Prove [andb_true_elim2], marking cases (and subcases) with bullets
+    when you use [destruct]. *)
+
+Theorem andb_true_elim2 : forall b c : bool,
+  andb b c = true -> c = true.
+Proof.
+  (* FILL IN HERE *) Admitted.
+(** [] *)
 
 (** **** Exercise: 1 star (zero_nbeq_plus_1)  *)
 Theorem zero_nbeq_plus_1 : forall n : nat,
@@ -927,28 +1051,30 @@ Notation "x * y" := (mult x y)
                        (at level 40, left associativity) 
                        : nat_scope.
 
-(** For each notation-symbol in Coq we can specify its _precedence level_
-    and its _associativity_. The precedence level n can be specified by the
-    keywords [at level n] and it is helpful to disambiguate
-    expressions containing different symbols. The associativity is helpful
-    to disambiguate expressions containing more occurrences of the same 
-    symbol. For example, the parameters specified above for [+] and [*]
-    say that the expression [1+2*3*4] is a shorthand for the expression
-    [(1+((2*3)*4))]. Coq uses precedence levels from 0 to 100, and 
+(** For each notation symbol in Coq, we can specify its _precedence
+    level_ and its _associativity_.  The precedence level [n] is
+    specified by writing [at level n]; this helps Coq parse compound
+    expressions.  The associativity setting helps to disambiguate
+    expressions containing multiple occurrences of the same
+    symbol. For example, the parameters specified above for [+] and
+    [*] say that the expression [1+2*3*4] is shorthand for
+    [(1+((2*3)*4))]. Coq uses precedence levels from 0 to 100, and
     _left_, _right_, or _no_ associativity.
 
-    Each notation-symbol in Coq is also active in a _notation scope_.  
-    Coq tries to guess what scope you mean, so when you write [S(O*O)] 
-    it guesses [nat_scope], but when you write the cartesian
-    product (tuple) type [bool*bool] it guesses [type_scope].
-    Occasionally you have to help it out with percent-notation by
-    writing [(x*y)%nat], and sometimes in Coq's feedback to you it
-    will use [%nat] to indicate what scope a notation is in.
+    Each notation symbol is also associated with a _notation scope_.
+    Coq tries to guess what scope you mean from context, so when you
+    write [S(O*O)] it guesses [nat_scope], but when you write the
+    cartesian product (tuple) type [bool*bool] it guesses
+    [type_scope].  Occasionally, you may have to help it out with
+    percent-notation by writing [(x*y)%nat], and sometimes in Coq's
+    feedback to you it will use [%nat] to indicate what scope a
+    notation is in.
 
-    Notation scopes also apply to numeral notation (3,4,5, etc.), so you
-    may sometimes see [0%nat] which means [O], or [0%Z] which means the
-    Integer zero.
-*)
+    Notation scopes also apply to numeral notation ([3], [4], [5],
+    etc.), so you may sometimes see [0%nat], which means [O] (the
+    natural number [0] that we're using in this chapter), or [0%Z]
+    which means the Integer zero (which comes from a different part of
+    the standard library). *)
 
 (** * [Fixpoint] and Structural Recursion (Advanced) *)
 
@@ -964,7 +1090,7 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
     that we make recursive calls only on strictly smaller values of
     [n].  This implies that all calls to [plus'] will eventually
     terminate.  Coq demands that some argument of _every_ [Fixpoint]
-    definition is "decreasing".
+    definition is "decreasing."
     
     This requirement is a fundamental feature of Coq's design: In
     particular, it guarantees that every function that can be defined
@@ -981,5 +1107,5 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
 (* FILL IN HERE *)
 (** [] *)
 
-(** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

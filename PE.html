@@ -99,7 +99,7 @@ Equiv.v introduced constant folding as an example of a program
 </div>
 
 <div class="doc">
-<a name="lab1025"></a><h1 class="section">Generalizing Constant Folding</h1>
+<a name="lab1019"></a><h1 class="section">Generalizing Constant Folding</h1>
 
 <div class="paragraph"> </div>
 
@@ -109,7 +109,7 @@ Equiv.v introduced constant folding as an example of a program
     <span class="inlinecode">3</span> and nothing about any other variable. 
 <div class="paragraph"> </div>
 
-<a name="lab1026"></a><h2 class="section">Partial States</h2>
+<a name="lab1020"></a><h2 class="section">Partial States</h2>
 
 <div class="paragraph"> </div>
 
@@ -173,7 +173,7 @@ More generally, if the <span class="inlinecode"><span class="id" type="var">list
 <div class="paragraph"> </div>
 
 <div class="code code-tight">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">compare</span>&nbsp;<span class="id" type="var">V</span>&nbsp;<span class="id" type="var">V'</span>&nbsp;<span class="id" type="var">SCase</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">compare</span>&nbsp;<span class="id" type="var">V</span>&nbsp;<span class="id" type="var">V'</span>
 <div class="paragraph"> </div>
 
 </div>
@@ -184,25 +184,24 @@ More generally, if the <span class="inlinecode"><span class="id" type="var">list
 <div class="code code-tight">
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "compare" <span class="id" type="var">ident</span>(<span class="id" type="var">i</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">j</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
+<span class="id" type="keyword">Tactic Notation</span> "compare" <span class="id" type="var">ident</span>(<span class="id" type="var">i</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">j</span>) :=<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">let</span> <span class="id" type="var">H</span> := <span class="id" type="tactic">fresh</span> "Heq" <span class="id" type="var">i</span> <span class="id" type="var">j</span> <span class="id" type="keyword">in</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">i</span> <span class="id" type="var">j</span>); <br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "equal"; <span class="id" type="tactic">subst</span> <span class="id" type="var">j</span><br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "not equal" ].<br/>
+&nbsp;&nbsp;[ <span class="id" type="tactic">subst</span> <span class="id" type="var">j</span> | ].<br/>
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">pe_domain</span>: <span style="font-family: arial;">&forall;</span><span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> <span class="id" type="var">n</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> = <span class="id" type="var">Some</span> <span class="id" type="var">n</span> <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;<span class="id" type="var">In</span> <span class="id" type="var">V</span> (<span class="id" type="var">map</span> (@<span class="id" type="var">fst</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>) <span class="id" type="var">pe_st</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> <span class="id" type="var">n</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">pe_st</span> <span class="id" type="keyword">as</span> [| [<span class="id" type="var">V'</span> <span class="id" type="var">n'</span>] <span class="id" type="var">pe_st</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "[]". <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "::". <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V'</span> <span class="id" type="var">SCase</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;<span class="inlinecode"></span>&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;::&nbsp;*)</span> <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V'</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab1027"></a><h3 class="section">Aside on <span class="inlinecode"><span class="id" type="var">In</span></span>.</h3>
+<a name="lab1021"></a><h3 class="section">Aside on <span class="inlinecode"><span class="id" type="var">In</span></span>.</h3>
 
 
 <div class="paragraph"> </div>
@@ -253,7 +252,7 @@ More generally, if the <span class="inlinecode"><span class="id" type="var">list
  Note that we can compute with <span class="inlinecode"><span class="id" type="var">in_dec</span></span>, just as with <span class="inlinecode"><span class="id" type="var">eq_id_dec</span></span>. 
 <div class="paragraph"> </div>
 
-<a name="lab1028"></a><h2 class="section">Arithmetic Expressions</h2>
+<a name="lab1022"></a><h2 class="section">Arithmetic Expressions</h2>
 
 <div class="paragraph"> </div>
 
@@ -332,17 +331,17 @@ Now, in what sense is <span class="inlinecode"><span class="id" type="var">pe_ae
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">pe_aexp_correct_weak</span>: <span style="font-family: arial;">&forall;</span><span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>, <span class="id" type="var">pe_consistent</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">a</span>, <span class="id" type="var">aeval</span> <span class="id" type="var">st</span> <span class="id" type="var">a</span> = <span class="id" type="var">aeval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">pe_consistent</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">H</span> <span class="id" type="var">a</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">aexp_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">a</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">simpl</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">a</span>; <span class="id" type="tactic">simpl</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> <span class="id" type="tactic">reflexivity</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a1</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a2</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHa1</span>; <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHa2</span>; <span class="id" type="tactic">reflexivity</span>).<br/>
 &nbsp;&nbsp;<span class="comment">(*&nbsp;Compared&nbsp;to&nbsp;fold_constants_aexp_sound,<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;only&nbsp;interesting&nbsp;case&nbsp;is&nbsp;AId&nbsp;*)</span><br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "AId".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;AId&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">i</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">l</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Some". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">n</span>:=<span class="id" type="var">n</span>) <span class="id" type="tactic">by</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">Heql</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "None". <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;Some&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">n</span>:=<span class="id" type="var">n</span>) <span class="id" type="tactic">by</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">Heql</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;None&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -449,7 +448,7 @@ Although <span class="inlinecode"><span class="id" type="var">pe_override</span>
 &nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">pe_st</span> <span class="id" type="keyword">as</span> [| [<span class="id" type="var">V</span> <span class="id" type="var">n</span>] <span class="id" type="var">pe_st</span>]. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">unfold</span> <span class="id" type="var">update</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V0</span> <span class="id" type="var">V</span> <span class="id" type="var">Case</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V0</span> <span class="id" type="var">V</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -502,7 +501,7 @@ Now we can state and prove that <span class="inlinecode"><span class="id" type="
 &nbsp;&nbsp;<span class="id" type="var">aeval</span> (<span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>) <span class="id" type="var">a</span> = <span class="id" type="var">aeval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a</span> <span class="id" type="var">st</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">aexp_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">a</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">simpl</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">a</span>; <span class="id" type="tactic">simpl</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> <span class="id" type="tactic">reflexivity</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a1</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a2</span>);<br/>
@@ -516,7 +515,7 @@ Now we can state and prove that <span class="inlinecode"><span class="id" type="
 </div>
 
 <div class="doc">
-<a name="lab1029"></a><h2 class="section">Boolean Expressions</h2>
+<a name="lab1023"></a><h2 class="section">Boolean Expressions</h2>
 
 <div class="paragraph"> </div>
 
@@ -583,7 +582,7 @@ The correctness of <span class="inlinecode"><span class="id" type="var">pe_bexp<
 &nbsp;&nbsp;<span class="id" type="var">beval</span> (<span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>) <span class="id" type="var">b</span> = <span class="id" type="var">beval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_bexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b</span> <span class="id" type="var">st</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">bexp_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">b</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">simpl</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">b</span>; <span class="id" type="tactic">simpl</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> <span class="id" type="tactic">reflexivity</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="var">remember</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">a'</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">a0'</span>;<br/>
@@ -603,7 +602,7 @@ The correctness of <span class="inlinecode"><span class="id" type="var">pe_bexp<
 </div>
 
 <div class="doc">
-<a name="lab1030"></a><h1 class="section">Partial Evaluation of Commands, Without Loops</h1>
+<a name="lab1024"></a><h1 class="section">Partial Evaluation of Commands, Without Loops</h1>
 
 <div class="paragraph"> </div>
 
@@ -664,7 +663,7 @@ The correctness of <span class="inlinecode"><span class="id" type="var">pe_bexp<
     not the residual command. 
 <div class="paragraph"> </div>
 
-<a name="lab1031"></a><h2 class="section">Assignment</h2>
+<a name="lab1025"></a><h2 class="section">Assignment</h2>
 
 <div class="paragraph"> </div>
 
@@ -699,13 +698,13 @@ The correctness of <span class="inlinecode"><span class="id" type="var">pe_bexp<
 &nbsp;&nbsp;<span class="id" type="var">pe_lookup</span> (<span class="id" type="var">pe_remove</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span>) <span class="id" type="var">V0</span><br/>
 &nbsp;&nbsp;= <span class="id" type="keyword">if</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span> <span class="id" type="keyword">then</span> <span class="id" type="var">None</span> <span class="id" type="keyword">else</span> <span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V0</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">pe_st</span> <span class="id" type="keyword">as</span> [| [<span class="id" type="var">V'</span> <span class="id" type="var">n'</span>] <span class="id" type="var">pe_st</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "[]". <span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>); <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "::". <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V'</span> <span class="id" type="var">SCase</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "equal". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHpe_st</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;<span class="inlinecode"></span>&nbsp;*)</span> <span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>); <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;::&nbsp;*)</span> <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHpe_st</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>). <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "not equal". <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V0</span> <span class="id" type="var">V'</span> <span class="id" type="var">SSCase</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "equal". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "not equal". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHpe_st</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;not&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V0</span> <span class="id" type="var">V'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;not&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHpe_st</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -717,9 +716,9 @@ The correctness of <span class="inlinecode"><span class="id" type="var">pe_bexp<
 &nbsp;&nbsp;<span class="id" type="var">pe_lookup</span> (<span class="id" type="var">pe_add</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> <span class="id" type="var">n</span>) <span class="id" type="var">V0</span><br/>
 &nbsp;&nbsp;= <span class="id" type="keyword">if</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span> <span class="id" type="keyword">then</span> <span class="id" type="var">Some</span> <span class="id" type="var">n</span> <span class="id" type="keyword">else</span> <span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V0</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span> <span class="id" type="var">n</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">pe_add</span>. <span class="id" type="tactic">simpl</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span> <span class="id" type="var">Case</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "equal". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "not equal". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_remove_correct</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;not&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_remove_correct</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -752,7 +751,7 @@ We will use the two theorems below to show that our partial
 </div>
 
 <div class="doc">
-<a name="lab1032"></a><h2 class="section">Conditional</h2>
+<a name="lab1026"></a><h2 class="section">Conditional</h2>
 
 <div class="paragraph"> </div>
 
@@ -869,7 +868,7 @@ We define the <span class="inlinecode"><span class="id" type="var">pe_compare</s
 &nbsp;&nbsp;<span class="id" type="var">In</span> <span class="id" type="var">x</span> <span class="id" type="var">l</span> <span style="font-family: arial;">&harr;</span> <span class="id" type="var">In</span> <span class="id" type="var">x</span> (<span class="id" type="var">pe_unique</span> <span class="id" type="var">l</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">l</span> <span class="id" type="var">x</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">h</span> <span class="id" type="var">t</span>]. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">left</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">h</span> <span class="id" type="var">x</span>).<br/>
@@ -877,7 +876,7 @@ We define the <span class="inlinecode"><span class="id" type="var">pe_compare</s
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">filter_In</span>. <span class="id" type="tactic">split</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHt</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">left</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">filter_In</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H0</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H0</span>. <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHt</span>. <span class="id" type="tactic">assumption</span>.<br/>
@@ -895,18 +894,18 @@ We define the <span class="inlinecode"><span class="id" type="var">pe_compare</s
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st1</span> <span class="id" type="var">pe_st2</span> <span class="id" type="var">V</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">pe_compare</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_unique_correct</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">filter_In</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">split</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">Heq</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">pe_disagree_at</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H0</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heq</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st2</span> <span class="id" type="var">V</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">beq_nat_refl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H0</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H0</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">Hagree</span>: <span class="id" type="var">pe_disagree_at</span> <span class="id" type="var">pe_st1</span> <span class="id" type="var">pe_st2</span> <span class="id" type="var">V</span> = <span class="id" type="var">false</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="comment">(*&nbsp;Proof&nbsp;of&nbsp;assertion&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_disagree_at</span> <span class="id" type="var">pe_st1</span> <span class="id" type="var">pe_st2</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">disagree</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">disagree</span>; [| <span class="id" type="tactic">reflexivity</span>].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span>  <span class="id" type="var">pe_disagree_domain</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heqdisagree</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Heq</span>. <span class="id" type="tactic">split</span>. <span class="id" type="tactic">assumption</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Heq</span>. <span class="id" type="tactic">split</span>. <span class="id" type="tactic">assumption</span>. <span class="id" type="tactic">reflexivity</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">pe_disagree_at</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hagree</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st1</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">n1</span>|];<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st2</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">n2</span>|];<br/>
@@ -949,7 +948,7 @@ The intersection of two partial states is the result of removing
 &nbsp;&nbsp;<span class="id" type="keyword">if</span> <span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">ids</span> <span class="id" type="keyword">then</span> <span class="id" type="var">None</span> <span class="id" type="keyword">else</span> <span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">ids</span> <span class="id" type="var">V</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">ids</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">V'</span> <span class="id" type="var">ids</span>]. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_remove_correct</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHids</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V'</span> <span class="id" type="var">V</span> <span class="id" type="var">Case</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">compare</span> <span class="id" type="var">V'</span> <span class="id" type="var">V</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">ids</span>);  <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
@@ -1034,25 +1033,25 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">eval_assign</span>: <span style="font-family: arial;">&forall;</span><span class="id" type="var">pe_st</span> <span class="id" type="var">ids</span> <span class="id" type="var">st</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">assign</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">ids</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">assigned</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">ids</span> <span class="id" type="var">st</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">ids</span> <span class="id" type="var">st</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">ids</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">V</span> <span class="id" type="var">ids</span>]; <span class="id" type="tactic">simpl</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "[]". <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_extensionality</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Skip</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "V::ids".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;<span class="inlinecode"></span>&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_extensionality</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Skip</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;V::ids&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_lookup</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">lookup</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">lookup</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Some". <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHids</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">assigned</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;Some&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHids</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">assigned</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_extensionality</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">update</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span> <span class="id" type="var">SSCase</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "equal". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqlookup</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "not equal". <span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V0</span> <span class="id" type="var">ids</span>); <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "None". <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_extensionality</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHids</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">assigned</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span> <span class="id" type="var">SSCase</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "equal". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqlookup</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">update</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqlookup</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;not&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V0</span> <span class="id" type="var">ids</span>); <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;None&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_extensionality</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHids</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">assigned</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">V0</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="var">compare</span> <span class="id" type="var">V</span> <span class="id" type="var">V0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqlookup</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V</span> <span class="id" type="var">ids</span>); <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "not equal". <span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V0</span> <span class="id" type="var">ids</span>); <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;not&nbsp;equal&nbsp;*)</span> <span class="id" type="tactic">destruct</span> (<span class="id" type="var">in_dec</span> <span class="id" type="var">eq_id_dec</span> <span class="id" type="var">V0</span> <span class="id" type="var">ids</span>); <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab1033"></a><h2 class="section">The Partial Evaluation Relation</h2>
+<a name="lab1027"></a><h2 class="section">The Partial Evaluation Relation</h2>
 
 <div class="paragraph"> </div>
 
@@ -1105,14 +1104,6 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 &nbsp;&nbsp;<span class="id" type="keyword">where</span> "c1 '/' st '<span style="font-family: arial;">&dArr;</span>' c1' '/' st'" := (<span class="id" type="var">pe_com</span> <span class="id" type="var">c1</span> <span class="id" type="var">st</span> <span class="id" type="var">c1'</span> <span class="id" type="var">st'</span>).<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "pe_com_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_Skip"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_AssStatic" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_AssDynamic"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_Seq"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_IfTrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_IfFalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_If" ].<br/>
-
-<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">pe_com</span>.<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">ceval</span>.<br/>
 
@@ -1120,7 +1111,7 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 </div>
 
 <div class="doc">
-<a name="lab1034"></a><h2 class="section">Examples</h2>
+<a name="lab1028"></a><h2 class="section">Examples</h2>
 
 <div class="paragraph"> </div>
 
@@ -1169,7 +1160,7 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 </div>
 
 <div class="doc">
-<a name="lab1035"></a><h2 class="section">Correctness of Partial Evaluation</h2>
+<a name="lab1029"></a><h2 class="section">Correctness of Partial Evaluation</h2>
 
 <div class="paragraph"> </div>
 
@@ -1200,27 +1191,27 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>) <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;(<span class="id" type="var">c'</span> / <span class="id" type="var">pe_st'</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">Hpe</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">pe_com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> <span class="id" type="var">Heval</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> <span class="id" type="var">Heval</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>, <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> ×; <span class="id" type="var">solve</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">inversion</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]);<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssStatic". <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssStatic&nbsp;*)</span> <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssDynamic". <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssDynamic&nbsp;*)</span> <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_Seq".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_Seq&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_If". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'IfTrue". <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="var">eassumption</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_If&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'IfTrue&nbsp;*)</span> <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="var">eassumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfFalse". <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span> <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_compare_override</span>.<br/>
@@ -1234,25 +1225,25 @@ The command generated by <span class="inlinecode"><span class="id" type="var">as
 &nbsp;&nbsp;(<span class="id" type="var">c'</span> / <span class="id" type="var">pe_st'</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>) <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">Hpe</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">pe_com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> [<span class="id" type="var">st'</span> <span class="id" type="var">Heval</span> <span class="id" type="var">Heq</span>];<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; []; <span class="id" type="tactic">subst</span>); <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssStatic". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssStatic&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssDynamic". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssDynamic&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_Seq". <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>; <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_IfTrue". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_Seq&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>; <span class="id" type="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_IfTrue&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_IfFalse". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_IfFalse&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_If".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_If&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_deterministic</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H8</span>; [| <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>]); <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfTrue".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfFalse".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_compare_override</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="tactic">eauto</span>.<br/>
@@ -1273,15 +1264,15 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>) <span style="font-family: arial;">&harr;</span><br/>
 &nbsp;&nbsp;(<span class="id" type="var">c'</span> / <span class="id" type="var">pe_st'</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">H</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span>. <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>". <span class="id" type="tactic">apply</span> <span class="id" type="var">pe_com_complete</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>". <span class="id" type="tactic">apply</span> <span class="id" type="var">pe_com_sound</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">pe_com_complete</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">pe_com_sound</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab1036"></a><h1 class="section">Partial Evaluation of Loops</h1>
+<a name="lab1030"></a><h1 class="section">Partial Evaluation of Loops</h1>
 
 <div class="paragraph"> </div>
 
@@ -1460,24 +1451,13 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;<span class="id" type="keyword">where</span> "c1 '/' st '<span style="font-family: arial;">&dArr;</span>' c1' '/' st' '/' c''" := (<span class="id" type="var">pe_com</span> <span class="id" type="var">c1</span> <span class="id" type="var">st</span> <span class="id" type="var">c1'</span> <span class="id" type="var">st'</span> <span class="id" type="var">c''</span>).<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "pe_com_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_Skip"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_AssStatic" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_AssDynamic"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_Seq"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_IfTrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_IfFalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_If"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_WhileEnd" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_WhileLoop"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_While" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_WhileFixedEnd"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_WhileFixedLoop" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "PE_WhileFixed" ].<br/>
-
-<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">pe_com</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab1037"></a><h2 class="section">Examples</h2>
+<a name="lab1031"></a><h2 class="section">Examples</h2>
 
 </div>
 <div class="code code-space">
@@ -1570,7 +1550,7 @@ The main theorem. Thanks to David Menendez for this formulation!
 </div>
 
 <div class="doc">
-<a name="lab1038"></a><h2 class="section">Correctness</h2>
+<a name="lab1032"></a><h2 class="section">Correctness</h2>
 
 <div class="paragraph"> </div>
 
@@ -1615,13 +1595,6 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">WHILE</span> <span class="id" type="var">b1</span> <span class="id" type="var">DO</span> <span class="id" type="var">c1</span> <span class="id" type="var">END</span>) / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span> # <span class="id" type="var">S</span> (<span class="id" type="var">n1</span> + <span class="id" type="var">n2</span>)<br/>
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">where</span> "c1 '/' st '<span style="font-family: arial;">&dArr;</span>' st' # n" := (<span class="id" type="var">ceval_count</span> <span class="id" type="var">c1</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">n</span>).<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "ceval_count_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'Skip" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'Ass" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'Seq"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'IfTrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'IfFalse"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'WhileEnd" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E'WhileLoop" ].<br/>
 
 <br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">ceval_count</span>.<br/>
@@ -1693,44 +1666,44 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span> # <span class="id" type="var">n</span>) <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;(<span class="id" type="var">c'</span> / <span class="id" type="var">pe_st'</span> / <span class="id" type="var">c''</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span> # <span class="id" type="var">n</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">c''</span> <span class="id" type="var">Hpe</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">pe_com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> <span class="id" type="var">n</span> <span class="id" type="var">Heval</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> <span class="id" type="var">n</span> <span class="id" type="var">Heval</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>, <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> ×; <span class="id" type="var">solve</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">inversion</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]);<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssStatic". <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssStatic&nbsp;*)</span> <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E'Skip</span>. <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssDynamic". <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssDynamic&nbsp;*)</span> <span class="id" type="var">econstructor</span>. <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E'Skip</span>. <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_Seq".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_Seq&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>; <span class="id" type="tactic">eauto</span>. <span class="id" type="tactic">omega</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_If". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'IfTrue". <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="var">eassumption</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_If&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'IfTrue&nbsp;*)</span> <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="var">eassumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfFalse". <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span> <span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_compare_override</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="var">eassumption</span>. <span class="id" type="var">eassumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileLoop".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileLoop&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>; <span class="id" type="tactic">eauto</span>. <span class="id" type="tactic">omega</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_While". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_WhileEnd". <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_While&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span> <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_WhileLoop".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
@@ -1739,21 +1712,21 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>; <span class="id" type="tactic">eauto</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_compare_override</span>, <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">omega</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileFixedLoop". <span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileFixedLoop&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> (<span class="id" type="var">S</span> (<span class="id" type="var">n1</span> + <span class="id" type="var">n2</span>)). <span class="id" type="tactic">intros</span> <span class="id" type="var">n</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">clear</span> - <span class="id" type="var">Case</span> <span class="id" type="var">H</span> <span class="id" type="var">H0</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">clear</span> - <span class="id" type="var">H</span> <span class="id" type="var">H0</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">using</span> <span class="id" type="var">lt_wf_ind</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">Heval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'WhileEnd". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span>, <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H7</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'WhileLoop".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'WhileEnd&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span>, <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H7</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'WhileLoop&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> (<span class="id" type="var">pe_compare_nil_override</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">H0</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">H7</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H1</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H7</span>; [| <span class="id" type="tactic">omega</span>]. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileFixed". <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileFixed&nbsp;*)</span> <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">using</span> <span class="id" type="var">lt_wf_ind</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">Heval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'WhileEnd". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H8</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E'WhileLoop". <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'WhileEnd&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H8</span>. <span class="id" type="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E'WhileLoop&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="var">eassumption</span>.<br/>
@@ -1769,40 +1742,40 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;(<span class="id" type="var">c'</span> / <span class="id" type="var">pe_st'</span> / <span class="id" type="var">c''</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span> # <span class="id" type="var">n</span>) <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">c''</span> <span class="id" type="var">Hpe</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">pe_com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hpe</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span> <span class="id" type="var">n</span> [<span class="id" type="var">st'</span> <span class="id" type="var">n'</span> <span class="id" type="var">Heval</span> <span class="id" type="var">Heval'</span> <span class="id" type="var">Hle</span>];<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; []; <span class="id" type="tactic">subst</span>);<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval'</span>; []; <span class="id" type="tactic">subst</span>); <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssStatic". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssStatic&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_add</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_AssDynamic". <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_AssDynamic&nbsp;*)</span> <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_override_update_remove</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">pe_aexp_correct</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_Seq". <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>; <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_IfTrue". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_Seq&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Seq</span>; <span class="id" type="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_IfTrue&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_IfFalse". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_IfFalse&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_If". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">H7</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfTrue".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_If&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">H7</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">H7</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_deterministic</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H8</span>; [| <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>]. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfFalse".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_deterministic</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H8</span>; [| <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>]. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_compare_override</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileEnd". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileEnd&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileLoop". <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_WhileLoop</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileLoop&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_WhileLoop</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="tactic">eauto</span>. <span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_While". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfTrue".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_While&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>; <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H9</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">H9</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H10</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">H10</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_deterministic</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H11</span>; [| <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>]. <span class="id" type="tactic">subst</span>.<br/>
@@ -1811,24 +1784,24 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_WhileLoop</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe1</span>. <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHHpe2</span>. <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_IfFalse". <span class="id" type="tactic">apply</span> <span class="id" type="var">ceval_count_sound</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">ceval_count_sound</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_deterministic</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H9</span>; [| <span class="id" type="tactic">apply</span> <span class="id" type="var">eval_assign</span>]. <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">assign_removes</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>; <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "c2'' = SKIP". <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval'</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;c2''&nbsp;=&nbsp;SKIP&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval'</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "c2'' = WHILE b1 DO c1 END". <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileFixedEnd". <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_count_sound</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Heval'</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileFixedLoop".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;c2''&nbsp;=&nbsp;WHILE&nbsp;b1&nbsp;DO&nbsp;c1&nbsp;END&nbsp;*)</span> <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileFixedEnd&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">ceval_count_sound</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Heval'</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileFixedLoop&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">loop_never_stops</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "PE_WhileFixed".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">clear</span> - <span class="id" type="var">Case</span> <span class="id" type="var">H1</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="var">IHHpe2</span> <span class="id" type="var">Heval</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;PE_WhileFixed&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">clear</span> - <span class="id" type="var">H1</span> <span class="id" type="var">IHHpe1</span> <span class="id" type="var">IHHpe2</span> <span class="id" type="var">Heval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">WHILE</span> <span class="id" type="var">pe_bexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b1</span> <span class="id" type="var">DO</span> <span class="id" type="var">c1'</span>;; <span class="id" type="var">c2'</span> <span class="id" type="var">END</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">c'</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span>) <span class="id" type="var">SCase</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heqc'</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">Heqc'</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_WhileEnd". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_WhileLoop".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">IHHeval2'</span> := <span class="id" type="var">IHHeval2</span> (<span class="id" type="var">refl_equal</span> <span class="id" type="var">_</span>)).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ceval_count_complete</span> <span class="id" type="keyword">in</span> <span class="id" type="var">IHHeval2'</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">IHHeval2'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">clear</span> <span class="id" type="var">IHHeval1</span> <span class="id" type="var">IHHeval2</span> <span class="id" type="var">IHHeval2'</span>.<br/>
@@ -1845,12 +1818,12 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;(<span class="id" type="var">c</span> / <span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st''</span>) <span style="font-family: arial;">&harr;</span><br/>
 &nbsp;&nbsp;(<span style="font-family: arial;">&exist;</span><span class="id" type="var">st'</span>, <span class="id" type="var">c'</span> / <span class="id" type="var">st</span> <span style="font-family: arial;">&dArr;</span> <span class="id" type="var">st'</span> <span style="font-family: arial;">&and;</span> <span class="id" type="var">pe_override</span> <span class="id" type="var">st'</span> <span class="id" type="var">pe_st'</span> = <span class="id" type="var">st''</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">c'</span> <span class="id" type="var">H</span> <span class="id" type="var">st</span> <span class="id" type="var">st''</span>. <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>". <span class="id" type="tactic">intros</span> <span class="id" type="var">Heval</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span> <span class="id" type="tactic">intros</span> <span class="id" type="var">Heval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ceval_count_complete</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heval</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">n</span> <span class="id" type="var">Heval'</span>].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">pe_com_complete</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">st</span>:=<span class="id" type="var">st</span>) (<span class="id" type="var">st''</span>:=<span class="id" type="var">st''</span>) (<span class="id" type="var">n</span>:=<span class="id" type="var">n</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [? ? ? <span class="id" type="var">Hskip</span> ?]. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hskip</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>". <span class="id" type="tactic">intros</span> [<span class="id" type="var">st'</span> [<span class="id" type="var">Heval</span> <span class="id" type="var">Heq</span>]]. <span class="id" type="tactic">subst</span> <span class="id" type="var">st''</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span> <span class="id" type="tactic">intros</span> [<span class="id" type="var">st'</span> [<span class="id" type="var">Heval</span> <span class="id" type="var">Heq</span>]]. <span class="id" type="tactic">subst</span> <span class="id" type="var">st''</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">pe_com_sound</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">econstructor</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Heval</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E'Skip</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
@@ -1862,7 +1835,7 @@ The main theorem. Thanks to David Menendez for this formulation!
 </div>
 
 <div class="doc">
-<a name="lab1039"></a><h1 class="section">Partial Evaluation of Flowchart Programs</h1>
+<a name="lab1033"></a><h1 class="section">Partial Evaluation of Flowchart Programs</h1>
 
 <div class="paragraph"> </div>
 
@@ -1876,7 +1849,7 @@ The main theorem. Thanks to David Menendez for this formulation!
     that is not possible in general; we do not pursue it here. 
 <div class="paragraph"> </div>
 
-<a name="lab1040"></a><h2 class="section">Basic blocks</h2>
+<a name="lab1034"></a><h2 class="section">Basic blocks</h2>
 
 <div class="paragraph"> </div>
 
@@ -1895,11 +1868,6 @@ The main theorem. Thanks to David Menendez for this formulation!
 &nbsp;&nbsp;| <span class="id" type="var">Goto</span> : <span class="id" type="var">Label</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">block</span> <span class="id" type="var">Label</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">If</span> : <span class="id" type="var">bexp</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">Label</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">Label</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">block</span> <span class="id" type="var">Label</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">Assign</span> : <span class="id" type="var">id</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">aexp</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">block</span> <span class="id" type="var">Label</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">block</span> <span class="id" type="var">Label</span>.<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "block_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "Goto" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "If" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "Assign" ].<br/>
 
 <br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">Goto</span> {<span class="id" type="var">Label</span>} <span class="id" type="var">_</span>.<br/>
@@ -1968,7 +1936,7 @@ To evaluate a basic block, given an initial state, is to compute
 </div>
 
 <div class="doc">
-<a name="lab1041"></a><h2 class="section">Flowchart programs</h2>
+<a name="lab1035"></a><h2 class="section">Flowchart programs</h2>
 
 <div class="paragraph"> </div>
 
@@ -2024,15 +1992,10 @@ Unlike a basic block, a program may not terminate, so we model the
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "peval_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_None" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_Some" ].<br/>
-
-<br/>
 </div>
 
 <div class="doc">
-<a name="lab1042"></a><h2 class="section">Partial evaluation of basic blocks and flowchart programs</h2>
+<a name="lab1036"></a><h2 class="section">Partial evaluation of basic blocks and flowchart programs</h2>
 
 <div class="paragraph"> </div>
 
@@ -2076,16 +2039,16 @@ Unlike a basic block, a program may not terminate, so we model the
 &nbsp;&nbsp;<span class="id" type="var">keval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_block</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">k</span>) = (<span class="id" type="var">st'</span>, (<span class="id" type="var">pe_st'</span>, <span class="id" type="var">l'</span>)) <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;<span class="id" type="var">keval</span> (<span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>) <span class="id" type="var">k</span> = (<span class="id" type="var">pe_override</span> <span class="id" type="var">st'</span> <span class="id" type="var">pe_st'</span>, <span class="id" type="var">l'</span>).<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">pe_st</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">block_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">k</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">l</span> | <span class="id" type="var">b</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span> | <span class="id" type="var">i</span> <span class="id" type="var">a</span> <span class="id" type="var">k</span>]) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">k</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">l</span> | <span class="id" type="var">b</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span> | <span class="id" type="var">i</span> <span class="id" type="var">a</span> <span class="id" type="var">k</span>];<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "Goto". <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "If".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;Goto&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;If&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">replace</span> (<span class="id" type="var">keval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_block</span> <span class="id" type="var">pe_st</span> (<span class="id" type="var">If</span> <span class="id" type="var">b</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span>)))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">with</span> (<span class="id" type="var">keval</span> <span class="id" type="var">st</span> (<span class="id" type="var">If</span> (<span class="id" type="var">pe_bexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b</span>) (<span class="id" type="var">pe_st</span>, <span class="id" type="var">l1</span>) (<span class="id" type="var">pe_st</span>, <span class="id" type="var">l2</span>)))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">in</span> <span class="id" type="var">H</span> <span class="id" type="tactic">by</span> (<span class="id" type="tactic">simpl</span>; <span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_bexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b</span>); <span class="id" type="tactic">reflexivity</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_bexp_correct</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_bexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">b</span>)); <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "Assign".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;Assign&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_aexp_correct</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">pe_aexp</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">a</span>); <span class="id" type="tactic">simpl</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">try</span> <span class="id" type="var">solve</span> [<span class="id" type="tactic">rewrite</span> <span class="id" type="var">pe_override_update_add</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">IHk</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>];<br/>
@@ -2113,16 +2076,16 @@ Unlike a basic block, a program may not terminate, so we model the
 &nbsp;&nbsp;<span class="id" type="var">peval</span> <span class="id" type="var">p</span> (<span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>) <span class="id" type="var">l</span> <span class="id" type="var">st'o</span> <span class="id" type="var">l'</span> <span style="font-family: arial;">&harr;</span><br/>
 &nbsp;&nbsp;<span class="id" type="var">pe_peval</span> <span class="id" type="var">p</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">l</span> <span class="id" type="var">st'o</span> <span class="id" type="var">l'</span>.<br/>
 <span class="id" type="keyword">Proof</span>. <span class="id" type="tactic">intros</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">split</span>; [<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>" | <span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>"].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>". <span class="id" type="tactic">intros</span> <span class="id" type="var">Heval</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">split</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span> <span class="id" type="tactic">intros</span> <span class="id" type="var">Heval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_override</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">sto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">pe_st</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">peval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span> <span class="id" type="keyword">as</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" type="var">sto</span> <span class="id" type="var">l</span> <span class="id" type="var">Hlookup</span> | <span class="id" type="var">sto</span> <span class="id" type="var">l</span> <span class="id" type="var">k</span> <span class="id" type="var">st'o</span> <span class="id" type="var">l'</span> <span class="id" type="var">st''o</span> <span class="id" type="var">l''</span> <span class="id" type="var">Hlookup</span> <span class="id" type="var">Hkeval</span> <span class="id" type="var">Heval</span> ])<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">Heqsto</span>; <span class="id" type="tactic">subst</span> <span class="id" type="var">sto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_None". <span class="id" type="tactic">eapply</span> <span class="id" type="var">pe_peval_intro</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_None</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span> <span class="id" type="keyword">as</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" type="var">sto</span> <span class="id" type="var">l</span> <span class="id" type="var">Hlookup</span> | <span class="id" type="var">sto</span> <span class="id" type="var">l</span> <span class="id" type="var">k</span> <span class="id" type="var">st'o</span> <span class="id" type="var">l'</span> <span class="id" type="var">st''o</span> <span class="id" type="var">l''</span> <span class="id" type="var">Hlookup</span> <span class="id" type="var">Hkeval</span> <span class="id" type="var">Heval</span> ]; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">Heqsto</span>; <span class="id" type="tactic">subst</span> <span class="id" type="var">sto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_None&nbsp;*)</span> <span class="id" type="tactic">eapply</span> <span class="id" type="var">pe_peval_intro</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_None</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Hlookup</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_Some".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_Some&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">keval</span> <span class="id" type="var">st</span> (<span class="id" type="var">pe_block</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">k</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">st'</span> [<span class="id" type="var">pe_st'</span> <span class="id" type="var">l'_</span>]].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">symmetry</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Heqx</span>. <span class="id" type="var">erewrite</span> <span class="id" type="var">pe_block_correct</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hkeval</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">Heqx</span>.<br/>
@@ -2130,19 +2093,19 @@ Unlike a basic block, a program may not terminate, so we model the
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">edestruct</span> <span class="id" type="var">IHHeval</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">subst</span> <span class="id" type="var">st''o</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">IHHeval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">pe_peval_intro</span>; [| <span class="id" type="tactic">reflexivity</span>]. <span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Some</span>; <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Hlookup</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>". <span class="id" type="tactic">intros</span> [<span class="id" type="var">st'</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">Heval</span> <span class="id" type="var">Heqst'o</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span> <span class="id" type="tactic">intros</span> [<span class="id" type="var">st'</span> <span class="id" type="var">pe_st'</span> <span class="id" type="var">Heval</span> <span class="id" type="var">Heqst'o</span>].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_st</span>, <span class="id" type="var">l</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">pe_st_l</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">remember</span> (<span class="id" type="var">pe_st'</span>, <span class="id" type="var">l'</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">pe_st'_l'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">pe_st</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">l</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">peval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span> <span class="id" type="keyword">as</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Heval</span> <span class="id" type="keyword">as</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" type="var">st</span> [<span class="id" type="var">pe_st_</span> <span class="id" type="var">l_</span>] <span class="id" type="var">Hlookup</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">st</span> [<span class="id" type="var">pe_st_</span> <span class="id" type="var">l_</span>] <span class="id" type="var">pe_k</span> <span class="id" type="var">st'</span> [<span class="id" type="var">pe_st'_</span> <span class="id" type="var">l'_</span>] <span class="id" type="var">st''</span> [<span class="id" type="var">pe_st''</span> <span class="id" type="var">l''</span>]<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Hlookup</span> <span class="id" type="var">Hkeval</span> <span class="id" type="var">Heval</span> ])<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">l</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">Heqpe_st_l</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Hlookup</span> <span class="id" type="var">Hkeval</span> <span class="id" type="var">Heval</span> ];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span> <span class="id" type="var">pe_st</span> <span class="id" type="var">Heqpe_st_l</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Heqpe_st_l</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">Heqpe_st'_l'</span>; <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">subst</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_None". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_None</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hlookup</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_None&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_None</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hlookup</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">p</span> <span class="id" type="var">l'</span>); [ <span class="id" type="var">solve</span> [ <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hlookup</span> ] | <span class="id" type="tactic">reflexivity</span> ].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "E_Some".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;E_Some&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hlookup</span>. <span class="id" type="var">remember</span> (<span class="id" type="var">p</span> <span class="id" type="var">l</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">k</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">k</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">k</span>|]; <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hlookup</span>; <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">E_Some</span>; <span class="id" type="tactic">eauto</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">pe_block_correct</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Hkeval</span>.<br/>

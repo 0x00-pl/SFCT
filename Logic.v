@@ -1,7 +1,6 @@
 (** * Logic: Logic in Coq *)
 
-Require Export MoreCoq. 
-
+Require Export BasicTactics.
 
 
 (** Coq's built-in logic is very small: the only primitives are
@@ -127,7 +126,7 @@ Print silly_implication.
     - Sometimes a proposition is declared to be true without
       substantiating evidence.  Such propositions are called _axioms_.
 
-    In this, and subsequence chapters, we'll see more about how these
+    In this and subsequent chapters, we'll see more about how these
     proof terms work in more detail.
 *)
 
@@ -184,8 +183,8 @@ Theorem and_example :
   (0 = 0) /\ (4 = mult 2 2).
 Proof.
   apply conj.
-  Case "left". reflexivity.
-  Case "right". reflexivity.  Qed.
+  - (* left *) reflexivity.
+  - (* right *) reflexivity.  Qed.
 
 (** Just for convenience, we can use the tactic [split] as a shorthand for
     [apply conj]. *)
@@ -194,8 +193,8 @@ Theorem and_example' :
   (0 = 0) /\ (4 = mult 2 2).
 Proof.
   split.
-    Case "left". reflexivity.
-    Case "right". reflexivity.  Qed.
+    - (* left *) reflexivity.
+    - (* right *) reflexivity.  Qed.
 
 (** ** "Eliminating" conjunctions *)
 (** Conversely, the [destruct] tactic can be used to take a
@@ -224,8 +223,8 @@ Proof.
   intros P Q H.
   destruct H as [HP HQ]. 
   split.  
-    Case "left". apply HQ. 
-    Case "right". apply HP.  Qed.
+    - (* left *) apply HQ. 
+    - (* right *) apply HP.  Qed.
   
 
 (** **** Exercise: 2 stars (and_assoc)  *)
@@ -268,8 +267,8 @@ Proof.
   intros P Q H. 
   destruct H as [HAB HBA].
   split.
-    Case "->". apply HBA.
-    Case "<-". apply HAB.  Qed.
+    - (* -> *) apply HBA.
+    - (* <- *) apply HAB.  Qed.
 
 (** **** Exercise: 1 star, optional (iff_properties)  *)
 (** Using the above proof that [<->] is symmetric ([iff_sym]) as
@@ -344,8 +343,8 @@ Theorem or_commut : forall P Q : Prop,
 Proof.
   intros P Q H.
   destruct H as [HP | HQ].
-    Case "left". apply or_intror. apply HP.
-    Case "right". apply or_introl. apply HQ.  Qed.
+    - (* left *) apply or_intror. apply HP.
+    - (* right *) apply or_introl. apply HQ.  Qed.
 
 (** From here on, we'll use the shorthand tactics [left] and [right]
     in place of [apply or_introl] and [apply or_intror]. *)
@@ -355,8 +354,8 @@ Theorem or_commut' : forall P Q : Prop,
 Proof.
   intros P Q H.
   destruct H as [HP | HQ].
-    Case "left". right. apply HP.
-    Case "right". left. apply HQ.  Qed.
+    - (* left *) right. apply HP.
+    - (* right *) left. apply HQ.  Qed.
 
 
 
@@ -366,12 +365,12 @@ Theorem or_distributes_over_and_1 : forall P Q R : Prop,
   P \/ (Q /\ R) -> (P \/ Q) /\ (P \/ R).
 Proof. 
   intros P Q R. intros H. destruct H as [HP | [HQ HR]]. 
-    Case "left". split.
-      SCase "left". left. apply HP.
-      SCase "right". left. apply HP.
-    Case "right". split.
-      SCase "left". right. apply HQ.
-      SCase "right". right. apply HR.  Qed.
+    - (* left *) split.
+      + (* left *) left. apply HP.
+      + (* right *) left. apply HP.
+    - (* right *) split.
+      + (* left *) right. apply HQ.
+      + (* right *) right. apply HR.  Qed.
 
 (** **** Exercise: 2 stars (or_distributes_over_and_2)  *)
 Theorem or_distributes_over_and_2 : forall P Q R : Prop,
@@ -405,10 +404,10 @@ Proof.
   (* WORKED IN CLASS *)
   intros b c H.
   destruct b.
-    Case "b = true". destruct c.
-      SCase "c = true". apply conj. reflexivity. reflexivity.
-      SCase "c = false". inversion H.
-    Case "b = false". inversion H.  Qed.
+    - (* b = true *) destruct c.
+      + (* c = true *) apply conj. reflexivity. reflexivity.
+      + (* c = false *) inversion H.
+    - (* b = false *) inversion H.  Qed.
 
 Theorem andb_true_intro : forall b c,
   b = true /\ c = true -> andb b c = true.
@@ -501,7 +500,7 @@ Proof.
 
 (** **** Exercise: 2 stars, advanced (True)  *)
 (** Define [True] as another inductively defined proposition.  (The
-    intution is that [True] should be a proposition for which it is
+    intuition is that [True] should be a proposition for which it is
     trivial to give evidence.) *)
 
 (* FILL IN HERE *)
@@ -600,8 +599,7 @@ Proof.
   (* But now what? There is no way to "invent" evidence for [~P] 
      from evidence for [P]. *) 
   Abort.
-
-(** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
+  (** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
 (** For those who like a challenge, here is an exercise
     taken from the Coq'Art book (p. 123).  The following five
     statements are often considered as characterizations of
@@ -656,22 +654,16 @@ Theorem not_false_then_true : forall b : bool,
   b <> false -> b = true.
 Proof.
   intros b H. destruct b.
-  Case "b = true". reflexivity.
-  Case "b = false".
+  - (* b = true *) reflexivity.
+  - (* b = false *)
     unfold not in H.  
     apply ex_falso_quodlibet.
     apply H. reflexivity.   Qed.
 
 
-(** *** *)
 
-(** *** *)
 
-(** *** *)
 
-(** *** *)
-
-(** *** *)
 
 (** **** Exercise: 2 stars (false_beq_nat)  *)
 Theorem false_beq_nat : forall n m : nat,
@@ -689,5 +681,5 @@ Proof.
 (** [] *)
 
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

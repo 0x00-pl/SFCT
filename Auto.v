@@ -32,43 +32,43 @@ Theorem ceval_deterministic: forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2. 
-  Case "E_Skip". reflexivity.
-  Case "E_Ass". reflexivity.
-  Case "E_Seq".
+  - (* E_Skip *) reflexivity.
+  - (* E_Ass *) reflexivity.
+  - (* E_Seq *)
     assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". apply IHE1_1; assumption.
+    { (* Proof of assertion *) apply IHE1_1; assumption. }
     subst st'0.
     apply IHE1_2. assumption.
-  Case "E_IfTrue".
-    SCase "b evaluates to true".
-      apply IHE1. assumption.
-    SCase "b evaluates to false (contradiction)".
-      rewrite H in H5. inversion H5.
-  Case "E_IfFalse".
-    SCase "b evaluates to true (contradiction)".
-      rewrite H in H5. inversion H5.
-    SCase "b evaluates to false".
-      apply IHE1. assumption.
-  Case "E_WhileEnd".
-    SCase "b evaluates to false".
-      reflexivity.
-    SCase "b evaluates to true (contradiction)".
-      rewrite H in H2. inversion H2.
-  Case "E_WhileLoop".
-    SCase "b evaluates to false (contradiction)".
-      rewrite H in H4. inversion H4.
-    SCase "b evaluates to true".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion". apply IHE1_1; assumption.
-      subst st'0.
-      apply IHE1_2. assumption.  Qed.
+  (* E_IfTrue *)
+  - (* b evaluates to true *)
+    apply IHE1. assumption.
+  - (* b evaluates to false (contradiction) *)
+    rewrite H in H5. inversion H5.
+  (* E_IfFalse *)
+  - (* b evaluates to true (contradiction) *)
+    rewrite H in H5. inversion H5.
+  - (* b evaluates to false *)
+    apply IHE1. assumption.
+  (* E_WhileEnd *)
+  - (* b evaluates to false *)
+    reflexivity.
+  - (* b evaluates to true (contradiction) *)
+    rewrite H in H2. inversion H2.
+  (* E_WhileLoop *)
+  - (* b evaluates to false (contradiction) *)
+    rewrite H in H4. inversion H4.
+  - (* b evaluates to true *)
+    assert (st' = st'0) as EQ1.
+    { (* Proof of assertion *) apply IHE1_1; assumption. }
+    subst st'0.
+    apply IHE1_2. assumption.  Qed.
 
 (** * The [auto] and [eauto] tactics *)
 
 (** Thus far, we have (nearly) always written proof scripts that
-    apply relevant hypothoses or lemmas by name. In particular, when
+    apply relevant hypotheses or lemmas by name. In particular, when
     a chain of hypothesis applications is needed, we have specified
     them explicitly.  (The only exceptions introduced so far are using
     [assumption] to find a matching unqualified hypothesis
@@ -247,30 +247,28 @@ Theorem ceval_deterministic': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; auto.
-  Case "E_Seq".
-    assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". auto. 
+  - (* E_Seq *)
+    assert (st' = st'0) as EQ1 by auto.
     subst st'0.
     auto. 
-  Case "E_IfTrue".
-    SCase "b evaluates to false (contradiction)".
+  - (* E_IfTrue *)
+    + (* b evaluates to false (contradiction) *)
       rewrite H in H5. inversion H5.
-  Case "E_IfFalse".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_IfFalse *)
+    + (* b evaluates to true (contradiction) *)
       rewrite H in H5. inversion H5.
-  Case "E_WhileEnd".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_WhileEnd *)
+    + (* b evaluates to true (contradiction) *)
       rewrite H in H2. inversion H2.
-  Case "E_WhileLoop".
-    SCase "b evaluates to false (contradiction)".
-      rewrite H in H4. inversion H4.
-    SCase "b evaluates to true".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion". auto. 
-      subst st'0.
-      auto. 
+  (* E_WhileLoop *)
+  - (* b evaluates to false (contradiction) *)
+    rewrite H in H4. inversion H4.
+  - (* b evaluates to true *)
+    assert (st' = st'0) as EQ1 by auto.
+    subst st'0.
+    auto. 
 Qed.
 
 (** When we are using a particular tactic many times in a proof,
@@ -289,28 +287,26 @@ Theorem ceval_deterministic'_alt: forall c st st1 st2,
 Proof with auto.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2...
-  Case "E_Seq".
-    assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion"...
+  - (* E_Seq *)
+    assert (st' = st'0) as EQ1...
     subst st'0...
-  Case "E_IfTrue".
-    SCase "b evaluates to false (contradiction)".
+  - (* E_IfTrue *)
+    + (* b evaluates to false (contradiction) *)
       rewrite H in H5. inversion H5.
-  Case "E_IfFalse".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_IfFalse *)
+    + (* b evaluates to true (contradiction) *)
       rewrite H in H5. inversion H5.
-  Case "E_WhileEnd".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_WhileEnd *)
+    + (* b evaluates to true (contradiction) *)
       rewrite H in H2. inversion H2.
-  Case "E_WhileLoop".
-    SCase "b evaluates to false (contradiction)".
-      rewrite H in H4. inversion H4.
-    SCase "b evaluates to true".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion"...
-      subst st'0...
+  (* E_WhileLoop *)
+  - (* b evaluates to false (contradiction) *)
+    rewrite H in H4. inversion H4.
+  - (* b evaluates to true *)
+    assert (st' = st'0) as EQ1...
+    subst st'0...
 Qed.
 
 (** * Searching Hypotheses *)
@@ -348,30 +344,28 @@ Theorem ceval_deterministic'': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; auto.
-  Case "E_Seq".
-    assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". auto. 
+  - (* E_Seq *)
+    assert (st' = st'0) as EQ1 by auto.
     subst st'0.
     auto. 
-  Case "E_IfTrue".
-    SCase "b evaluates to false (contradiction)".
+  - (* E_IfTrue *)
+    + (* b evaluates to false (contradiction) *)
       rwinv H H5. 
-  Case "E_IfFalse".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_IfFalse *)
+    + (* b evaluates to true (contradiction) *)
       rwinv H H5. 
-  Case "E_WhileEnd".
-    SCase "b evaluates to true (contradiction)".
+  - (* E_WhileEnd *)
+    + (* b evaluates to true (contradiction) *)
       rwinv H H2. 
-  Case "E_WhileLoop".
-    SCase "b evaluates to false (contradiction)".
-      rwinv H H4. 
-    SCase "b evaluates to true".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion". auto.
-      subst st'0.
-      auto. Qed.
+  (* E_WhileLoop *)
+  - (* b evaluates to false (contradiction) *)
+    rwinv H H4. 
+  - (* b evaluates to true *)
+    assert (st' = st'0) as EQ1 by auto.
+    subst st'0.
+    auto. Qed.
 
 
 (** But this is not much better.  We really want Coq to discover
@@ -398,17 +392,15 @@ Theorem ceval_deterministic''': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; try find_rwinv; auto.
-  Case "E_Seq".
-    assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". auto. 
+  - (* E_Seq *)
+    assert (st' = st'0) as EQ1 by auto.
     subst st'0.
     auto. 
-  Case "E_WhileLoop".
-    SCase "b evaluates to true".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion". auto. 
+  - (* E_WhileLoop *)
+    + (* b evaluates to true *)
+      assert (st' = st'0) as EQ1 by auto.
       subst st'0.
       auto. Qed.
 
@@ -427,12 +419,12 @@ Theorem ceval_deterministic'''': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; try find_rwinv; auto.
-  Case "E_Seq".
+  - (* E_Seq *)
     rewrite (IHE1_1 st'0 H1) in *. auto.
-  Case "E_WhileLoop".
-    SCase "b evaluates to true".
+  - (* E_WhileLoop *)
+    + (* b evaluates to true *)
       rewrite (IHE1_1 st'0 H3) in *. auto. Qed.
 
 (** Now we can automate the task of finding the relevant hypotheses to 
@@ -465,7 +457,7 @@ Theorem ceval_deterministic''''': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; try find_rwinv; repeat find_eqn; auto.
   Qed.
 
@@ -488,12 +480,6 @@ Inductive com : Type :=
     checked _after_ each execution of the body, with the loop
     repeating as long as the guard stays _false_.  Because of this,
     the body will always execute at least once. *)
-
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
-  | Case_aux c "IFB" | Case_aux c "WHILE"
-  | Case_aux c "CRepeat" ].
 
 Notation "'SKIP'" := 
   CSkip.
@@ -545,15 +531,6 @@ Inductive ceval : state -> com -> state -> Prop :=
       ceval st (CRepeat c1 b1) st''
 .
 
-Tactic Notation "ceval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Skip" | Case_aux c "E_Ass"
-  | Case_aux c "E_Seq"
-  | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop" 
-  | Case_aux c "E_RepeatEnd" | Case_aux c "E_RepeatLoop" 
-].
-
 Notation "c1 '/' st '||' st'" := (ceval st c1 st') 
                                  (at level 40, st at level 39).
 
@@ -565,15 +542,15 @@ Theorem ceval_deterministic: forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; try find_rwinv; repeat find_eqn; auto.
-  Case "E_RepeatEnd".
-    SCase "b evaluates to false (contradiction)".
+  - (* E_RepeatEnd *)
+    + (* b evaluates to false (contradiction) *)
        find_rwinv.
        (* oops: why didn't [find_rwinv] solve this for us already? 
           answer: we did things in the wrong order. *)
-  case "E_RepeatLoop".
-     SCase "b evaluates to true (contradiction)".
+  - (* E_RepeatLoop *)
+     + (* b evaluates to true (contradiction) *)
         find_rwinv.
 Qed.
 
@@ -584,7 +561,7 @@ Theorem ceval_deterministic': forall c st st1 st2,
 Proof.
   intros c st st1 st2 E1 E2;
   generalize dependent st2;
-  ceval_cases (induction E1) Case;
+  induction E1;
            intros st2 E2; inv E2; repeat find_eqn; try find_rwinv; auto.
 Qed.
       
@@ -598,4 +575,4 @@ End Repeat.
 
 *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

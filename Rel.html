@@ -69,7 +69,7 @@ Somewhat confusingly, the Coq standard library hijacks the generic
     clear which is meant. 
 <div class="paragraph"> </div>
 
- An example relation on <span class="inlinecode"><span class="id" type="var">nat</span></span> is <span class="inlinecode"><span class="id" type="var">le</span></span>, the less-that-or-equal-to
+ An example relation on <span class="inlinecode"><span class="id" type="var">nat</span></span> is <span class="inlinecode"><span class="id" type="var">le</span></span>, the less-than-or-equal-to
     relation which we usually write like this <span class="inlinecode"><span class="id" type="var">n1</span></span> <span class="inlinecode">≤</span> <span class="inlinecode"><span class="id" type="var">n2</span></span>. 
 </div>
 <div class="code code-tight">
@@ -86,7 +86,7 @@ Somewhat confusingly, the Coq standard library hijacks the generic
 </div>
 
 <div class="doc">
-<a name="lab363"></a><h1 class="section">Basic Properties of Relations</h1>
+<a name="lab357"></a><h1 class="section">Basic Properties of Relations</h1>
 
 <div class="paragraph"> </div>
 
@@ -150,17 +150,17 @@ However, the <span class="inlinecode">≤</span> relation on numbers is not a pa
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">not</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">partial_function</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">Hc</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">assert</span> (0 = 1) <span class="id" type="keyword">as</span> <span class="id" type="var">Nonsense</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "Proof of assertion".<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">Hc</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">x</span> := 0).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
+&nbsp;&nbsp;{ <span class="comment">(*&nbsp;Proof&nbsp;of&nbsp;assertion&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">Hc</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">x</span> := 0).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>. }<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Nonsense</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab364"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab358"></a><h4 class="section">Exercise: 2 stars, optional</h4>
  Show that the <span class="inlinecode"><span class="id" type="var">total_relation</span></span> defined in earlier is not a partial
     function. 
 </div>
@@ -174,7 +174,7 @@ However, the <span class="inlinecode">≤</span> relation on numbers is not a pa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab365"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab359"></a><h4 class="section">Exercise: 2 stars, optional</h4>
  Show that the <span class="inlinecode"><span class="id" type="var">empty_relation</span></span> defined earlier is a partial
     function. 
 </div>
@@ -222,8 +222,8 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">m</span> <span class="id" type="var">o</span> <span class="id" type="var">Hnm</span> <span class="id" type="var">Hmo</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hmo</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "le_n". <span class="id" type="tactic">apply</span> <span class="id" type="var">Hnm</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "le_S". <span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHHmo</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;le_n&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">Hnm</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;le_S&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHHmo</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">lt_trans</span>:<br/>
@@ -240,7 +240,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 </div>
 
 <div class="doc">
-<a name="lab366"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab360"></a><h4 class="section">Exercise: 2 stars, optional</h4>
  We can also prove <span class="inlinecode"><span class="id" type="var">lt_trans</span></span> more laboriously by induction,
     without using le_trans.  Do this.
 </div>
@@ -261,7 +261,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab367"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab361"></a><h4 class="section">Exercise: 2 stars, optional</h4>
  Prove the same thing again by induction on <span class="inlinecode"><span class="id" type="var">o</span></span>. 
 </div>
 <div class="code code-tight">
@@ -297,7 +297,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 </div>
 
 <div class="doc">
-<a name="lab368"></a><h4 class="section">Exercise: 1 star, optional</h4>
+<a name="lab362"></a><h4 class="section">Exercise: 1 star, optional</h4>
 
 </div>
 <div class="code code-space">
@@ -311,7 +311,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab369"></a><h4 class="section">Exercise: 2 stars, optional (le_Sn_n_inf)</h4>
+<a name="lab363"></a><h4 class="section">Exercise: 2 stars, optional (le_Sn_n_inf)</h4>
  Provide an informal proof of the following theorem:
 
 <div class="paragraph"> </div>
@@ -331,7 +331,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
  
 <div class="paragraph"> </div>
 
-<a name="lab370"></a><h4 class="section">Exercise: 1 star, optional</h4>
+<a name="lab364"></a><h4 class="section">Exercise: 1 star, optional</h4>
 
 </div>
 <div class="code code-space">
@@ -363,7 +363,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 </div>
 
 <div class="doc">
-<a name="lab371"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab365"></a><h4 class="section">Exercise: 2 stars, optional</h4>
 
 </div>
 <div class="code code-space">
@@ -391,7 +391,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 </div>
 
 <div class="doc">
-<a name="lab372"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab366"></a><h4 class="section">Exercise: 2 stars, optional</h4>
 
 </div>
 <div class="code code-space">
@@ -405,7 +405,7 @@ A relation <span class="inlinecode"><span class="id" type="var">R</span></span> 
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab373"></a><h4 class="section">Exercise: 2 stars, optional</h4>
+<a name="lab367"></a><h4 class="section">Exercise: 2 stars, optional</h4>
 
 </div>
 <div class="code code-space">
@@ -462,16 +462,16 @@ A preorder is almost like a partial order, but doesn't have to be
 &nbsp;&nbsp;<span class="id" type="var">order</span> <span class="id" type="var">le</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">order</span>. <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "refl". <span class="id" type="tactic">apply</span> <span class="id" type="var">le_reflexive</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "antisym". <span class="id" type="tactic">apply</span> <span class="id" type="var">le_antisymmetric</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "transitive.". <span class="id" type="tactic">apply</span> <span class="id" type="var">le_trans</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;refl&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">le_reflexive</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;antisym&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">le_antisymmetric</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;transitive.&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">le_trans</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab374"></a><h1 class="section">Reflexive, Transitive Closure</h1>
+<a name="lab368"></a><h1 class="section">Reflexive, Transitive Closure</h1>
 
 <div class="paragraph"> </div>
 
@@ -505,16 +505,16 @@ For example, the reflexive and transitive closure of the
 &nbsp;&nbsp;(<span class="id" type="var">n</span> ≤ <span class="id" type="var">m</span>) <span style="font-family: arial;">&harr;</span> ((<span class="id" type="var">clos_refl_trans</span> <span class="id" type="var">next_nat</span>) <span class="id" type="var">n</span> <span class="id" type="var">m</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "le_n". <span class="id" type="tactic">apply</span> <span class="id" type="var">rt_refl</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "le_S".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;le_n&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">rt_refl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;le_S&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">rt_trans</span> <span class="id" type="keyword">with</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHle</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">rt_step</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">nn</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "rt_step". <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "rt_refl". <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "rt_trans".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;rt_step&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_S</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;rt_refl&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">le_n</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;rt_trans&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">le_trans</span> <span class="id" type="keyword">with</span> <span class="id" type="var">y</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHclos_refl_trans1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHclos_refl_trans2</span>. <span class="id" type="keyword">Qed</span>.<br/>
@@ -554,28 +554,7 @@ The above definition of reflexive, transitive closure is
     other chapters.) 
 <div class="paragraph"> </div>
 
- (The following <span class="inlinecode"><span class="id" type="keyword">Tactic</span></span> <span class="inlinecode"><span class="id" type="keyword">Notation</span></span> definitions are explained in
-    another chapter.  You can ignore them if you haven't read the
-    explanation yet.) 
-</div>
-<div class="code code-tight">
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "rt_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "rt_step" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "rt_refl" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "rt_trans" ].<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "rsc_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "rsc_refl" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "rsc_step" ].<br/>
-
-<br/>
-</div>
-
-<div class="doc">
-Our new definition of reflexive, transitive closure "bundles"
+ Our new definition of reflexive, transitive closure "bundles"
     the <span class="inlinecode"><span class="id" type="var">rt_step</span></span> and <span class="inlinecode"><span class="id" type="var">rt_trans</span></span> rules into the single rule step.
     The left-hand premise of this step is a single use of <span class="inlinecode"><span class="id" type="var">R</span></span>,
     leading to a much simpler induction principle.
@@ -604,7 +583,7 @@ Our new definition of reflexive, transitive closure "bundles"
 </div>
 
 <div class="doc">
-<a name="lab375"></a><h4 class="section">Exercise: 2 stars, optional (rsc_trans)</h4>
+<a name="lab369"></a><h4 class="section">Exercise: 2 stars, optional (rsc_trans)</h4>
 
 </div>
 <div class="code code-space">
@@ -626,7 +605,7 @@ Our new definition of reflexive, transitive closure "bundles"
     relation. 
 <div class="paragraph"> </div>
 
-<a name="lab376"></a><h4 class="section">Exercise: 3 stars, optional (rtc_rsc_coincide)</h4>
+<a name="lab370"></a><h4 class="section">Exercise: 3 stars, optional (rtc_rsc_coincide)</h4>
 
 </div>
 <div class="code code-space">

@@ -164,7 +164,7 @@ Definition test_ceval (st:state) (c:com) :=
   | Some st => Some (st X, st Y, st Z)
   end.  
 
-(* Eval compute in 
+(* Compute
      (test_ceval empty_state 
          (X ::= ANum 2;;
           IFB BLe (AId X) (ANum 1)
@@ -219,44 +219,43 @@ Proof.
   generalize dependent c.
   induction i as [| i' ].
 
-  Case "i = 0 -- contradictory".
+  - (* i = 0 -- contradictory *)
     intros c st st' H. inversion H.
 
-  Case "i = S i'".
+  - (* i = S i' *)
     intros c st st' H.
-    com_cases (destruct c) SCase; 
+    destruct c; 
            simpl in H; inversion H; subst; clear H. 
-      SCase "SKIP". apply E_Skip.
-      SCase "::=". apply E_Ass. reflexivity.
+      + (* SKIP *) apply E_Skip.
+      + (* ::= *) apply E_Ass. reflexivity.
 
-      SCase ";;".
+      + (* ;; *)
         destruct (ceval_step st c1 i') eqn:Heqr1. 
-        SSCase "Evaluation of r1 terminates normally".
+        * (* Evaluation of r1 terminates normally *)
           apply E_Seq with s. 
             apply IHi'. rewrite Heqr1. reflexivity.
             apply IHi'. simpl in H1. assumption.
-        SSCase "Otherwise -- contradiction".
+        * (* Otherwise -- contradiction *)
           inversion H1.
 
-      SCase "IFB". 
+      + (* IFB *) 
         destruct (beval st b) eqn:Heqr.
-        SSCase "r = true".
+        * (* r = true *)
           apply E_IfTrue. rewrite Heqr. reflexivity.
           apply IHi'. assumption.
-        SSCase "r = false".
+        * (* r = false *)
           apply E_IfFalse. rewrite Heqr. reflexivity.
           apply IHi'. assumption.
 
-      SCase "WHILE". destruct (beval st b) eqn :Heqr.
-        SSCase "r = true". 
+      + (* WHILE *) destruct (beval st b) eqn :Heqr.
+        * (* r = true *) 
          destruct (ceval_step st c i') eqn:Heqr1.
-          SSSCase "r1 = Some s".
-            apply E_WhileLoop with s. rewrite Heqr. reflexivity.
-            apply IHi'. rewrite Heqr1. reflexivity. 
-            apply IHi'. simpl in H1. assumption.
-          SSSCase "r1 = None".
-            inversion H1.
-        SSCase "r = false".
+         { (* r1 = Some s *)
+           apply E_WhileLoop with s. rewrite Heqr. reflexivity.
+           apply IHi'. rewrite Heqr1. reflexivity. 
+           apply IHi'. simpl in H1. assumption. }
+         { (* r1 = None *) inversion H1. }
+        * (* r = false *)
           inversion H1. 
           apply E_WhileEnd. 
           rewrite <- Heqr. subst. reflexivity.  Qed.
@@ -279,41 +278,41 @@ Theorem ceval_step_more: forall i1 i2 st st' c,
   ceval_step st c i2 = Some st'.
 Proof. 
 induction i1 as [|i1']; intros i2 st st' c Hle Hceval.
-  Case "i1 = 0".
+  - (* i1 = 0 *)
     simpl in Hceval. inversion Hceval.
-  Case "i1 = S i1'".
+  - (* i1 = S i1' *)
     destruct i2 as [|i2']. inversion Hle. 
     assert (Hle': i1' <= i2') by omega.
-    com_cases (destruct c) SCase.
-    SCase "SKIP".
+    destruct c.
+    + (* SKIP *)
       simpl in Hceval. inversion Hceval.
       reflexivity.
-    SCase "::=".
+    + (* ::= *)
       simpl in Hceval. inversion Hceval.
       reflexivity.
-    SCase ";;".
+    + (* ;; *)
       simpl in Hceval. simpl. 
       destruct (ceval_step st c1 i1') eqn:Heqst1'o.
-      SSCase "st1'o = Some".
+      * (* st1'o = Some *)
         apply (IHi1' i2') in Heqst1'o; try assumption.
         rewrite Heqst1'o. simpl. simpl in Hceval.
         apply (IHi1' i2') in Hceval; try assumption.
-      SSCase "st1'o = None".
+      * (* st1'o = None *)
         inversion Hceval.
 
-    SCase "IFB".
+    + (* IFB *)
       simpl in Hceval. simpl.
       destruct (beval st b); apply (IHi1' i2') in Hceval; assumption.
     
-    SCase "WHILE".
+    + (* WHILE *)
       simpl in Hceval. simpl.
       destruct (beval st b); try assumption. 
       destruct (ceval_step st c i1') eqn: Heqst1'o.
-      SSCase "st1'o = Some".
+      * (* st1'o = Some *)
         apply (IHi1' i2') in Heqst1'o; try assumption. 
         rewrite -> Heqst1'o. simpl. simpl in Hceval. 
         apply (IHi1' i2') in Hceval; try assumption.
-      SSCase "i1'o = None".
+      * (* i1'o = None *)
         simpl in Hceval. inversion Hceval.  Qed.
 
 (** **** Exercise: 3 stars (ceval__ceval_step)  *)
@@ -325,7 +324,7 @@ Theorem ceval__ceval_step: forall c st st',
       exists i, ceval_step st c i = Some st'.
 Proof. 
   intros c st st' Hce.
-  ceval_cases (induction Hce) Case.
+  induction Hce.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -359,5 +358,5 @@ Proof.
   rewrite E1 in E2. inversion E2. reflexivity. 
   omega. omega.  Qed.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

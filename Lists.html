@@ -50,7 +50,7 @@
 
 <br/>
 <span class="id" type="keyword">Inductive</span> <span class="id" type="var">natprod</span> : <span class="id" type="keyword">Type</span> :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">pair</span> : <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">natprod</span>.<br/>
+| <span class="id" type="var">pair</span> : <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">natprod</span>.<br/>
 
 <br/>
 </div>
@@ -94,7 +94,7 @@ This declaration can be read: "There is just one way to
 &nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="id" type="keyword">Eval</span> <span class="id" type="tactic">compute</span> <span class="id" type="keyword">in</span> (<span class="id" type="var">fst</span> (<span class="id" type="var">pair</span> 3 5)).<br/>
+<span class="id" type="var">Compute</span> (<span class="id" type="var">fst</span> (<span class="id" type="var">pair</span> 3 5)).<br/>
 <span class="comment">(*&nbsp;===&gt;&nbsp;3&nbsp;*)</span><br/>
 
 <br/>
@@ -127,7 +127,7 @@ The new notation can be used both in expressions and in
 <div class="code code-tight">
 
 <br/>
-<span class="id" type="keyword">Eval</span> <span class="id" type="tactic">compute</span> <span class="id" type="keyword">in</span> (<span class="id" type="var">fst</span> (3,5)).<br/>
+<span class="id" type="var">Compute</span> (<span class="id" type="var">fst</span> (3,5)).<br/>
 
 <br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">fst'</span> (<span class="id" type="var">p</span> : <span class="id" type="var">natprod</span>) : <span class="id" type="var">nat</span> := <br/>
@@ -679,17 +679,20 @@ Multiset <span class="inlinecode"><span class="id" type="var">sum</span></span> 
 <div class="paragraph"> </div>
 
 <a name="lab77"></a><h4 class="section">Exercise: 3 stars (bag_theorem)</h4>
- Write down an interesting theorem <span class="inlinecode"><span class="id" type="var">bag_theorem</span></span> about bags involving
-    the functions <span class="inlinecode"><span class="id" type="var">count</span></span> and <span class="inlinecode"><span class="id" type="var">add</span></span>, and prove it.  Note that, since this
-    problem is somewhat open-ended, it's possible that you may come up
-    with a theorem which is true, but whose proof requires techniques
-    you haven't learned yet.  Feel free to ask for help if you get
-    stuck! 
+ Write down an interesting theorem <span class="inlinecode"><span class="id" type="var">bag_theorem</span></span> about bags
+    involving the functions <span class="inlinecode"><span class="id" type="var">count</span></span> and <span class="inlinecode"><span class="id" type="var">add</span></span>, and prove it.  For
+    this, replace the <span class="inlinecode"><span class="id" type="var">admit</span></span> command below with the statement of your
+    theorem. Note that, since this problem is somewhat open-ended,
+    it's possible that you may come up with a theorem which is true,
+    but whose proof requires techniques you haven't learned yet.  Feel
+    free to ask for help if you get stuck! 
 </div>
 <div class="code code-tight">
 
 <br/>
-<span class="comment">(*&nbsp;FILL&nbsp;IN&nbsp;HERE&nbsp;*)</span><br/>
+<span class="id" type="keyword">Theorem</span> <span class="id" type="var">bag_theorem</span> :<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;FILL&nbsp;IN&nbsp;HERE&nbsp;*)</span> <span class="id" type="var">admit</span>.<br/>
+<span class="comment">(*&nbsp;FILL&nbsp;IN&nbsp;HERE&nbsp;*)</span> <span class="id" type="var">Admitted</span>.<br/>
 </div>
 
 <div class="doc">
@@ -737,9 +740,9 @@ Multiset <span class="inlinecode"><span class="id" type="var">sum</span></span> 
 &nbsp;&nbsp;<span class="id" type="var">pred</span> (<span class="id" type="var">length</span> <span class="id" type="var">l</span>) = <span class="id" type="var">length</span> (<span class="id" type="var">tl</span> <span class="id" type="var">l</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;nil&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = cons n l'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;cons&nbsp;n&nbsp;l'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -830,25 +833,29 @@ Here, the <span class="inlinecode"><span class="id" type="var">nil</span></span>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">app_assoc</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">l1</span> <span class="id" type="var">l2</span> <span class="id" type="var">l3</span> : <span class="id" type="var">natlist</span>, <br/>
 &nbsp;&nbsp;(<span class="id" type="var">l1</span> ++ <span class="id" type="var">l2</span>) ++ <span class="id" type="var">l3</span> = <span class="id" type="var">l1</span> ++ (<span class="id" type="var">l2</span> ++ <span class="id" type="var">l3</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span> <span class="id" type="var">l3</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l1</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l1'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l1 = nil".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span> <span class="id" type="var">l3</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l1</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l1'</span> <span class="id" type="var">IHl1'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l1&nbsp;=&nbsp;nil&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l1 = cons n l1'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l1&nbsp;=&nbsp;cons&nbsp;n&nbsp;l1'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHl1'</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-Again, this Coq proof is not especially illuminating as a
-    static written document &mdash; it is easy to see what's going on if
-    you are reading the proof in an interactive Coq session and you
-    can see the current goal and context at each point, but this state
-    is not visible in the written-down parts of the Coq proof.  So a
-    natural-language proof &mdash; one written for human readers &mdash; will
-    need to include more explicit signposts; in particular, it will
-    help the reader stay oriented if we remind them exactly what the
-    induction hypothesis is in the second case.  
+Notice that, as when doing induction on natural numbers, the
+    <span class="inlinecode"><span class="id" type="keyword">as</span>...</span> clause provided to the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> tactic gives a name to
+    the induction hypothesis corresponding to the smaller list <span class="inlinecode"><span class="id" type="var">l1'</span></span>
+    in the <span class="inlinecode"><span class="id" type="var">cons</span></span> case. Once again, this Coq proof is not especially
+    illuminating as a static written document &mdash; it is easy to see
+    what's going on if you are reading the proof in an interactive Coq
+    session and you can see the current goal and context at each
+    point, but this state is not visible in the written-down parts of
+    the Coq proof.  So a natural-language proof &mdash; one written for
+    human readers &mdash; will need to include more explicit signposts; in
+    particular, it will help the reader stay oriented if we remind
+    them exactly what the induction hypothesis is in the second case.
+    
 <div class="paragraph"> </div>
 
 <a name="lab81"></a><h3 class="section">Informal version</h3>
@@ -927,10 +934,10 @@ Again, this Coq proof is not especially illuminating as a
 &nbsp;&nbsp;<span class="id" type="var">length</span> (<span class="id" type="var">l1</span> ++ <span class="id" type="var">l2</span>) = (<span class="id" type="var">length</span> <span class="id" type="var">l1</span>) + (<span class="id" type="var">length</span> <span class="id" type="var">l2</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="comment">(*&nbsp;WORKED&nbsp;IN&nbsp;CLASS&nbsp;*)</span><br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l1</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l1'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l1 = nil".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l1</span> <span class="id" type="var">l2</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l1</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l1'</span> <span class="id" type="var">IHl1'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l1&nbsp;=&nbsp;nil&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l1 = cons".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l1&nbsp;=&nbsp;cons&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHl1'</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -990,10 +997,10 @@ Again, this Coq proof is not especially illuminating as a
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">rev_length_firsttry</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">l</span> : <span class="id" type="var">natlist</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">length</span> (<span class="id" type="var">rev</span> <span class="id" type="var">l</span>) = <span class="id" type="var">length</span> <span class="id" type="var">l</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = []".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l'</span> <span class="id" type="var">IHl'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;<span class="inlinecode"></span>&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = n :: l'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;n&nbsp;::&nbsp;l'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;This&nbsp;is&nbsp;the&nbsp;tricky&nbsp;case.&nbsp;&nbsp;Let's&nbsp;begin&nbsp;as&nbsp;usual&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by&nbsp;simplifying.&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
@@ -1022,10 +1029,10 @@ So let's take the equation about <span class="inlinecode"><span class="id" type=
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">length_snoc</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span> : <span class="id" type="var">nat</span>, <span style="font-family: arial;">&forall;</span><span class="id" type="var">l</span> : <span class="id" type="var">natlist</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">length</span> (<span class="id" type="var">snoc</span> <span class="id" type="var">l</span> <span class="id" type="var">n</span>) = <span class="id" type="var">S</span> (<span class="id" type="var">length</span> <span class="id" type="var">l</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span> <span class="id" type="var">l'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span> <span class="id" type="var">l'</span> <span class="id" type="var">IHl'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;nil&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = cons n' l'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;cons&nbsp;n'&nbsp;l'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHl'</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -1049,10 +1056,10 @@ So let's take the equation about <span class="inlinecode"><span class="id" type=
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">rev_length</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">l</span> : <span class="id" type="var">natlist</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">length</span> (<span class="id" type="var">rev</span> <span class="id" type="var">l</span>) = <span class="id" type="var">length</span> <span class="id" type="var">l</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">l</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">l</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n</span> <span class="id" type="var">l'</span> <span class="id" type="var">IHl'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;nil&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "l = cons".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;l&nbsp;=&nbsp;cons&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">length_snoc</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHl'</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -1429,10 +1436,10 @@ The following lemma about <span class="inlinecode"><span class="id" type="var">b
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">ble_n_Sn</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">ble_nat</span> <span class="id" type="var">n</span> (<span class="id" type="var">S</span> <span class="id" type="var">n</span>) = <span class="id" type="var">true</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "0".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span>. <span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span> <span class="id" type="var">IHn'</span>].<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "S n'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;S&nbsp;n'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">IHn'</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -1689,11 +1696,11 @@ This declaration can be read: "There are two ways to construct a
 </div>
 
 <div class="doc">
-Here is a function <span class="inlinecode"><span class="id" type="var">find</span></span> that searches a <span class="inlinecode"><span class="id" type="var">dictionary</span></span> for a
-    given key.  It evaluates evaluates to <span class="inlinecode"><span class="id" type="var">None</span></span> if the key was not
-    found and <span class="inlinecode"><span class="id" type="var">Some</span></span> <span class="inlinecode"><span class="id" type="var">val</span></span> if the key was mapped to <span class="inlinecode"><span class="id" type="var">val</span></span> in the
-    dictionary. If the same key is mapped to multiple values, <span class="inlinecode"><span class="id" type="var">find</span></span>
-    will return the first one it finds. 
+Here is a function <span class="inlinecode"><span class="id" type="var">find</span></span> that searches a <span class="inlinecode"><span class="id" type="var">dictionary</span></span> for a given
+    key.  It evaluates to <span class="inlinecode"><span class="id" type="var">None</span></span> if the key was not found and <span class="inlinecode"><span class="id" type="var">Some</span></span>
+    <span class="inlinecode"><span class="id" type="var">val</span></span> if the key was mapped to <span class="inlinecode"><span class="id" type="var">val</span></span> in the dictionary. If the same
+    key is mapped to multiple values, <span class="inlinecode"><span class="id" type="var">find</span></span> will return the first one
+    it finds. 
 </div>
 <div class="code code-tight">
 
@@ -1701,9 +1708,9 @@ Here is a function <span class="inlinecode"><span class="id" type="var">find</sp
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">find</span> (<span class="id" type="var">key</span> : <span class="id" type="var">nat</span>) (<span class="id" type="var">d</span> : <span class="id" type="var">dictionary</span>) : <span class="id" type="var">natoption</span> := <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">d</span> <span class="id" type="keyword">with</span> <br/>
 &nbsp;&nbsp;| <span class="id" type="var">empty</span>         ⇒ <span class="id" type="var">None</span><br/>
-&nbsp;&nbsp;| <span class="id" type="var">record</span> <span class="id" type="var">k</span> <span class="id" type="var">v</span> <span class="id" type="var">d'</span> ⇒ <span class="id" type="keyword">if</span> (<span class="id" type="var">beq_nat</span> <span class="id" type="var">key</span> <span class="id" type="var">k</span>) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">then</span> (<span class="id" type="var">Some</span> <span class="id" type="var">v</span>) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> (<span class="id" type="var">find</span> <span class="id" type="var">key</span> <span class="id" type="var">d'</span>)<br/>
+&nbsp;&nbsp;| <span class="id" type="var">record</span> <span class="id" type="var">k</span> <span class="id" type="var">v</span> <span class="id" type="var">d'</span> ⇒ <span class="id" type="keyword">if</span> <span class="id" type="var">beq_nat</span> <span class="id" type="var">key</span> <span class="id" type="var">k</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">then</span> <span class="id" type="var">Some</span> <span class="id" type="var">v</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> <span class="id" type="var">find</span> <span class="id" type="var">key</span> <span class="id" type="var">d'</span><br/>
 &nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
@@ -1717,7 +1724,7 @@ Here is a function <span class="inlinecode"><span class="id" type="var">find</sp
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">dictionary_invariant1'</span> : <span style="font-family: arial;">&forall;</span>(<span class="id" type="var">d</span> : <span class="id" type="var">dictionary</span>) (<span class="id" type="var">k</span> <span class="id" type="var">v</span>: <span class="id" type="var">nat</span>),<br/>
-&nbsp;&nbsp;(<span class="id" type="var">find</span> <span class="id" type="var">k</span> (<span class="id" type="var">insert</span> <span class="id" type="var">k</span> <span class="id" type="var">v</span> <span class="id" type="var">d</span>)) = <span class="id" type="var">Some</span> <span class="id" type="var">v</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">find</span> <span class="id" type="var">k</span> (<span class="id" type="var">insert</span> <span class="id" type="var">k</span> <span class="id" type="var">v</span> <span class="id" type="var">d</span>) = <span class="id" type="var">Some</span> <span class="id" type="var">v</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;<span class="comment">(*&nbsp;FILL&nbsp;IN&nbsp;HERE&nbsp;*)</span> <span class="id" type="var">Admitted</span>.<br/>
 </div>

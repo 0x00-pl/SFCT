@@ -36,11 +36,6 @@ Inductive hoare_proof : Assertion -> com -> Assertion -> Type :=
     (forall st, Q' st -> Q st) ->
     hoare_proof P c Q.
 
-Tactic Notation "hoare_proof_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "H_Skip" | Case_aux c "H_Asgn" | Case_aux c "H_Seq"
-  | Case_aux c "H_If" | Case_aux c "H_While" | Case_aux c "H_Consequence" ].
-
 (** We don't need to include axioms corresponding to [hoare_consequence_pre]
     or [hoare_consequence_post], because these can be proven easily
     from [H_Consequence]. *)
@@ -117,30 +112,30 @@ Theorem H_Post_True_deriv:
   forall c P, hoare_proof P c (fun _ => True).
 Proof.
   intro c.
-  com_cases (induction c) Case; intro P.
-  Case "SKIP".
+  induction c; intro P.
+  - (* SKIP *)
     eapply H_Consequence.
     apply H_Skip.
     intros. apply H.
     (* Proof of True *)
     intros. apply I.
-  Case "::=".
+  - (* ::= *)
     eapply H_Consequence_pre.
     apply H_Asgn.
     intros. apply I.
-  Case ";;".
+  - (* ;; *)
     eapply H_Consequence_pre.
     eapply H_Seq.
     apply (IHc1 (fun _ => True)).
     apply IHc2.
     intros. apply I.
-  Case "IFB".
+  - (* IFB *)
     apply H_Consequence_pre with (fun _ => True).
     apply H_If.
     apply IHc1.
     apply IHc2.
     intros. apply I.
-  Case "WHILE".
+  - (* WHILE *)
     eapply H_Consequence.
     eapply H_While.
     eapply IHc.
@@ -166,15 +161,15 @@ Theorem H_Pre_False_deriv:
   forall c Q, hoare_proof (fun _ => False) c Q.
 Proof.
   intros c.
-  com_cases (induction c) Case; intro Q.
-  Case "SKIP". pre_false_helper H_Skip.
-  Case "::=". pre_false_helper H_Asgn.
-  Case ";;". pre_false_helper H_Seq. apply IHc1. apply IHc2.
-  Case "IFB".
+  induction c; intro Q.
+  - (* SKIP *) pre_false_helper H_Skip.
+  - (* ::= *) pre_false_helper H_Asgn.
+  - (* ;; *) pre_false_helper H_Seq. apply IHc1. apply IHc2.
+  - (* IFB *)
     apply H_If; eapply H_Consequence_pre.
     apply IHc1. intro. eapply False_and_P_imp.
     apply IHc2. intro. eapply False_and_P_imp.
-  Case "WHILE".
+  - (* WHILE *)
     eapply H_Consequence_post.
     eapply H_While.
     eapply H_Consequence_pre.
@@ -234,18 +229,18 @@ Theorem hoare_proof_complete: forall P c Q,
   {{P}} c {{Q}} -> hoare_proof P c Q.
 Proof.
   intros P c. generalize dependent P.
-  com_cases (induction c) Case; intros P Q HT.
-  Case "SKIP".
+  induction c; intros P Q HT.
+  - (* SKIP *)
     eapply H_Consequence.
      eapply H_Skip.
       intros.  eassumption.
       intro st. apply HT.  apply E_Skip.
-  Case "::=".
+  - (* ::= *)
     eapply H_Consequence.
       eapply H_Asgn.
       intro st. apply HT. econstructor. reflexivity.
       intros; assumption.
-  Case ";;".
+  - (* ;; *)
     apply H_Seq with (wp c2 Q).
      eapply IHc1.
        intros st st' E1 H. unfold wp. intros st'' E2.
@@ -277,5 +272,5 @@ Proof.
     [Hoare2] on formalizing decorated programs shows how we can do even
     better. *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

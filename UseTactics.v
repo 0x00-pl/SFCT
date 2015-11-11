@@ -149,7 +149,7 @@ Theorem ceval_deterministic: forall c st st1 st2,
   st1 = st2.
 Proof. 
   introv E1 E2. generalize dependent st2.
-  (ceval_cases (induction E1) Case); intros st2 E2.
+  induction E1; intros st2 E2.
   admit. admit. (* skip some basic cases *)
   dup. (* duplicate the goal for comparison *)
   (* was: *) inversion E2. subst. admit.
@@ -168,34 +168,34 @@ Theorem ceval_deterministic': forall c st st1 st2,
   st1 = st2.
 Proof. 
   introv E1 E2. generalize dependent st2.
-  (ceval_cases (induction E1) Case); intros st2 E2; 
+  (induction E1); intros st2 E2; 
     inverts E2 as.
-  Case "E_Skip". reflexivity.
-  Case "E_Ass". 
+  - (* E_Skip *) reflexivity.
+  - (* E_Ass *) 
     (* Observe that the variable [n] is not automatically 
        substituted because, contrary to [inversion E2; subst],
        the tactic [inverts E2] does not substitute the equalities
        that exist before running the inversion. *)     
     (* new: *) subst n. 
     reflexivity.
-  Case "E_Seq". 
+  - (* E_Seq *) 
     (* Here, the newly created variables can be introduced
        using intros, so they can be assigned meaningful names,
        for example [st3] instead of [st'0]. *)
     (* new: *) intros st3 Red1 Red2.
     assert (st' = st3) as EQ1.
-      SCase "Proof of assertion". apply IHE1_1; assumption.
+    { (* Proof of assertion *) apply IHE1_1; assumption. }
     subst st3.
     apply IHE1_2. assumption. 
-  Case "E_IfTrue". 
-    SCase "b1 evaluates to true".
-      (* In an easy case like this one, there is no need to
-         provide meaningful names, so we can just use [intros] *)
-      (* new: *) intros. 
-      apply IHE1. assumption.
-    SCase "b1 evaluates to false (contradiction)".
-      (* new: *) intros.
-      rewrite H in H5. inversion H5.
+  (* E_IfTrue *) 
+  - (* b1 evaluates to true *)
+    (* In an easy case like this one, there is no need to
+       provide meaningful names, so we can just use [intros] *)
+    (* new: *) intros. 
+    apply IHE1. assumption.
+  - (* b1 evaluates to false (contradiction) *)
+    (* new: *) intros.
+    rewrite H in H5. inversion H5.
   (* The other cases are similiar *)
 Abort.
 
@@ -334,16 +334,16 @@ Theorem progress : forall ST t T st,
   (* was: [value t \/ exists t', exists st', t / st ==> t' / st'] *)
 Proof with eauto.
   intros ST t T st Ht HST. remember (@empty ty) as Gamma.
-  (has_type_cases (induction Ht) Case); subst; try solve by inversion...
-  Case "T_App".
+  (induction Ht); subst; try solve by inversion...
+  - (* T_App *)
     right. destruct IHHt1 as [Ht1p | Ht1p]...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion Ht1p; subst; try solve by inversion.
       destruct IHHt2 as [Ht2p | Ht2p]...
-      SSCase "t2 steps".
-        inversion Ht2p as [t2' [st' Hstep]].
-        exists (tapp (tabs x T t) t2') st'...
-        (* was: [exists (tapp (tabs x T t) t2'). exists st'...] *)
+      (* t2 steps *)
+      inversion Ht2p as [t2' [st' Hstep]].
+      exists (tapp (tabs x T t) t2') st'...
+      (* was: [exists (tapp (tabs x T t) t2'). exists st'...] *)
 Abort.
 
 (** Remark: a similar facility for n-ary existentials is provided
@@ -713,17 +713,17 @@ Proof.
      right away, but the point is to do the proof and use [IH]
      only at the places where we need an induction hypothesis. *)
   introv E1 E2. gen st2.
-  (ceval_cases (induction E1) Case); introv E2; inverts E2 as.
-  Case "E_Skip". reflexivity.
-  Case "E_Ass". 
+  (induction E1); introv E2; inverts E2 as.
+  - (* E_Skip *) reflexivity.
+  - (* E_Ass *) 
     subst n. 
     reflexivity.
-  Case "E_Seq". 
+  - (* E_Seq *) 
     intros st3 Red1 Red2.
     assert (st' = st3) as EQ1.
-      SCase "Proof of assertion". 
-        (* was: [apply IHE1_1; assumption.] *)
-        (* new: *) eapply IH. eapply E1_1. eapply Red1.
+    { (* Proof of assertion *) 
+      (* was: [apply IHE1_1; assumption.] *)
+      (* new: *) eapply IH. eapply E1_1. eapply Red1. }
     subst st3.
     (* was: apply IHE1_2. assumption.] *)
     (* new: *) eapply IH. eapply E1_2. eapply Red2.
@@ -750,7 +750,7 @@ Theorem ceval_deterministic: forall c st st1 st2,
 Proof. 
   intros c st st1 st2 E1 E2.
   generalize dependent st2.
-  (ceval_cases (induction E1) Case); intros st2 E2; inverts E2.
+  (induction E1); intros st2 E2; inverts E2.
   admit. admit. (* Skipping some trivial cases *)
   sort. (* Observe how the context is reorganized *)
 Abort.
@@ -958,8 +958,8 @@ Lemma substitution_preserves_typing : forall Gamma x U v t S,
 Proof with eauto.
   intros Gamma x U v t S Htypt Htypv.
   generalize dependent S. generalize dependent Gamma.
-  (t_cases (induction t) Case); intros; simpl.
-  Case "tvar".
+  (induction t); intros; simpl.
+  - (* tvar *)
     rename i into y.
 
     (* An example where [destruct] is replaced with [lets]. *)
@@ -967,7 +967,7 @@ Proof with eauto.
     (* new: *) lets (T&Hctx&Hsub): typing_inversion_var Htypt.
     unfold extend in Hctx.
     destruct (eq_id_dec x y)...
-    SCase "x=y".
+    + (* x=y *)
       subst.
       inversion Hctx; subst. clear Hctx.
       apply context_invariance with empty...
@@ -979,14 +979,14 @@ Proof with eauto.
        (* new: *)
         lets [T' HT']: free_in_context S empty Hcontra...
         inversion HT'.
-  Case "tapp".
+  - (* tapp *)
     
     (* Exercise: replace the following [destruct] with a [lets]. *)
     (* old: destruct (typing_inversion_app _ _ _ _ Htypt) 
               as [T1 [Htypt1 Htypt2]]. eapply T_App... *)
     (* FILL IN HERE *) admit.
     
-  Case "tabs".
+  - (* tabs *)
     rename i into y. rename t into T1.
 
     (* Here is another example of using [lets]. *)
@@ -998,23 +998,23 @@ Proof with eauto.
     (* new: *) applys T_Sub (TArrow T1 T2)...
      apply T_Abs...
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
       eapply context_invariance...
       subst. 
       intros x Hafi. unfold extend.
       destruct (eq_id_dec y x)...
-    SCase "x<>y".
+    + (* x<>y *)
       apply IHt. eapply context_invariance...
       intros z Hafi. unfold extend.
       destruct (eq_id_dec y z)...
       subst. rewrite neq_id...
-  Case "ttrue".
+  - (* ttrue *)
     lets: typing_inversion_true Htypt...
-  Case "tfalse".
+  - (* tfalse *)
     lets: typing_inversion_false Htypt...
-  Case "tif".
+  - (* tif *)
     lets (Htyp1&Htyp2&Htyp3): typing_inversion_if Htypt...
-  Case "tunit". 
+  - (* tunit *) 
     (* An example where [assert] can be replaced with [lets]. *)
     (* old: assert (subtype TUnit S) 
              by apply (typing_inversion_unit _ _ Htypt)... *)
@@ -1064,4 +1064,4 @@ End ExamplesInstantiations.
 
 *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

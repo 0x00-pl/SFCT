@@ -134,7 +134,15 @@ This is exactly like the definition of <span class="inlinecode"><span class="id"
 </div>
 
 <div class="doc">
-The "<span class="inlinecode"><span style="font-family: arial;">&forall;</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span>" in these types can be read as an additional
+(Side note on notation: In .v files, the "forall" quantifier is
+    spelled out in letters.  In the generated HTML files, <span class="inlinecode"><span style="font-family: arial;">&forall;</span></span> is
+    usually typeset as the usual mathematical "upside down A," but
+    you'll see the spelled-out "forall" in a few places, as in the
+    above comments.  This is just a quirk of typesetting: there is no
+    difference in meaning. 
+<div class="paragraph"> </div>
+
+ The "<span class="inlinecode"><span style="font-family: arial;">&forall;</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span>" in these types can be read as an additional
     argument to the constructors that determines the expected types of
     the arguments that follow.  When <span class="inlinecode"><span class="id" type="var">nil</span></span> and <span class="inlinecode"><span class="id" type="var">cons</span></span> are used, these
     arguments are supplied in the same way as the others.  For
@@ -496,21 +504,29 @@ In this instance, we don't save much by writing <span class="inlinecode"><span c
     type argument(s) of a given function. The <span class="inlinecode"><span class="id" type="var">Arguments</span></span> directive
     specifies the name of the function or constructor, and then lists
     its argument names, with curly braces around any arguments to be
-    treated as implicit. 
-    
+    treated as implicit. If some arguments of a definition don't have
+    a name, as it is often the case for constructors, they can be
+    marked with a wildcard pattern <span class="inlinecode"><span class="id" type="var">_</span></span>. 
 </div>
 <div class="code code-tight">
 
 <br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">nil</span> {<span class="id" type="var">X</span>}.<br/>
-<span class="id" type="var">Arguments</span> <span class="id" type="var">cons</span> {<span class="id" type="var">X</span>} <span class="id" type="var">_</span> <span class="id" type="var">_</span>. <span class="comment">(*&nbsp;use&nbsp;underscore&nbsp;for&nbsp;argument&nbsp;position&nbsp;that&nbsp;has&nbsp;no&nbsp;name&nbsp;*)</span><br/>
+<span class="id" type="var">Arguments</span> <span class="id" type="var">cons</span> {<span class="id" type="var">X</span>} <span class="id" type="var">_</span> <span class="id" type="var">_</span>.<br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">length</span> {<span class="id" type="var">X</span>} <span class="id" type="var">l</span>.<br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">app</span> {<span class="id" type="var">X</span>} <span class="id" type="var">l1</span> <span class="id" type="var">l2</span>.<br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">rev</span> {<span class="id" type="var">X</span>} <span class="id" type="var">l</span>.<br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">snoc</span> {<span class="id" type="var">X</span>} <span class="id" type="var">l</span> <span class="id" type="var">v</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;note:&nbsp;no&nbsp;_&nbsp;arguments&nbsp;required...&nbsp;*)</span><br/>
+</div>
+
+<div class="doc">
+Now, we don't have to supply type arguments for these functions: 
+</div>
+<div class="code code-tight">
+
+<br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">list123''</span> := <span class="id" type="var">cons</span> 1 (<span class="id" type="var">cons</span> 2 (<span class="id" type="var">cons</span> 3 <span class="id" type="var">nil</span>)).<br/>
 <span class="id" type="keyword">Check</span> (<span class="id" type="var">length</span> <span class="id" type="var">list123''</span>).<br/>
 
@@ -539,11 +555,30 @@ In this instance, we don't save much by writing <span class="inlinecode"><span c
 </div>
 
 <div class="doc">
-(Note that we didn't even have to provide a type argument to
-    the recursive call to <span class="inlinecode"><span class="id" type="var">length''</span></span>; indeed, it is invalid to provide
+(Note that we didn't even have to provide a type argument to the
+    recursive call to <span class="inlinecode"><span class="id" type="var">length''</span></span>; indeed, it is invalid to provide
     one.)  We will use this style whenever possible, although we will
     continue to use use explicit <span class="inlinecode"><span class="id" type="var">Argument</span></span> declarations for
-    <span class="inlinecode"><span class="id" type="keyword">Inductive</span></span> constructors. 
+    <span class="inlinecode"><span class="id" type="keyword">Inductive</span></span> constructors. The reason for that is that marking the
+    parameter of an inductive type as implicit causes it to become
+    implicit for the type itself, not just its constructors.  For
+    instance, consider the following alternative definition of the
+    <span class="inlinecode"><span class="id" type="var">list</span></span> type: 
+</div>
+<div class="code code-tight">
+
+<br/>
+<span class="id" type="keyword">Inductive</span> <span class="id" type="var">list'</span> {<span class="id" type="var">X</span>:<span class="id" type="keyword">Type</span>} : <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <span class="id" type="var">nil'</span> : <span class="id" type="var">list'</span><br/>
+&nbsp;&nbsp;| <span class="id" type="var">cons'</span> : <span class="id" type="var">X</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">list'</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">list'</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Because <span class="inlinecode"><span class="id" type="var">X</span></span> is declared as implicit for the <i>entire</i> inductive
+    definition, we can't write an expression such as <span class="inlinecode"><span class="id" type="var">list'</span></span> <span class="inlinecode"><span class="id" type="var">nat</span></span>,
+    which is almost never what we want. 
 <div class="paragraph"> </div>
 
 <a name="lab113"></a><h3 class="section"> </h3>
@@ -560,17 +595,21 @@ In this instance, we don't save much by writing <span class="inlinecode"><span c
 <div class="code code-tight">
 
 <br/>
-<span class="comment">(*&nbsp;Definition&nbsp;mynil&nbsp;:=&nbsp;nil.&nbsp;&nbsp;*)</span><br/>
+<span class="id" type="var">Fail</span> <span class="id" type="keyword">Definition</span> <span class="id" type="var">mynil</span> := <span class="id" type="var">nil</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-If we uncomment this definition, Coq will give us an error,
-    because it doesn't know what type argument to supply to <span class="inlinecode"><span class="id" type="var">nil</span></span>.  We
-    can help it by providing an explicit type declaration (so that Coq
-    has more information available when it gets to the "application"
-    of <span class="inlinecode"><span class="id" type="var">nil</span></span>): 
+The <span class="inlinecode"><span class="id" type="var">Fail</span></span> qualifier that appears before <span class="inlinecode"><span class="id" type="keyword">Definition</span></span> can be
+    used with <i>any</i> command, and is used to ensure that that command
+    indeed fails when executed. If the command does fail, Coq prints
+    the corresponding error message, but continues processing the rest
+    of the file.  Here, Coq gives us an error because it doesn't know
+    what type argument to supply to <span class="inlinecode"><span class="id" type="var">nil</span></span>.  We can help it by
+    providing an explicit type declaration (so that Coq has more
+    information available when it gets to the "application" of <span class="inlinecode"><span class="id" type="var">nil</span></span>):
+    
 </div>
 <div class="code code-tight">
 
@@ -697,7 +736,7 @@ Now lists can be written just the way we'd hope:
 
 <br/>
 <span class="id" type="keyword">Inductive</span> <span class="id" type="var">prod</span> (<span class="id" type="var">X</span> <span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>) : <span class="id" type="keyword">Type</span> :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">pair</span> : <span class="id" type="var">X</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">Y</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">prod</span> <span class="id" type="var">X</span> <span class="id" type="var">Y</span>.<br/>
+| <span class="id" type="var">pair</span> : <span class="id" type="var">X</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">Y</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">prod</span> <span class="id" type="var">X</span> <span class="id" type="var">Y</span>.<br/>
 
 <br/>
 <span class="id" type="var">Arguments</span> <span class="id" type="var">pair</span> {<span class="id" type="var">X</span>} {<span class="id" type="var">Y</span>} <span class="id" type="var">_</span> <span class="id" type="var">_</span>.<br/>
@@ -745,6 +784,9 @@ We can also use the <span class="inlinecode"><span class="id" type="keyword">Not
 
  The first and second projection functions now look pretty
     much as they would in any functional programming language. 
+<div class="paragraph"> </div>
+
+ Note that the pair notation can also be used in patterns... 
 </div>
 <div class="code code-tight">
 
@@ -763,18 +805,17 @@ We can also use the <span class="inlinecode"><span class="id" type="keyword">Not
 The following function takes two lists and combines them
     into a list of pairs.  In many functional programming languages,
     it is called <span class="inlinecode"><span class="id" type="var">zip</span></span>.  We call it <span class="inlinecode"><span class="id" type="var">combine</span></span> for consistency with
-    Coq's standard library.  Note that the pair notation can be used both in expressions and in
-    patterns... 
+    Coq's standard library. 
 </div>
 <div class="code code-tight">
 
 <br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">combine</span> {<span class="id" type="var">X</span> <span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>} (<span class="id" type="var">lx</span> : <span class="id" type="var">list</span> <span class="id" type="var">X</span>) (<span class="id" type="var">ly</span> : <span class="id" type="var">list</span> <span class="id" type="var">Y</span>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">list</span> (<span class="id" type="var">X</span>×<span class="id" type="var">Y</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">match</span> (<span class="id" type="var">lx</span>,<span class="id" type="var">ly</span>) <span class="id" type="keyword">with</span><br/>
-&nbsp;&nbsp;| ([],_) ⇒ []<br/>
-&nbsp;&nbsp;| (<span class="id" type="var">_</span>,[]) ⇒ []<br/>
-&nbsp;&nbsp;| (<span class="id" type="var">x</span>::<span class="id" type="var">tx</span>, <span class="id" type="var">y</span>::<span class="id" type="var">ty</span>) ⇒ (<span class="id" type="var">x</span>,<span class="id" type="var">y</span>) :: (<span class="id" type="var">combine</span> <span class="id" type="var">tx</span> <span class="id" type="var">ty</span>)<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">lx</span>, <span class="id" type="var">ly</span> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;| [], <span class="id" type="var">_</span> ⇒ []<br/>
+&nbsp;&nbsp;| <span class="id" type="var">_</span>, [] ⇒ []<br/>
+&nbsp;&nbsp;| <span class="id" type="var">x</span> :: <span class="id" type="var">tx</span>, <span class="id" type="var">y</span> :: <span class="id" type="var">ty</span> ⇒ (<span class="id" type="var">x</span>, <span class="id" type="var">y</span>) :: (<span class="id" type="var">combine</span> <span class="id" type="var">tx</span> <span class="id" type="var">ty</span>)<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
@@ -797,7 +838,7 @@ The following function takes two lists and combines them
 <div class="paragraph"> </div>
 
 <div class="code code-tight">
-&nbsp;&nbsp;<span class="id" type="keyword">Eval</span>&nbsp;<span class="id" type="tactic">compute</span>&nbsp;<span class="id" type="keyword">in</span>&nbsp;(<span class="id" type="var">combine</span>&nbsp;[1;2]&nbsp;[<span class="id" type="var">false</span>;<span class="id" type="var">false</span>;<span class="id" type="var">true</span>;<span class="id" type="var">true</span>]).
+&nbsp;&nbsp;<span class="id" type="var">Compute</span>&nbsp;(<span class="id" type="var">combine</span>&nbsp;[1;2]&nbsp;[<span class="id" type="var">false</span>;<span class="id" type="var">false</span>;<span class="id" type="var">true</span>;<span class="id" type="var">true</span>]).
 <div class="paragraph"> </div>
 
 </div>

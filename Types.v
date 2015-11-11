@@ -144,14 +144,6 @@ Inductive step : tm -> tm -> Prop :=
 
 where "t1 '==>' t2" := (step t1 t2).
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_IfTrue" | Case_aux c "ST_IfFalse" | Case_aux c "ST_If" 
-  | Case_aux c "ST_Succ" | Case_aux c "ST_PredZero"
-  | Case_aux c "ST_PredSucc" | Case_aux c "ST_Pred" 
-  | Case_aux c "ST_IszeroZero" | Case_aux c "ST_IszeroSucc"
-  | Case_aux c "ST_Iszero" ].
-
 Hint Constructors step.
 (** Notice that the [step] relation doesn't care about whether
     expressions make global sense -- it just checks that the operation
@@ -293,12 +285,6 @@ Inductive has_type : tm -> ty -> Prop :=
 
 where "'|-' t '\in' T" := (has_type t T).
 
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_True" | Case_aux c "T_False" | Case_aux c "T_If"
-  | Case_aux c "T_Zero" | Case_aux c "T_Succ" | Case_aux c "T_Pred"
-  | Case_aux c "T_Iszero" ].
-
 Hint Constructors has_type.
 
 (* ###################################################################### *)
@@ -378,17 +364,17 @@ Theorem progress : forall t T,
 
 Proof with auto.
   intros t T HT.
-  has_type_cases (induction HT) Case...
+  induction HT...
   (* The cases that were obviously values, like T_True and
      T_False, were eliminated immediately by auto *)
-  Case "T_If".
+  - (* T_If *)
     right. inversion IHHT1; clear IHHT1.
-    SCase "t1 is a value".
+    + (* t1 is a value *)
     apply (bool_canonical t1 HT1) in H.
     inversion H; subst; clear H.
       exists t2...
       exists t3...
-    SCase "t1 can take a step".
+    + (* t1 can take a step *)
       inversion H as [t1' H1].
       exists (tif t1' t2 t3)...
   (* FILL IN HERE *) Admitted.
@@ -465,16 +451,16 @@ Theorem preservation : forall t t' T,
 Proof with auto.
   intros t t' T HT HE.
   generalize dependent t'.
-  has_type_cases (induction HT) Case; 
+  induction HT; 
          (* every case needs to introduce a couple of things *)
          intros t' HE; 
          (* and we can deal with several impossible
             cases all at once *)
          try (solve by inversion).
-    Case "T_If". inversion HE; subst; clear HE.
-      SCase "ST_IFTrue". assumption.
-      SCase "ST_IfFalse". assumption.
-      SCase "ST_If". apply T_If; try assumption.
+    - (* T_If *) inversion HE; subst; clear HE.
+      + (* ST_IFTrue *) assumption.
+      + (* ST_IfFalse *) assumption.
+      + (* ST_If *) apply T_If; try assumption.
         apply IHHT1; assumption.
     (* FILL IN HERE *) Admitted.
 (** [] *)
@@ -767,4 +753,4 @@ Proof.
 (* FILL IN HERE *)
 [] *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

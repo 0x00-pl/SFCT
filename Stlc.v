@@ -162,12 +162,6 @@ Inductive tm : Type :=
   | tfalse : tm
   | tif : tm -> tm -> tm -> tm.
 
-Tactic Notation "t_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" 
-  | Case_aux c "tabs" | Case_aux c "ttrue" 
-  | Case_aux c "tfalse" | Case_aux c "tif" ].
-
 (** Note that an abstraction [\x:T.t] (formally, [tabs x T t]) is
     always annotated with the type [T] of its parameter, in contrast
     to Coq (and other functional languages like ML, Haskell, etc.),
@@ -247,7 +241,7 @@ Notation notB := (tabs x TBool (tif (tvar x) tfalse ttrue)).
 
     Coq, in its built-in functional programming langauge, makes the
     first choice -- for example,
-         Eval simpl in (fun x:bool => 3 + 4)
+         Compute (fun x:bool => 3 + 4)
     yields [fun x:bool => 7].  
 
     Most real-world functional programming languages make the second
@@ -459,12 +453,6 @@ Inductive step : tm -> tm -> Prop :=
       (tif t1 t2 t3) ==> (tif t1' t2 t3)
 
 where "t1 '==>' t2" := (step t1 t2).
-
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" 
-  | Case_aux c "ST_App2" | Case_aux c "ST_IfTrue" 
-  | Case_aux c "ST_IfFalse" | Case_aux c "ST_If" ].
 
 Hint Constructors step.
 
@@ -696,12 +684,6 @@ Inductive has_type : context -> tm -> ty -> Prop :=
 
 where "Gamma '|-' t '\in' T" := (has_type Gamma t T).
 
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" 
-  | Case_aux c "T_App" | Case_aux c "T_True" 
-  | Case_aux c "T_False" | Case_aux c "T_If" ].
-
 Hint Constructors has_type.
 
 (* ################################### *)
@@ -818,5 +800,5 @@ Proof.
 
 End STLC.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

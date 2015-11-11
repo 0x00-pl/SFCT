@@ -234,7 +234,7 @@ Require Export Stlc.
 
 
 (** We create elements of these types by _tagging_ elements of
-    the component types.  For example, if [n] is a [Nat] then [inl v]
+    the component types.  For example, if [n] is a [Nat] then [inl n]
     is an element of [Nat+Bool]; similarly, if [b] is a [Bool] then
     [inr b] is a [Nat+Bool].  The names of the tags [inl] and [inr]
     arise from thinking of them as functions
@@ -486,7 +486,7 @@ Require Export Stlc.
 
 
 (** The intuition is that the higher-order function [f] passed
-   to [fix] is a _generator_ for the [fact] function: if [fact] is
+   to [fix] is a _generator_ for the [fact] function: if [f] is
    applied to a function that approximates the desired behavior of
    [fact] up to some number [n] (that is, a function that returns
    correct results on inputs less than or equal to [n]), then it
@@ -746,7 +746,7 @@ if 3=0 then 1 else 3 * (fix F (pred 3))
         rules, staying as close as possible to the form we've given
         them above.  This is conceptually straightforward, and it's
         probably what we'd want to do if we were building a real
-        compiler -- in particular, it will allow is to print error
+        compiler -- in particular, it will allow us to print error
         messages in the form that programmers will find easy to
         understand.  But the formal versions of the rules will not be
         pretty at all!
@@ -905,12 +905,6 @@ Inductive ty : Type :=
   | TSum   : ty -> ty -> ty
   | TList  : ty -> ty.
 
-Tactic Notation "T_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "TArrow" | Case_aux c "TNat"
-  | Case_aux c "TProd" | Case_aux c "TUnit"
-  | Case_aux c "TSum" | Case_aux c "TList"  ].
-
 Inductive tm : Type :=
   (* pure STLC *)
   | tvar : id -> tm
@@ -955,17 +949,6 @@ Inductive tm : Type :=
        if0 x then ... else ...
 >>
 *)
-
-Tactic Notation "t_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" | Case_aux c "tabs"
-  | Case_aux c "tnat" | Case_aux c "tsucc" | Case_aux c "tpred"
-  | Case_aux c "tmult" | Case_aux c "tif0"
-  | Case_aux c "tpair" | Case_aux c "tfst" | Case_aux c "tsnd"
-  | Case_aux c "tunit" | Case_aux c "tlet" 
-  | Case_aux c "tinl" | Case_aux c "tinr" | Case_aux c "tcase"
-  | Case_aux c "tnil" | Case_aux c "tcons" | Case_aux c "tlcase"
-  | Case_aux c "tfix" ].
 
 (* ###################################################################### *)
 (** *** Substitution *)
@@ -1158,25 +1141,6 @@ Inductive step : tm -> tm -> Prop :=
 
 where "t1 '==>' t2" := (step t1 t2).
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" | Case_aux c "ST_App2"
-  | Case_aux c "ST_Succ1" | Case_aux c "ST_SuccNat"
-    | Case_aux c "ST_Pred1" | Case_aux c "ST_PredNat"
-    | Case_aux c "ST_Mult1" | Case_aux c "ST_Mult2"
-    | Case_aux c "ST_MultNats" | Case_aux c "ST_If01"
-    | Case_aux c "ST_If0Zero" | Case_aux c "ST_If0Nonzero"
-  | Case_aux c "ST_Pair1" | Case_aux c "ST_Pair2"
-    | Case_aux c "ST_Fst1" | Case_aux c "ST_FstPair"
-    | Case_aux c "ST_Snd1" | Case_aux c "ST_SndPair"
-    (* FILL IN HERE *)
-  | Case_aux c "ST_Inl" | Case_aux c "ST_Inr" | Case_aux c "ST_Case"
-    | Case_aux c "ST_CaseInl" | Case_aux c "ST_CaseInr"
-  | Case_aux c "ST_Cons1" | Case_aux c "ST_Cons2" | Case_aux c "ST_Lcase1"
-    | Case_aux c "ST_LcaseNil" | Case_aux c "ST_LcaseCons"
-(* FILL IN HERE *)
-  ].
-
 Notation multistep := (multi step).
 Notation "t1 '==>*' t2" := (multistep t1 t2) (at level 40).
 
@@ -1268,21 +1232,6 @@ Inductive has_type : context -> tm -> ty -> Prop :=
 where "Gamma '|-' t '\in' T" := (has_type Gamma t T).
 
 Hint Constructors has_type.
-
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" | Case_aux c "T_App" 
-  | Case_aux c "T_Nat" | Case_aux c "T_Succ" | Case_aux c "T_Pred"
-  | Case_aux c "T_Mult" | Case_aux c "T_If0"
-  | Case_aux c "T_Pair" | Case_aux c "T_Fst" | Case_aux c "T_Snd"
-  | Case_aux c "T_Unit" 
-(* let *)
-(* FILL IN HERE *)
-  | Case_aux c "T_Inl" | Case_aux c "T_Inr" | Case_aux c "T_Case"
-  | Case_aux c "T_Nil" | Case_aux c "T_Cons" | Case_aux c "T_Lcase" 
-(* fix *)
-(* FILL IN HERE *)
-].
 
 (* ###################################################################### *)
 (** ** Examples *)
@@ -1707,17 +1656,17 @@ Proof with eauto.
   intros t T Ht.
   remember (@empty ty) as Gamma.
   generalize dependent HeqGamma.
-  has_type_cases (induction Ht) Case; intros HeqGamma; subst.
-  Case "T_Var".
+  induction Ht; intros HeqGamma; subst.
+  - (* T_Var *)
     (* The final rule in the given typing derivation cannot be [T_Var],
        since it can never be the case that [empty |- x : T] (since the
        context is empty). *)
     inversion H.
-  Case "T_Abs".
+  - (* T_Abs *)
     (* If the [T_Abs] rule was the last used, then [t = tabs x T11 t12],
        which is a value. *)
     left...
-  Case "T_App".
+  - (* T_App *)
     (* If the last rule applied was T_App, then [t = t1 t2], and we know 
        from the form of the rule that
          [empty |- t1 : T1 -> T2]
@@ -1726,146 +1675,146 @@ Proof with eauto.
        or can take a step. *)
     right.
     destruct IHHt1; subst...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2; subst...
-      SSCase "t2 is a value".
+      * (* t2 is a value *)
       (* If both [t1] and [t2] are values, then we know that 
          [t1 = tabs x T11 t12], since abstractions are the only values
          that can have an arrow type.  But 
          [(tabs x T11 t12) t2 ==> [x:=t2]t12] by [ST_AppAbs]. *)
         inversion H; subst; try (solve by inversion).
         exists (subst x t2 t12)...
-      SSCase "t2 steps".
+      * (* t2 steps *)
         (* If [t1] is a value and [t2 ==> t2'], then [t1 t2 ==> t1 t2'] 
            by [ST_App2]. *)
         inversion H0 as [t2' Hstp]. exists (tapp t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       (* Finally, If [t1 ==> t1'], then [t1 t2 ==> t1' t2] by [ST_App1]. *)
       inversion H as [t1' Hstp]. exists (tapp t1' t2)...
-  Case "T_Nat".
+  - (* T_Nat *)
     left...
-  Case "T_Succ".
+  - (* T_Succ *)
     right.
     destruct IHHt...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
       exists (tnat (S n1))...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tsucc t1')...
-  Case "T_Pred".
+  - (* T_Pred *)
     right.
     destruct IHHt...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
       exists (tnat (pred n1))...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tpred t1')...
-  Case "T_Mult".
+  - (* T_Mult *)
     right.
     destruct IHHt1...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2...
-      SSCase "t2 is a value".
+      * (* t2 is a value *)
         inversion H; subst; try solve by inversion.
         inversion H0; subst; try solve by inversion.
         exists (tnat (mult n1 n0))...
-      SSCase "t2 steps".
+      * (* t2 steps *)
         inversion H0 as [t2' Hstp].
         exists (tmult t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tmult t1' t2)...
-  Case "T_If0".
+  - (* T_If0 *)
     right.
     destruct IHHt1...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
       destruct n1 as [|n1'].
-      SSCase "n1=0".
+      * (* n1=0 *)
         exists t2...
-      SSCase "n1<>0".
+      * (* n1<>0 *)
         exists t3...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' H0].
       exists (tif0 t1' t2 t3)...
-  Case "T_Pair".
+  - (* T_Pair *)
     destruct IHHt1...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2...
-      SSCase "t2 steps".
+      * (* t2 steps *)
         right.  inversion H0 as [t2' Hstp].
         exists (tpair t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       right. inversion H as [t1' Hstp].
       exists (tpair t1' t2)...
-  Case "T_Fst".
+  - (* T_Fst *)
     right.
     destruct IHHt...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
       exists v1...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tfst t1')...
-  Case "T_Snd".
+  - (* T_Snd *)
     right.
     destruct IHHt...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
       exists v2...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tsnd t1')...
-  Case "T_Unit".
+  - (* T_Unit *)
     left...
 (* let *)
 (* FILL IN HERE *)
-  Case "T_Inl".
+  - (* T_Inl *)
     destruct IHHt... 
-    SCase "t1 steps". 
+    + (* t1 steps *) 
       right. inversion H as [t1' Hstp]... 
       (* exists (tinl _ t1')... *)
-  Case "T_Inr".
+  - (* T_Inr *)
     destruct IHHt... 
-    SCase "t1 steps". 
+    + (* t1 steps *) 
       right. inversion H as [t1' Hstp]... 
       (* exists (tinr _ t1')... *)
-  Case "T_Case".
+  - (* T_Case *)
     right. 
     destruct IHHt1...
-    SCase "t0 is a value".
+    + (* t0 is a value *)
       inversion H; subst; try solve by inversion.
-      SSCase "t0 is inl".
+      * (* t0 is inl *)
         exists ([x1:=v]t1)...  
-      SSCase "t0 is inr".        
+      * (* t0 is inr *)        
         exists ([x2:=v]t2)...
-    SCase "t0 steps".
+    + (* t0 steps *)
       inversion H as [t0' Hstp]. 
       exists (tcase t0' x1 t1 x2 t2)...
-  Case "T_Nil".
+  - (* T_Nil *)
     left...
-  Case "T_Cons".
+  - (* T_Cons *)
     destruct IHHt1...
-    SCase "head is a value".
+    + (* head is a value *)
       destruct IHHt2...
-      SSCase "tail steps".
+      * (* tail steps *)
         right. inversion H0 as [t2' Hstp].
         exists (tcons t1 t2')...
-    SCase "head steps".
+    + (* head steps *)
       right. inversion H as [t1' Hstp].
       exists (tcons t1' t2)...
-  Case "T_Lcase".
+  - (* T_Lcase *)
     right.
     destruct IHHt1... 
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       inversion H; subst; try solve by inversion.
-      SSCase "t1=tnil".
+      * (* t1=tnil *)
         exists t2...
-      SSCase "t1=tcons v1 vl".
+      * (* t1=tcons v1 vl *)
         exists ([x2:=vl]([x1:=v1]t3))...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp].
       exists (tlcase t1' t2 x1 x2 t3)...
 (* fix *)
@@ -1971,23 +1920,23 @@ Lemma context_invariance : forall Gamma Gamma' t S,
      Gamma' |- t \in S.
 Proof with eauto.
   intros. generalize dependent Gamma'.
-  has_type_cases (induction H) Case; 
+  induction H; 
     intros Gamma' Heqv...
-  Case "T_Var".
+  - (* T_Var *)
     apply T_Var... rewrite <- Heqv...
-  Case "T_Abs".
+  - (* T_Abs *)
     apply T_Abs... apply IHhas_type. intros y Hafi.
     unfold extend. 
     destruct (eq_id_dec x y)...
-  Case "T_Mult".
+  - (* T_Mult *)
     apply T_Mult...
-  Case "T_If0".
+  - (* T_If0 *)
     apply T_If0...
-  Case "T_Pair". 
+  - (* T_Pair *) 
     apply T_Pair...
 (* let *)
 (* FILL IN HERE *)
-  Case "T_Case".
+  - (* T_Case *)
     eapply T_Case... 
      apply IHhas_type2. intros y Hafi.
        unfold extend.
@@ -1995,9 +1944,9 @@ Proof with eauto.
      apply IHhas_type3. intros y Hafi.
        unfold extend.
        destruct (eq_id_dec x2 y)...
-  Case "T_Cons".
+  - (* T_Cons *)
     apply T_Cons...
-  Case "T_Lcase".
+  - (* T_Lcase *)
     eapply T_Lcase... apply IHhas_type3. intros y Hafi.
     unfold extend. 
     destruct (eq_id_dec x1 y)...
@@ -2010,23 +1959,23 @@ Lemma free_in_context : forall x t T Gamma,
    exists T', Gamma x = Some T'.
 Proof with eauto.
   intros x t T Gamma Hafi Htyp.
-  has_type_cases (induction Htyp) Case; inversion Hafi; subst...
-  Case "T_Abs".
+  induction Htyp; inversion Hafi; subst...
+  - (* T_Abs *)
     destruct IHHtyp as [T' Hctx]... exists T'.
     unfold extend in Hctx. 
     rewrite neq_id in Hctx...
 (* let *)
 (* FILL IN HERE *)
-  Case "T_Case".
-    SCase "left".
-      destruct IHHtyp2 as [T' Hctx]... exists T'. 
-      unfold extend in Hctx. 
-      rewrite neq_id in Hctx...
-    SCase "right".
-      destruct IHHtyp3 as [T' Hctx]... exists T'. 
-      unfold extend in Hctx. 
-      rewrite neq_id in Hctx...
-  Case "T_Lcase".
+  (* T_Case *)
+  - (* left *)
+    destruct IHHtyp2 as [T' Hctx]... exists T'. 
+    unfold extend in Hctx. 
+    rewrite neq_id in Hctx...
+  - (* right *)
+    destruct IHHtyp3 as [T' Hctx]... exists T'. 
+    unfold extend in Hctx. 
+    rewrite neq_id in Hctx...
+  - (* T_Lcase *)
     clear Htyp1 IHHtyp1 Htyp2 IHHtyp2.
     destruct IHHtyp3 as [T' Hctx]... exists T'.
     unfold extend in Hctx.
@@ -2049,9 +1998,9 @@ Proof with eauto.
      from the IH, with the exception of tvar and tabs.
      The former aren't automatic because we must reason about how the
      variables interact. *)
-  t_cases (induction t) Case;
+  induction t;
     intros S Gamma Htypt; simpl; inversion Htypt; subst...
-  Case "tvar".
+  - (* tvar *)
     simpl. rename i into y.
     (* If t = y, we know that
          [empty |- v : U] and
@@ -2061,7 +2010,7 @@ Proof with eauto.
 
        There are two cases to consider: either [x=y] or [x<>y]. *)
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then we know that [U = S], and that [[x:=v]y = v].
        So what we really must show is that if [empty |- v : U] then
        [Gamma |- v : U].  We have already proven a more general version
@@ -2073,11 +2022,11 @@ Proof with eauto.
       intros x Hcontra.
       destruct (free_in_context _ _ S empty Hcontra) as [T' HT']...
       inversion HT'.
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then [Gamma y = Some S] and the substitution has no
        effect.  We can show that [Gamma |- y : S] by [T_Var]. *)
       apply T_Var... unfold extend in H1. rewrite neq_id in H1...
-  Case "tabs".
+  - (* tabs *)
     rename i into y. rename t into T11.
     (* If [t = tabs y T11 t0], then we know that
          [Gamma,x:U |- tabs y T11 t0 : T11->T12]
@@ -2095,7 +2044,7 @@ Proof with eauto.
     *)
     apply T_Abs...
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then the substitution has no effect.  Context
        invariance shows that [Gamma,y:U,y:T11] and [Gamma,y:T11] are
        equivalent.  Since the former context shows that [t0 : T12], so
@@ -2104,7 +2053,7 @@ Proof with eauto.
       subst.
       intros x Hafi. unfold extend.
       destruct (eq_id_dec y x)...
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then the IH and context invariance allow us to show that
          [Gamma,x:U,y:T11 |- t0 : T12]       =>
          [Gamma,y:T11,x:U |- t0 : T12]       =>
@@ -2115,51 +2064,51 @@ Proof with eauto.
       subst. rewrite neq_id...
 (* let *)
 (* FILL IN HERE *)
-  Case "tcase".
+  - (* tcase *)
     rename i into x1. rename i0 into x2.
     eapply T_Case...
-      SCase "left arm".
+      + (* left arm *)
        destruct (eq_id_dec x x1).
-       SSCase "x = x1".
+       * (* x = x1 *)
         eapply context_invariance...
         subst.
         intros z Hafi. unfold extend.
         destruct (eq_id_dec x1 z)...
-       SSCase "x <> x1". 
+       * (* x <> x1 *) 
          apply IHt2. eapply context_invariance...
          intros z Hafi.  unfold extend.
          destruct (eq_id_dec x1 z)...
            subst. rewrite neq_id...
-      SCase "right arm".
+      + (* right arm *)
        destruct (eq_id_dec x x2).
-       SSCase "x = x2".
+       * (* x = x2 *)
         eapply context_invariance...
         subst.
         intros z Hafi. unfold extend.
         destruct (eq_id_dec x2 z)...
-       SSCase "x <> x2". 
+       * (* x <> x2 *) 
          apply IHt3. eapply context_invariance...
          intros z Hafi.  unfold extend.
          destruct (eq_id_dec x2 z)...
            subst. rewrite neq_id...
-  Case "tlcase".
+  - (* tlcase *)
     rename i into y1. rename i0 into y2.
     eapply T_Lcase... 
     destruct (eq_id_dec x y1).
-    SCase "x=y1".
+    + (* x=y1 *)
       simpl.  
       eapply context_invariance...
       subst.
       intros z Hafi. unfold extend.
       destruct (eq_id_dec y1 z)... 
-    SCase "x<>y1".
+    + (* x<>y1 *)
       destruct (eq_id_dec x y2).
-      SSCase "x=y2".
+      * (* x=y2 *)
         eapply context_invariance...
         subst. 
         intros z Hafi. unfold extend.
         destruct (eq_id_dec y2 z)...
-      SSCase "x<>y2".
+      * (* x<>y2 *)
         apply IHt3. eapply context_invariance...
         intros z Hafi. unfold extend.
         destruct (eq_id_dec y1 z)...
@@ -2182,15 +2131,15 @@ Proof with eauto.
   generalize dependent t'.
   (* Proof: By induction on the given typing derivation.  Many cases are
      contradictory ([T_Var], [T_Abs]).  We show just the interesting ones. *)
-  has_type_cases (induction HT) Case; 
+  induction HT; 
     intros t' HeqGamma HE; subst; inversion HE; subst...
-  Case "T_App".
+  - (* T_App *)
     (* If the last rule used was [T_App], then [t = t1 t2], and three rules
        could have been used to show [t ==> t']: [ST_App1], [ST_App2], and 
        [ST_AppAbs]. In the first two cases, the result follows directly from 
        the IH. *)
     inversion HE; subst...
-    SCase "ST_AppAbs".
+    + (* ST_AppAbs *)
       (* For the third case, suppose 
            [t1 = tabs x T11 t12]
          and
@@ -2205,21 +2154,21 @@ Proof with eauto.
          by assumption, so we are done. *)
       apply substitution_preserves_typing with T1...
       inversion HT1...
-  Case "T_Fst".
+  - (* T_Fst *)
     inversion HT...
-  Case "T_Snd".
+  - (* T_Snd *)
     inversion HT...
 (* let *)
 (* FILL IN HERE *)
-  Case "T_Case".
-    SCase "ST_CaseInl".
-      inversion HT1; subst. 
-      eapply substitution_preserves_typing...
-    SCase "ST_CaseInr".
-      inversion HT1; subst. 
-      eapply substitution_preserves_typing...
-  Case "T_Lcase".
-    SCase "ST_LcaseCons".
+  (* T_Case *)
+  - (* ST_CaseInl *)
+    inversion HT1; subst. 
+    eapply substitution_preserves_typing...
+  - (* ST_CaseInr *)
+    inversion HT1; subst. 
+    eapply substitution_preserves_typing...
+  - (* T_Lcase *)
+    + (* ST_LcaseCons *)
       inversion HT1; subst.
       apply substitution_preserves_typing with (TList T1)...
       apply substitution_preserves_typing with T1...
@@ -2230,6 +2179,6 @@ Qed.
 
 End STLCExtended.
 
-(* $Date: 2014-12-01 15:15:02 -0500 (Mon, 01 Dec 2014) $ *)
+(* $Date$ *)
 
 

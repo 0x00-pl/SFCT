@@ -23,5 +23,5 @@
 (** printing Gamma'' #<span style="font-family: serif; font-size:85%;">&Gamma;''</span># *)
 (** printing |-> #<span style="font-family: arial;">&#8614;</span># *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

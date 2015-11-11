@@ -34,7 +34,7 @@
     all the examples and false starts in those files. 
 <div class="paragraph"> </div>
 
-<a name="lab357"></a><h1 class="section">From the Coq Standard Library</h1>
+<a name="lab351"></a><h1 class="section">From the Coq Standard Library</h1>
 
 </div>
 <div class="code code-space">
@@ -51,45 +51,13 @@
 </div>
 
 <div class="doc">
-<a name="lab358"></a><h1 class="section">From Basics.v</h1>
+<a name="lab352"></a><h1 class="section">From Basics.v</h1>
 
 </div>
 <div class="code code-space">
 
 <br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">admit</span> {<span class="id" type="var">T</span>: <span class="id" type="keyword">Type</span>} : <span class="id" type="var">T</span>. <span class="id" type="var">Admitted</span>.<br/>
-
-<br/>
-<span class="id" type="keyword">Require</span> <span class="id" type="var">String</span>. <span class="id" type="keyword">Open</span> <span class="id" type="keyword">Scope</span> <span class="id" type="var">string_scope</span>.<br/>
-
-<br/>
-<span class="id" type="keyword">Ltac</span> <span class="id" type="var">move_to_top</span> <span class="id" type="var">x</span> :=<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">reverse</span> <span class="id" type="var">goal</span> <span class="id" type="keyword">with</span><br/>
-&nbsp;&nbsp;| <span class="id" type="var">H</span> : <span class="id" type="var">_</span> <span style="font-family: arial;">&#8866;</span> <span class="id" type="var">_</span> ⇒ <span class="id" type="tactic">try</span> <span class="id" type="tactic">move</span> <span class="id" type="var">x</span> <span class="id" type="keyword">after</span> <span class="id" type="var">H</span><br/>
-&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "assert_eq" <span class="id" type="var">ident</span>(<span class="id" type="var">x</span>) <span class="id" type="var">constr</span>(<span class="id" type="var">v</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">let</span> <span class="id" type="var">H</span> := <span class="id" type="tactic">fresh</span> <span class="id" type="keyword">in</span><br/>
-&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">x</span> = <span class="id" type="var">v</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">H</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">reflexivity</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="tactic">clear</span> <span class="id" type="var">H</span>.<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "Case_aux" <span class="id" type="var">ident</span>(<span class="id" type="var">x</span>) <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span> [<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">set</span> (<span class="id" type="var">x</span> := <span class="id" type="var">name</span>); <span class="id" type="var">move_to_top</span> <span class="id" type="var">x</span><br/>
-&nbsp;&nbsp;| <span class="id" type="var">assert_eq</span> <span class="id" type="var">x</span> <span class="id" type="var">name</span>; <span class="id" type="var">move_to_top</span> <span class="id" type="var">x</span><br/>
-&nbsp;&nbsp;| <span class="id" type="tactic">fail</span> 1 "because we are working on a different case" ].<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "Case" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">Case</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSSCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSSSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSSSCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSSSSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSSSSCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSSSSSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSSSSSCase</span> <span class="id" type="var">name</span>.<br/>
-<span class="id" type="keyword">Tactic Notation</span> "SSSSSSSCase" <span class="id" type="var">constr</span>(<span class="id" type="var">name</span>) := <span class="id" type="var">Case_aux</span> <span class="id" type="var">SSSSSSSCase</span> <span class="id" type="var">name</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">ble_nat</span> (<span class="id" type="var">n</span> <span class="id" type="var">m</span> : <span class="id" type="var">nat</span>) : <span class="id" type="var">bool</span> :=<br/>
@@ -108,9 +76,9 @@
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">b</span> <span class="id" type="var">c</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">b</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = true".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;true&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = false".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;false&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -130,7 +98,7 @@
 </div>
 
 <div class="doc">
-<a name="lab359"></a><h1 class="section">From Props.v</h1>
+<a name="lab353"></a><h1 class="section">From Props.v</h1>
 
 </div>
 <div class="code code-space">
@@ -144,7 +112,7 @@
 </div>
 
 <div class="doc">
-<a name="lab360"></a><h1 class="section">From Logic.v</h1>
+<a name="lab354"></a><h1 class="section">From Logic.v</h1>
 
 </div>
 <div class="code code-space">
@@ -214,7 +182,7 @@
 </div>
 
 <div class="doc">
-<a name="lab361"></a><h1 class="section">From Later Files</h1>
+<a name="lab355"></a><h1 class="section">From Later Files</h1>
 
 </div>
 <div class="code code-space">
@@ -236,11 +204,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">multi</span> <span class="id" type="var">X</span> <span class="id" type="var">R</span> <span class="id" type="var">y</span> <span class="id" type="var">z</span> <span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">multi</span> <span class="id" type="var">X</span> <span class="id" type="var">R</span> <span class="id" type="var">x</span> <span class="id" type="var">z</span>.<br/>
 <span class="id" type="keyword">Implicit Arguments</span> <span class="id" type="var">multi</span> [[<span class="id" type="var">X</span>]].<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "multi_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "multi_refl" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "multi_step" ].<br/>
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">multi_R</span> : <span style="font-family: arial;">&forall;</span>(<span class="id" type="var">X</span>:<span class="id" type="keyword">Type</span>) (<span class="id" type="var">R</span>:<span class="id" type="var">relation</span> <span class="id" type="var">X</span>) (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">X</span>),<br/>
@@ -276,9 +239,9 @@
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">id1</span> <span class="id" type="var">id2</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">id1</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">n1</span>]. <span class="id" type="tactic">destruct</span> <span class="id" type="var">id2</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">n2</span>].<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_nat_dec</span> <span class="id" type="var">n1</span> <span class="id" type="var">n2</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">Heq</span> | <span class="id" type="var">Hneq</span>].<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "n1 = n2".<br/>
+&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;n1&nbsp;=&nbsp;n2&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">left</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heq</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "n1 ≠ n2".<br/>
+&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;n1&nbsp;&lt;&gt;&nbsp;n2&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">right</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">contra</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">contra</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">Hneq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H0</span>.<br/>
 <span class="id" type="keyword">Defined</span>.<br/>
 
@@ -340,7 +303,7 @@
  
 <div class="paragraph"> </div>
 
-<a name="lab362"></a><h1 class="section">Some useful tactics</h1>
+<a name="lab356"></a><h1 class="section">Some useful tactics</h1>
 
 </div>
 <div class="code code-space">

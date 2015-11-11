@@ -1,5 +1,5 @@
 Logic 逻辑
-Proof Assistants 计算机辅助证明
+Proof Assistants 证明助理
 Functional Programming 函数式编程
 Program Verification 软件形式化验证
 Type System 类型系统
@@ -54,3 +54,5 @@ Hoare Triple 霍爾三元組
 assert 断言
 commute 可交换的
 normalization 正规化
+Operation Semantic 操作语义
+Session 会话

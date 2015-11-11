@@ -314,8 +314,8 @@ Theorem and_example :
   (beautiful 0) /\ (beautiful 3).
 Proof.
   apply conj.
-   (* Case "left". *)  apply b_0.
-   (* Case "right". *)  apply b_3.  Qed.
+  - (* left *) apply b_0.
+  - (* right *) apply b_3.  Qed.
 
 (** Let's take a look at the proof object for the above theorem. *)
 
@@ -328,28 +328,19 @@ Print and_example.
          (...pf of beautiful 3...) (...pf of beautiful 3...)
     as you'd expect, given the type of [conj]. *)
 
-(** **** Exercise: 1 star, optional (case_proof_objects)  *)
-(** The [Case] tactics were commented out in the proof of
-    [and_example] to avoid cluttering the proof object.  What would
-    you guess the proof object will look like if we uncomment them?
-    Try it and see. *)
-(** [] *)
-
 Theorem and_commut : forall P Q : Prop, 
   P /\ Q -> Q /\ P.
 Proof.
   intros P Q H.
   inversion H as [HP HQ]. 
   split.  
-    (* Case "left". *) apply HQ. 
-    (* Case "right". *) apply HP.  Qed.
+  - (* left *) apply HQ. 
+  - (* right *) apply HP.  Qed.
 
-(** Once again, we have commented out the [Case] tactics to make the
-    proof object for this theorem easier to understand. It is still
-    a little complicated, but after performing some simple reduction
-    steps, we can see that all that is really happening is taking apart 
-    a record containing evidence for [P] and [Q] and rebuilding it in the
-    opposite order: *)
+(** This proof object is still a little complicated, but after
+    performing some simple reduction steps, we can see that all that
+    is really happening is taking apart a record containing evidence
+    for [P] and [Q] and rebuilding it in the opposite order: *)
 
 Print and_commut.
 (* ===>
@@ -487,7 +478,7 @@ Proof.
 
 
 (** **** Exercise: 2 stars (trans_eq_example_redux)  *)
-(** Redo the proof of the following theorem (from MoreCoq.v) using
+(** Redo the proof of the following theorem (from BasicTactics.v) using
 an [apply] of [trans_eq] but _not_ using a [with] clause. *)
 
 Example trans_eq_example' : forall (a b c d e f : nat),
@@ -520,7 +511,7 @@ Print add1.
          : nat -> nat
 *)
 
-Eval compute in add1 2. 
+Compute add1 2. 
 (* ==> 3 : nat *)
 
 (** Notice that we terminate the [Definition] with a [.] rather than with
@@ -533,5 +524,5 @@ This feature is mainly useful for writing functions with dependent types,
 which we won't explore much further in this book.
 But it does illustrate the uniformity and orthogonality of the basic ideas in Coq. *)
 
-(** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

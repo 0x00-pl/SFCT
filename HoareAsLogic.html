@@ -75,12 +75,6 @@ The presentation of Hoare logic in chapter <span class="inlinecode"><span class=
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">hoare_proof</span> <span class="id" type="var">P</span> <span class="id" type="var">c</span> <span class="id" type="var">Q</span>.<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "hoare_proof_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_Skip" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_Asgn" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_Seq"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_If" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_While" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "H_Consequence" ].<br/>
-
-<br/>
 </div>
 
 <div class="doc">
@@ -156,7 +150,7 @@ Print&nbsp;sample_proof.<br/>
 </div>
 
 <div class="doc">
-<a name="lab584"></a><h4 class="section">Exercise: 2 stars (hoare_proof_sound)</h4>
+<a name="lab578"></a><h4 class="section">Exercise: 2 stars (hoare_proof_sound)</h4>
  Prove that such proof objects represent true claims. 
 </div>
 <div class="code code-tight">
@@ -193,30 +187,30 @@ Print&nbsp;sample_proof.<br/>
 &nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">c</span> <span class="id" type="var">P</span>, <span class="id" type="var">hoare_proof</span> <span class="id" type="var">P</span> <span class="id" type="var">c</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">_</span> ⇒ <span class="id" type="var">True</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intro</span> <span class="id" type="var">P</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "SKIP".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>; <span class="id" type="tactic">intro</span> <span class="id" type="var">P</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;SKIP&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_Skip</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;Proof&nbsp;of&nbsp;True&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">I</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "::=".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;::=&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence_pre</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_Asgn</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">I</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> ";;".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;;;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence_pre</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Seq</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">IHc1</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">_</span> ⇒ <span class="id" type="var">True</span>)).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHc2</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">I</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "IFB".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;IFB&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_Consequence_pre</span> <span class="id" type="keyword">with</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">_</span> ⇒ <span class="id" type="var">True</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_If</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHc1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHc2</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">I</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "WHILE".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;WHILE&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_While</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHc</span>.<br/>
@@ -251,15 +245,15 @@ Similarly, we can show that <span class="inlinecode"><span style="letter-spacing
 &nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">c</span> <span class="id" type="var">Q</span>, <span class="id" type="var">hoare_proof</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">_</span> ⇒ <span class="id" type="var">False</span>) <span class="id" type="var">c</span> <span class="id" type="var">Q</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intro</span> <span class="id" type="var">Q</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "SKIP". <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Skip</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "::=". <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Asgn</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> ";;". <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Seq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHc1</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHc2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "IFB".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>; <span class="id" type="tactic">intro</span> <span class="id" type="var">Q</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;SKIP&nbsp;*)</span> <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Skip</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;::=&nbsp;*)</span> <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Asgn</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;;;&nbsp;*)</span> <span class="id" type="var">pre_false_helper</span> <span class="id" type="var">H_Seq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHc1</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHc2</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;IFB&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_If</span>; <span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence_pre</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHc1</span>. <span class="id" type="tactic">intro</span>. <span class="id" type="tactic">eapply</span> <span class="id" type="var">False_and_P_imp</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHc2</span>. <span class="id" type="tactic">intro</span>. <span class="id" type="tactic">eapply</span> <span class="id" type="var">False_and_P_imp</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "WHILE".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;WHILE&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence_post</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_While</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence_pre</span>.<br/>
@@ -302,7 +296,7 @@ http://www.ps.uni-saarland.de/courses/sem-ws11/script/Hoare.html
 </div>
 
 <div class="doc">
-<a name="lab585"></a><h4 class="section">Exercise: 1 star (wp_is_precondition)</h4>
+<a name="lab579"></a><h4 class="section">Exercise: 1 star (wp_is_precondition)</h4>
 
 </div>
 <div class="code code-space">
@@ -317,7 +311,7 @@ http://www.ps.uni-saarland.de/courses/sem-ws11/script/Hoare.html
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab586"></a><h4 class="section">Exercise: 1 star (wp_is_weakest)</h4>
+<a name="lab580"></a><h4 class="section">Exercise: 1 star (wp_is_weakest)</h4>
 
 </div>
 <div class="code code-space">
@@ -348,7 +342,7 @@ The following utility lemma will also be useful.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab587"></a><h4 class="section">Exercise: 4 stars (hoare_proof_complete)</h4>
+<a name="lab581"></a><h4 class="section">Exercise: 4 stars (hoare_proof_complete)</h4>
  Complete the proof of the theorem. 
 </div>
 <div class="code code-tight">
@@ -358,18 +352,18 @@ The following utility lemma will also be useful.
 &nbsp;&nbsp;<span style="letter-spacing:-.4em;">{</span>{<span class="id" type="var">P</span><span style="letter-spacing:-.4em;">}</span>} <span class="id" type="var">c</span> <span style="letter-spacing:-.4em;">{</span>{<span class="id" type="var">Q</span><span style="letter-spacing:-.4em;">}</span>} <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">hoare_proof</span> <span class="id" type="var">P</span> <span class="id" type="var">c</span> <span class="id" type="var">Q</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">P</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">com_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">HT</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "SKIP".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">c</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">HT</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;SKIP&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Skip</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="var">eassumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">st</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HT</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Skip</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "::=".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;::=&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Consequence</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">H_Asgn</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">st</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HT</span>. <span class="id" type="var">econstructor</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>; <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> ";;".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;;;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_Seq</span> <span class="id" type="keyword">with</span> (<span class="id" type="var">wp</span> <span class="id" type="var">c2</span> <span class="id" type="var">Q</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">IHc1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">E1</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">wp</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">st''</span> <span class="id" type="var">E2</span>.<br/>

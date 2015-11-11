@@ -784,9 +784,9 @@ Example hoare_asgn_example3 : forall a n,
   {{fun st => st X = n}}.
 Proof.
   intros a n. eapply hoare_seq.
-  Case "right part of seq".
+  - (* right part of seq *)
     apply hoare_skip.
-  Case "left part of seq".
+  - (* left part of seq *)
     eapply hoare_consequence_pre. apply hoare_asgn. 
     intros st H. subst. reflexivity. Qed.
 
@@ -913,12 +913,12 @@ Theorem hoare_if : forall P Q b c1 c2,
 Proof.
   intros P Q b c1 c2 HTrue HFalse st st' HE HP.
   inversion HE; subst. 
-  Case "b is true".
+  - (* b is true *)
     apply (HTrue st st'). 
       assumption. 
       split. assumption. 
              apply bexp_eval_true. assumption.
-  Case "b is false".
+  - (* b is false *)
     apply (HFalse st st'). 
       assumption. 
       split. assumption.
@@ -990,13 +990,13 @@ Example if_example :
 Proof.
   (* WORKED IN CLASS *)
   apply hoare_if.
-  Case "Then".
+  - (* Then *)
     eapply hoare_consequence_pre. apply hoare_asgn.
     unfold bassn, assn_sub, update, assert_implies.
     simpl. intros st [_ H].
     apply beq_nat_true in H.
     rewrite H. omega.
-  Case "Else".
+  - (* Else *)
     eapply hoare_consequence_pre. apply hoare_asgn.
     unfold assn_sub, update, assert_implies.
     simpl; intros st _. omega.
@@ -1045,11 +1045,6 @@ Inductive com : Type :=
   | CWhile : bexp -> com -> com
   | CIf1 : bexp -> com -> com.
 
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
-  | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "CIF1" ].
-
 Notation "'SKIP'" := 
   CSkip.
 Notation "c1 ;; c2" := 
@@ -1091,14 +1086,6 @@ Inductive ceval : com -> state -> state -> Prop :=
 (* FILL IN HERE *)
 
   where "c1 '/' st '||' st'" := (ceval c1 st st').
-
-Tactic Notation "ceval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Skip" | Case_aux c "E_Ass" | Case_aux c "E_Seq"
-  | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop"
-  (* FILL IN HERE *)
-  ].
 
 (** Now we repeat (verbatim) the definition and notation of Hoare triples. *)
 
@@ -1217,11 +1204,11 @@ Proof.
      on [He], because, in the "keep looping" case, its hypotheses 
      talk about the whole loop instead of just [c]. *)
   remember (WHILE b DO c END) as wcom eqn:Heqwcom.
-  ceval_cases (induction He) Case;
+  induction He;
     try (inversion Heqwcom); subst; clear Heqwcom.
-  Case "E_WhileEnd".
+  - (* E_WhileEnd *)
     split. assumption. apply bexp_eval_false. assumption.
-  Case "E_WhileLoop".
+  - (* E_WhileLoop *)
     apply IHHe2. reflexivity.
     apply (Hhoare st st'). assumption.
       split. assumption. apply bexp_eval_true. assumption.
@@ -1282,12 +1269,12 @@ Proof.
   apply hoare_consequence_pre with (P' := fun st : state => True).
   eapply hoare_consequence_post.
   apply hoare_while.
-  Case "Loop body preserves invariant".
+  - (* Loop body preserves invariant *)
     apply hoare_post_true. intros st. apply I. 
-  Case "Loop invariant and negated guard imply postcondition".
+  - (* Loop invariant and negated guard imply postcondition *)
     simpl. intros st [Hinv Hguard].
     apply ex_falso_quodlibet. apply Hguard. reflexivity.
-  Case "Precondition implies invariant".
+  - (* Precondition implies invariant *)
     intros st H. constructor.  Qed.
 
 (** Of course, this result is not surprising if we remember that
@@ -1325,12 +1312,6 @@ Inductive com : Type :=
     checked _after_ each execution of the body, with the loop
     repeating as long as the guard stays _false_.  Because of this,
     the body will always execute at least once. *)
-
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
-  | Case_aux c "IFB" | Case_aux c "WHILE"
-  | Case_aux c "CRepeat" ].
 
 Notation "'SKIP'" := 
   CSkip.
@@ -1379,15 +1360,6 @@ Inductive ceval : state -> com -> state -> Prop :=
       ceval st (WHILE b1 DO c1 END) st''
 (* FILL IN HERE *)
 .
-
-Tactic Notation "ceval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Skip" | Case_aux c "E_Ass"
-  | Case_aux c "E_Seq"
-  | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop" 
-(* FILL IN HERE *)
-].
 
 (** A couple of definitions from above, copied here so they use the
     new [ceval]. *)
@@ -1457,11 +1429,6 @@ Inductive com : Type :=
   | CWhile : bexp -> com -> com
   | CHavoc : id -> com.
 
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
-  | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "HAVOC" ].
-
 Notation "'SKIP'" :=
   CSkip.
 Notation "X '::=' a" :=
@@ -1499,13 +1466,6 @@ Inductive ceval : com -> state -> state -> Prop :=
               (HAVOC X) / st || update st X n
 
   where "c1 '/' st '||' st'" := (ceval c1 st st').
-
-Tactic Notation "ceval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Skip" | Case_aux c "E_Ass" | Case_aux c "E_Seq"
-  | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop"
-  | Case_aux c "E_Havoc" ].
 
 (** The definition of Hoare triples is exactly as before. Unlike our
     notion of program equivalence, which had subtle consequences with
@@ -1573,5 +1533,5 @@ End Himp.
     that programs satisfy specifications of their behavior.
 *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

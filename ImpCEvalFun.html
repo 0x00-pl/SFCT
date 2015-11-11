@@ -32,7 +32,7 @@
 </div>
 
 <div class="doc">
-<a name="lab447"></a><h1 class="section">Evaluation Function</h1>
+<a name="lab441"></a><h1 class="section">Evaluation Function</h1>
 
 </div>
 <div class="code code-space">
@@ -233,7 +233,7 @@ We can improve the readability of this definition by introducing a
 &nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;Eval&nbsp;compute&nbsp;in&nbsp;<br/>
+<span class="comment">(*&nbsp;Compute<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(test_ceval&nbsp;empty_state&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(X&nbsp;::=&nbsp;ANum&nbsp;2;;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IFB&nbsp;BLe&nbsp;(AId&nbsp;X)&nbsp;(ANum&nbsp;1)<br/>
@@ -247,7 +247,7 @@ We can improve the readability of this definition by introducing a
 </div>
 
 <div class="doc">
-<a name="lab448"></a><h4 class="section">Exercise: 2 stars (pup_to_n)</h4>
+<a name="lab442"></a><h4 class="section">Exercise: 2 stars (pup_to_n)</h4>
  Write an Imp program that sums the numbers from <span class="inlinecode">1</span> to
    <span class="inlinecode"><span class="id" type="var">X</span></span> (inclusive: <span class="inlinecode">1</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span> <span class="inlinecode">+</span> <span class="inlinecode">...</span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" type="var">X</span></span>) in the variable <span class="inlinecode"><span class="id" type="var">Y</span></span>.  Make sure
    your solution satisfies the test that follows. 
@@ -271,7 +271,7 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab449"></a><h4 class="section">Exercise: 2 stars, optional (peven)</h4>
+<a name="lab443"></a><h4 class="section">Exercise: 2 stars, optional (peven)</h4>
  Write a <span class="inlinecode"><span class="id" type="var">While</span></span> program that sets <span class="inlinecode"><span class="id" type="var">Z</span></span> to <span class="inlinecode">0</span> if <span class="inlinecode"><span class="id" type="var">X</span></span> is even and
     sets <span class="inlinecode"><span class="id" type="var">Z</span></span> to <span class="inlinecode">1</span> otherwise.  Use <span class="inlinecode"><span class="id" type="var">ceval_test</span></span> to test your
     program. 
@@ -291,7 +291,7 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 </div>
 
 <div class="doc">
-<a name="lab450"></a><h1 class="section">Equivalence of Relational and Step-Indexed Evaluation</h1>
+<a name="lab444"></a><h1 class="section">Equivalence of Relational and Step-Indexed Evaluation</h1>
 
 <div class="paragraph"> </div>
 
@@ -317,48 +317,47 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">i</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">i'</span> ].<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "i = 0 -- contradictory".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;i&nbsp;=&nbsp;0&nbsp;--&nbsp;contradictory&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "i = S i'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;i&nbsp;=&nbsp;S&nbsp;i'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">com_cases</span> (<span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>) <span class="id" type="var">SCase</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>; <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">clear</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "SKIP". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Skip</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "::=". <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;SKIP&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Skip</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;::=&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">E_Ass</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> ";;".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;;;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c1</span> <span class="id" type="var">i'</span>) <span class="id" type="var">eqn</span>:<span class="id" type="var">Heqr1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Evaluation of r1 terminates normally".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;Evaluation&nbsp;of&nbsp;r1&nbsp;terminates&nbsp;normally&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_Seq</span> <span class="id" type="keyword">with</span> <span class="id" type="var">s</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr1</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H1</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Otherwise -- contradiction".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;Otherwise&nbsp;--&nbsp;contradiction&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H1</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "IFB".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;IFB&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> <span class="id" type="var">b</span>) <span class="id" type="var">eqn</span>:<span class="id" type="var">Heqr</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "r = true".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;r&nbsp;=&nbsp;true&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfTrue</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "r = false".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;r&nbsp;=&nbsp;false&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_IfFalse</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">assumption</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "WHILE". <span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> <span class="id" type="var">b</span>) <span class="id" type="var">eqn</span> :<span class="id" type="var">Heqr</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "r = true".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;WHILE&nbsp;*)</span> <span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> <span class="id" type="var">b</span>) <span class="id" type="var">eqn</span> :<span class="id" type="var">Heqr</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;r&nbsp;=&nbsp;true&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c</span> <span class="id" type="var">i'</span>) <span class="id" type="var">eqn</span>:<span class="id" type="var">Heqr1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSSCase</span> "r1 = Some s".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileLoop</span> <span class="id" type="keyword">with</span> <span class="id" type="var">s</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr1</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H1</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSSCase</span> "r1 = None".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "r = false".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="comment">(*&nbsp;r1&nbsp;=&nbsp;Some&nbsp;s&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileLoop</span> <span class="id" type="keyword">with</span> <span class="id" type="var">s</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqr1</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHi'</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H1</span>. <span class="id" type="tactic">assumption</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="comment">(*&nbsp;r1&nbsp;=&nbsp;None&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H1</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;r&nbsp;=&nbsp;false&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">E_WhileEnd</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqr</span>. <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
@@ -367,7 +366,7 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 </div>
 
 <div class="doc">
-<a name="lab451"></a><h4 class="section">Exercise: 4 stars (ceval_step__ceval_inf)</h4>
+<a name="lab445"></a><h4 class="section">Exercise: 4 stars (ceval_step__ceval_inf)</h4>
  Write an informal proof of <span class="inlinecode"><span class="id" type="var">ceval_step__ceval</span></span>, following the
     usual template.  (The template for case analysis on an inductively
     defined value should look the same as for induction, except that
@@ -390,50 +389,50 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 &nbsp;&nbsp;<span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c</span> <span class="id" type="var">i2</span> = <span class="id" type="var">Some</span> <span class="id" type="var">st'</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 <span class="id" type="tactic">induction</span> <span class="id" type="var">i1</span> <span class="id" type="keyword">as</span> [|<span class="id" type="var">i1'</span>]; <span class="id" type="tactic">intros</span> <span class="id" type="var">i2</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">c</span> <span class="id" type="var">Hle</span> <span class="id" type="var">Hceval</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "i1 = 0".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;i1&nbsp;=&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hceval</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "i1 = S i1'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;i1&nbsp;=&nbsp;S&nbsp;i1'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">i2</span> <span class="id" type="keyword">as</span> [|<span class="id" type="var">i2'</span>]. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hle</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">Hle'</span>: <span class="id" type="var">i1'</span> ≤ <span class="id" type="var">i2'</span>) <span class="id" type="tactic">by</span> <span class="id" type="tactic">omega</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">com_cases</span> (<span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>) <span class="id" type="var">SCase</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "SKIP".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;SKIP&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hceval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "::=".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;::=&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hceval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> ";;".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;;;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c1</span> <span class="id" type="var">i1'</span>) <span class="id" type="var">eqn</span>:<span class="id" type="var">Heqst1'o</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "st1'o = Some".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;st1'o&nbsp;=&nbsp;Some&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">IHi1'</span> <span class="id" type="var">i2'</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">Heqst1'o</span>; <span class="id" type="tactic">try</span> <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">Heqst1'o</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">IHi1'</span> <span class="id" type="var">i2'</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>; <span class="id" type="tactic">try</span> <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "st1'o = None".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;st1'o&nbsp;=&nbsp;None&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">Hceval</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "IFB".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;IFB&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> <span class="id" type="var">b</span>); <span class="id" type="tactic">apply</span> (<span class="id" type="var">IHi1'</span> <span class="id" type="var">i2'</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>; <span class="id" type="tactic">assumption</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "WHILE".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;WHILE&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">beval</span> <span class="id" type="var">st</span> <span class="id" type="var">b</span>); <span class="id" type="tactic">try</span> <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c</span> <span class="id" type="var">i1'</span>) <span class="id" type="var">eqn</span>: <span class="id" type="var">Heqst1'o</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "st1'o = Some".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;st1'o&nbsp;=&nbsp;Some&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">IHi1'</span> <span class="id" type="var">i2'</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">Heqst1'o</span>; <span class="id" type="tactic">try</span> <span class="id" type="tactic">assumption</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">Heqst1'o</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">IHi1'</span> <span class="id" type="var">i2'</span>) <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>; <span class="id" type="tactic">try</span> <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "i1'o = None".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;i1'o&nbsp;=&nbsp;None&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hceval</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hceval</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab452"></a><h4 class="section">Exercise: 3 stars (ceval__ceval_step)</h4>
+<a name="lab446"></a><h4 class="section">Exercise: 3 stars (ceval__ceval_step)</h4>
  Finish the following proof.  You'll need <span class="inlinecode"><span class="id" type="var">ceval_step_more</span></span> in a
     few places, as well as some basic facts about <span class="inlinecode">≤</span> and <span class="inlinecode"><span class="id" type="var">plus</span></span>. 
 </div>
@@ -445,7 +444,7 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&exist;</span><span class="id" type="var">i</span>, <span class="id" type="var">ceval_step</span> <span class="id" type="var">st</span> <span class="id" type="var">c</span> <span class="id" type="var">i</span> = <span class="id" type="var">Some</span> <span class="id" type="var">st'</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st'</span> <span class="id" type="var">Hce</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Hce</span>) <span class="id" type="var">Case</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Hce</span>.<br/>
 &nbsp;&nbsp;<span class="comment">(*&nbsp;FILL&nbsp;IN&nbsp;HERE&nbsp;*)</span> <span class="id" type="var">Admitted</span>.<br/>
 </div>
 
@@ -467,7 +466,7 @@ Proof.&nbsp;reflexivity.&nbsp;Qed.<br/>
 </div>
 
 <div class="doc">
-<a name="lab453"></a><h1 class="section">Determinism of Evaluation (Simpler Proof)</h1>
+<a name="lab447"></a><h1 class="section">Determinism of Evaluation (Simpler Proof)</h1>
 
 <div class="paragraph"> </div>
 

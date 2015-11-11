@@ -81,10 +81,6 @@ Inductive tm : Type :=
   | C : nat -> tm         (* Constant *)
   | P : tm -> tm -> tm.   (* Plus *)
 
-Tactic Notation "tm_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "C" | Case_aux c "P" ].
-
 (** Here is a standard evaluator for this language, written in the
     same (big-step) style as we've been using up to this point. *)
 
@@ -103,8 +99,8 @@ Fixpoint evalF (t : tm) : nat :=
 
                                t1 || n1
                                t2 || n2
-                        ----------------------                         (E_Plus)
-                        P t1 t2 || C (n1 + n2)
+                           ------------------                          (E_Plus)
+                           P t1 t2 || n1 + n2
 *)
 
 Reserved Notation " t '||' n " (at level 50, left associativity). 
@@ -118,10 +114,6 @@ Inductive eval : tm -> nat -> Prop :=
       P t1 t2 || (n1 + n2)
 
   where " t '||' n " := (eval t n).
-
-Tactic Notation "eval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Const" | Case_aux c "E_Plus" ].
 
 Module SimpleArith1.
 
@@ -154,11 +146,6 @@ Inductive step : tm -> tm -> Prop :=
       P (C n1) t2 ==> P (C n1) t2'
 
   where " t '==>' t' " := (step t t').
-
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_PlusConstConst"
-  | Case_aux c "ST_Plus1" | Case_aux c "ST_Plus2" ].
 
 (** Things to notice:
  
@@ -277,21 +264,21 @@ Theorem step_deterministic:
 Proof.
   unfold deterministic. intros x y1 y2 Hy1 Hy2.
   generalize dependent y2.
-  step_cases (induction Hy1) Case; intros y2 Hy2.
-    Case "ST_PlusConstConst". step_cases (inversion Hy2) SCase.
-      SCase "ST_PlusConstConst". reflexivity.
-      SCase "ST_Plus1". inversion H2.
-      SCase "ST_Plus2". inversion H2.
-    Case "ST_Plus1". step_cases (inversion Hy2) SCase.
-      SCase "ST_PlusConstConst". rewrite <- H0 in Hy1. inversion Hy1.
-      SCase "ST_Plus1".
+  induction Hy1; intros y2 Hy2.
+    - (* ST_PlusConstConst *) inversion Hy2.
+      + (* ST_PlusConstConst *) reflexivity.
+      + (* ST_Plus1 *) inversion H2.
+      + (* ST_Plus2 *) inversion H2.
+    - (* ST_Plus1 *) inversion Hy2.
+      + (* ST_PlusConstConst *) rewrite <- H0 in Hy1. inversion Hy1.
+      + (* ST_Plus1 *)
         rewrite <- (IHHy1 t1'0).
         reflexivity. assumption.
-      SCase "ST_Plus2". rewrite <- H in Hy1. inversion Hy1.
-    Case "ST_Plus2". step_cases (inversion Hy2) SCase.
-      SCase "ST_PlusConstConst". rewrite <- H1 in Hy1. inversion Hy1.
-      SCase "ST_Plus1". inversion H2.
-      SCase "ST_Plus2".
+      + (* ST_Plus2 *) rewrite <- H in Hy1. inversion Hy1.
+    - (* ST_Plus2 *) inversion Hy2.
+      + (* ST_PlusConstConst *) rewrite <- H1 in Hy1. inversion Hy1.
+      + (* ST_Plus1 *) inversion H2.
+      + (* ST_Plus2 *)
         rewrite <- (IHHy1 t2'0).
         reflexivity. assumption.  
 Qed.
@@ -317,12 +304,12 @@ Theorem step_deterministic_alt: deterministic step.
 Proof.
   intros x y1 y2 Hy1 Hy2.
   generalize dependent y2.
-  step_cases (induction Hy1) Case; intros y2 Hy2; 
+  induction Hy1; intros y2 Hy2; 
     inversion Hy2; subst; try (solve by inversion).
-  Case "ST_PlusConstConst". reflexivity.
-  Case "ST_Plus1". 
+  - (* ST_PlusConstConst *) reflexivity.
+  - (* ST_Plus1 *) 
     apply IHHy1 in H2. rewrite H2. reflexivity.
-  Case "ST_Plus2".
+  - (* ST_Plus2 *)
     apply IHHy1 in H2. rewrite H2. reflexivity.
 Qed.
 
@@ -408,11 +395,6 @@ Inductive step : tm -> tm -> Prop :=
 
   where " t '==>' t' " := (step t t').
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_PlusConstConst"
-  | Case_aux c "ST_Plus1" | Case_aux c "ST_Plus2" ].
-
 (** **** Exercise: 3 stars (redo_determinism)  *)
 (** As a sanity check on this change, let's re-verify determinism 
 
@@ -479,17 +461,17 @@ Proof.
 Theorem strong_progress : forall t,
   value t \/ (exists t', t ==> t').
 Proof.  
-  tm_cases (induction t) Case.
-    Case "C". left. apply v_const.
-    Case "P". right. inversion IHt1.
-      SCase "l". inversion IHt2.
-        SSCase "l". inversion H. inversion H0.
+  induction t.
+    - (* C *) left. apply v_const.
+    - (* P *) right. inversion IHt1.
+      + (* l *) inversion IHt2.
+        * (* l *) inversion H. inversion H0.
           exists (C (n + n0)).
           apply ST_PlusConstConst.
-        SSCase "r". inversion H0 as [t' H1].
+        * (* r *) inversion H0 as [t' H1].
           exists (P t1 t').
           apply ST_Plus2. apply H. apply H1.
-      SCase "r". inversion H as [t' H0]. 
+      + (* r *) inversion H as [t' H0]. 
           exists (P t' t2).
           apply ST_Plus1. apply H0.  Qed.
 
@@ -533,10 +515,10 @@ Lemma nf_is_value : forall t,
 Proof. (* a corollary of [strong_progress]... *)
   unfold normal_form. intros t H.
   assert (G : value t \/ exists t', t ==> t').
-    SCase "Proof of assertion". apply strong_progress.
+  { (* Proof of assertion *) apply strong_progress. }
   inversion G.
-    SCase "l". apply H0.
-    SCase "r". apply ex_falso_quodlibet. apply H. assumption.  Qed.
+    + (* l *) apply H0.
+    + (* r *) apply ex_falso_quodlibet. apply H. assumption.  Qed.
 
 Corollary nf_same_as_value : forall t,
   normal_form step t <-> value t.
@@ -877,10 +859,6 @@ Inductive multi {X:Type} (R: relation X) : relation X :=
     between [x] and [y].
 *)
 
-Tactic Notation "multi_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "multi_refl" | Case_aux c "multi_step" ].
-
 (** We write [==>*] for the [multi step] relation -- i.e., the
     relation that relates two terms [t] and [t'] if we can get from
     [t] to [t'] using the [step] relation zero or more times. *)
@@ -914,9 +892,9 @@ Theorem multi_trans :
       multi R x z.
 Proof.
   intros X R x y z G H.
-  multi_cases (induction G) Case.
-    Case "multi_refl". assumption.
-    Case "multi_step". 
+  induction G.
+    - (* multi_refl *) assumption.
+    - (* multi_step *) 
       apply multi_step with y. assumption. 
       apply IHG. assumption.  Qed.
 
@@ -1044,9 +1022,9 @@ Lemma multistep_congr_1 : forall t1 t1' t2,
      t1 ==>* t1' ->
      P t1 t2 ==>* P t1' t2.
 Proof.
-  intros t1 t1' t2 H. multi_cases (induction H) Case.
-    Case "multi_refl". apply multi_refl. 
-    Case "multi_step". apply multi_step with (P y t2). 
+  intros t1 t1' t2 H. induction H.
+    - (* multi_refl *) apply multi_refl. 
+    - (* multi_step *) apply multi_step with (P y t2). 
         apply ST_Plus1. apply H. 
         apply IHmulti.  Qed.
 
@@ -1086,16 +1064,16 @@ Theorem step_normalizing :
   normalizing step.
 Proof.
   unfold normalizing.
-  tm_cases (induction t) Case.
-    Case "C". 
+  induction t.
+    - (* C *) 
       exists (C n). 
       split.
-      SCase "l". apply multi_refl. 
-      SCase "r". 
+      + (* l *) apply multi_refl. 
+      + (* r *) 
         (* We can use [rewrite] with "iff" statements, not
            just equalities: *)
         rewrite nf_same_as_value. apply v_const.
-    Case "P".
+    - (* P *)
       inversion IHt1 as [t1' H1]; clear IHt1. inversion IHt2 as [t2' H2]; clear IHt2.
       inversion H1 as [H11 H12]; clear H1. inversion H2 as [H21 H22]; clear H2.
       rewrite nf_same_as_value in H12. rewrite nf_same_as_value in H22.
@@ -1104,14 +1082,14 @@ Proof.
       rewrite <- H0 in H21.
       exists (C (n1 + n2)).
       split.
-        SCase "l". 
+        + (* l *) 
           apply multi_trans with (P (C n1) t2).
           apply multistep_congr_1. apply H11.
           apply multi_trans with 
              (P (C n1) (C n2)).
           apply multistep_congr_2. apply v_const. apply H21.
           apply multi_R. apply ST_PlusConstConst.
-        SCase "r". 
+        + (* r *) 
           rewrite nf_same_as_value. apply v_const.  Qed.
 
 (* ########################################################### *)
@@ -1224,11 +1202,6 @@ Inductive tm : Type :=
   | tfalse : tm
   | tif : tm -> tm -> tm -> tm.
 
-Tactic Notation "tm_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "C" | Case_aux c "P"
-  | Case_aux c "ttrue" | Case_aux c "tfalse" | Case_aux c "tif" ].
-
 Inductive value : tm -> Prop :=
   | v_const : forall n, value (C n)
   | v_true : value ttrue
@@ -1255,12 +1228,6 @@ Inductive step : tm -> tm -> Prop :=
       tif t1 t2 t3 ==> tif t1' t2 t3
 
   where " t '==>' t' " := (step t t').
-
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_PlusConstConst"
-  | Case_aux c "ST_Plus1" | Case_aux c "ST_Plus2"
-  | Case_aux c "ST_IfTrue" | Case_aux c "ST_IfFalse" | Case_aux c "ST_If" ].
 
 (** Earlier, we separately proved for both plus- and if-expressions...
 
@@ -1447,11 +1414,6 @@ Inductive com : Type :=
   | CWhile : bexp -> com -> com
   (* New: *)
   | CPar : com -> com -> com.
-
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
-  | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "PAR" ].
 
 Notation "'SKIP'" := 
   CSkip.
@@ -1688,6 +1650,6 @@ Proof.
 (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** $Date: 2014-12-31 15:16:58 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 
 

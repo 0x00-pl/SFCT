@@ -19,33 +19,6 @@ Require Export Arith.EqNat.  (* Contains [beq_nat], among other things *)
 
 Definition admit {T: Type} : T.  Admitted.
 
-Require String. Open Scope string_scope.
-
-Ltac move_to_top x :=
-  match reverse goal with
-  | H : _ |- _ => try move x after H
-  end.
-
-Tactic Notation "assert_eq" ident(x) constr(v) :=
-  let H := fresh in
-  assert (x = v) as H by reflexivity;
-  clear H.
-
-Tactic Notation "Case_aux" ident(x) constr(name) :=
-  first [
-    set (x := name); move_to_top x
-  | assert_eq x name; move_to_top x
-  | fail 1 "because we are working on a different case" ].
-
-Tactic Notation "Case" constr(name) := Case_aux Case name.
-Tactic Notation "SCase" constr(name) := Case_aux SCase name.
-Tactic Notation "SSCase" constr(name) := Case_aux SSCase name.
-Tactic Notation "SSSCase" constr(name) := Case_aux SSSCase name.
-Tactic Notation "SSSSCase" constr(name) := Case_aux SSSSCase name.
-Tactic Notation "SSSSSCase" constr(name) := Case_aux SSSSSCase name.
-Tactic Notation "SSSSSSCase" constr(name) := Case_aux SSSSSSCase name.
-Tactic Notation "SSSSSSSCase" constr(name) := Case_aux SSSSSSSCase name.
-
 Fixpoint ble_nat (n m : nat) : bool :=
   match n with
   | O => true
@@ -61,9 +34,9 @@ Theorem andb_true_elim1 : forall b c,
 Proof.
   intros b c H.
   destruct b.
-  Case "b = true".
+  - (* b = true *)
     reflexivity.
-  Case "b = false".
+  - (* b = false *)
     rewrite <- H. reflexivity.  Qed.
 
 Theorem andb_true_elim2 : forall b c,
@@ -153,10 +126,6 @@ Inductive multi (X:Type) (R: relation X)
                     multi X R x z.
 Implicit Arguments multi [[X]]. 
 
-Tactic Notation "multi_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "multi_refl" | Case_aux c "multi_step" ].
-
 Theorem multi_R : forall (X:Type) (R:relation X) (x y : X),
        R x y -> multi R x y.
 Proof.
@@ -181,9 +150,9 @@ Proof.
    intros id1 id2.
    destruct id1 as [n1]. destruct id2 as [n2].
    destruct (eq_nat_dec n1 n2) as [Heq | Hneq].
-   Case "n1 = n2".
+   - (* n1 = n2 *)
      left. rewrite Heq. reflexivity.
-   Case "n1 <> n2".
+   - (* n1 <> n2 *)
      right. intros contra. inversion contra. apply Hneq. apply H0.
 Defined. 
 
@@ -247,5 +216,5 @@ Tactic Notation "solve" "by" "inversion" "3" :=
 Tactic Notation "solve" "by" "inversion" :=
   solve by inversion 1.
 
-(** $Date: 2014-12-31 12:04:02 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

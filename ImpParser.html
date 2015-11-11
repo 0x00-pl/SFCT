@@ -52,7 +52,7 @@
 </div>
 
 <div class="doc">
-<a name="lab439"></a><h1 class="section">Internals</h1>
+<a name="lab433"></a><h1 class="section">Internals</h1>
 
 </div>
 <div class="code code-space">
@@ -72,7 +72,7 @@
 </div>
 
 <div class="doc">
-<a name="lab440"></a><h2 class="section">Lexical Analysis</h2>
+<a name="lab434"></a><h2 class="section">Lexical Analysis</h2>
 
 </div>
 <div class="code code-space">
@@ -167,7 +167,7 @@
 </div>
 
 <div class="doc">
-<a name="lab441"></a><h2 class="section">Parsing</h2>
+<a name="lab435"></a><h2 class="section">Parsing</h2>
 
 </div>
 <div class="code code-space">
@@ -176,7 +176,7 @@
 </div>
 
 <div class="doc">
-<a name="lab442"></a><h3 class="section">Options with Errors</h3>
+<a name="lab436"></a><h3 class="section">Options with Errors</h3>
 
 </div>
 <div class="code code-space">
@@ -215,7 +215,7 @@
 </div>
 
 <div class="doc">
-<a name="lab443"></a><h3 class="section">Symbol Table</h3>
+<a name="lab437"></a><h3 class="section">Symbol Table</h3>
 
 </div>
 <div class="code code-space">
@@ -238,7 +238,7 @@
 </div>
 
 <div class="doc">
-<a name="lab444"></a><h3 class="section">Generic Combinators for Building Parsers</h3>
+<a name="lab438"></a><h3 class="section">Generic Combinators for Building Parsers</h3>
 
 </div>
 <div class="code code-space">
@@ -282,7 +282,7 @@
 </div>
 
 <div class="doc">
-<a name="lab445"></a><h3 class="section">A Recursive-Descent Parser for Imp</h3>
+<a name="lab439"></a><h3 class="section">A Recursive-Descent Parser for Imp</h3>
 
 </div>
 <div class="code code-space">
@@ -407,11 +407,11 @@
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">parseBExp</span> := <span class="id" type="var">parseConjunctionExp</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;<br/>
-Eval&nbsp;compute&nbsp;in&nbsp;<br/>
+<span class="comment">(*<br/>
+Compute<br/>
 &nbsp;&nbsp;(parseProductExp&nbsp;100&nbsp;(tokenize&nbsp;"x*y*(x*x)*x")).<br/>
 <br/>
-Eval&nbsp;compute&nbsp;in&nbsp;<br/>
+Compute<br/>
 &nbsp;&nbsp;(parseDisjunctionExp&nbsp;100&nbsp;(tokenize&nbsp;"not((x==x||x*x&lt;=(x*x)*x)&amp;&amp;x==x)")).&nbsp;<br/>
 *)</span><br/>
 
@@ -471,14 +471,14 @@ Eval&nbsp;compute&nbsp;in&nbsp;<br/>
 </div>
 
 <div class="doc">
-<a name="lab446"></a><h1 class="section">Examples</h1>
+<a name="lab440"></a><h1 class="section">Examples</h1>
 
 </div>
 <div class="code code-space">
 
 <br/>
 <span class="comment">(*<br/>
-Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
+Compute&nbsp;parse&nbsp;"<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;x&nbsp;==&nbsp;y&nbsp;+&nbsp;1&nbsp;+&nbsp;2&nbsp;-&nbsp;y&nbsp;*&nbsp;6&nbsp;+&nbsp;3&nbsp;THEN<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;:=&nbsp;x&nbsp;*&nbsp;1;;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;:=&nbsp;0<br/>
@@ -498,7 +498,7 @@ Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
 
 <br/>
 <span class="comment">(*<br/>
-Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
+Compute&nbsp;parse&nbsp;"<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;SKIP;;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;z:=x*y*(x*x);;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;WHILE&nbsp;x==x&nbsp;DO<br/>
@@ -529,7 +529,7 @@ Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
 
 <br/>
 <span class="comment">(*<br/>
-Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
+Compute&nbsp;parse&nbsp;"<br/>
 &nbsp;&nbsp;&nbsp;SKIP;;<br/>
 &nbsp;&nbsp;&nbsp;z:=x*y*(x*x);;<br/>
 &nbsp;&nbsp;&nbsp;WHILE&nbsp;x==x&nbsp;DO<br/>

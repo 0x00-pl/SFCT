@@ -12,7 +12,7 @@ Module NatList.
     with [S]), or more than one, as in this definition: *)
 
 Inductive natprod : Type :=
-  pair : nat -> nat -> natprod.
+| pair : nat -> nat -> natprod.
 
 (** This declaration can be read: "There is just one way to
     construct a pair of numbers: by applying the constructor [pair] to
@@ -38,7 +38,7 @@ Definition snd (p : natprod) : nat :=
   | pair x y => y
   end.
 
-Eval compute in (fst (pair 3 5)).
+Compute (fst (pair 3 5)).
 (* ===> 3 *)
 
 (** *** *)
@@ -55,7 +55,7 @@ Notation "( x , y )" := (pair x y).
     chapter -- this notation is provided as part of the standard
     library): *)
 
-Eval compute in (fst (3,5)).
+Compute (fst (3,5)).
 
 Definition fst' (p : natprod) : nat := 
   match p with
@@ -405,14 +405,17 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars (bag_theorem)  *)
-(** Write down an interesting theorem [bag_theorem] about bags involving
-    the functions [count] and [add], and prove it.  Note that, since this
-    problem is somewhat open-ended, it's possible that you may come up
-    with a theorem which is true, but whose proof requires techniques
-    you haven't learned yet.  Feel free to ask for help if you get
-    stuck! *)
+(** Write down an interesting theorem [bag_theorem] about bags
+    involving the functions [count] and [add], and prove it.  For
+    this, replace the [admit] command below with the statement of your
+    theorem. Note that, since this problem is somewhat open-ended,
+    it's possible that you may come up with a theorem which is true,
+    but whose proof requires techniques you haven't learned yet.  Feel
+    free to ask for help if you get stuck! *)
 
-(* FILL IN HERE *)
+Theorem bag_theorem :
+  (* FILL IN HERE *) admit.
+(* FILL IN HERE *) Admitted.
 (** [] *)
 
 (* ###################################################### *)
@@ -439,9 +442,9 @@ Theorem tl_length_pred : forall l:natlist,
   pred (length l) = length (tl l).
 Proof.
   intros l. destruct l as [| n l'].
-  Case "l = nil".
+  - (* l = nil *)
     reflexivity.
-  Case "l = cons n l'". 
+  - (* l = cons n l' *)
     reflexivity.  Qed.
 
 (** Here, the [nil] case works because we've chosen to define
@@ -496,21 +499,25 @@ Proof.
 Theorem app_assoc : forall l1 l2 l3 : natlist, 
   (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).   
 Proof.
-  intros l1 l2 l3. induction l1 as [| n l1'].
-  Case "l1 = nil".
+  intros l1 l2 l3. induction l1 as [| n l1' IHl1'].
+  - (* l1 = nil *)
     reflexivity.
-  Case "l1 = cons n l1'".
+  - (* l1 = cons n l1' *)
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
-(** Again, this Coq proof is not especially illuminating as a
-    static written document -- it is easy to see what's going on if
-    you are reading the proof in an interactive Coq session and you
-    can see the current goal and context at each point, but this state
-    is not visible in the written-down parts of the Coq proof.  So a
-    natural-language proof -- one written for human readers -- will
-    need to include more explicit signposts; in particular, it will
-    help the reader stay oriented if we remind them exactly what the
-    induction hypothesis is in the second case.  *)
+(** Notice that, as when doing induction on natural numbers, the
+    [as...] clause provided to the [induction] tactic gives a name to
+    the induction hypothesis corresponding to the smaller list [l1']
+    in the [cons] case. Once again, this Coq proof is not especially
+    illuminating as a static written document -- it is easy to see
+    what's going on if you are reading the proof in an interactive Coq
+    session and you can see the current goal and context at each
+    point, but this state is not visible in the written-down parts of
+    the Coq proof.  So a natural-language proof -- one written for
+    human readers -- will need to include more explicit signposts; in
+    particular, it will help the reader stay oriented if we remind
+    them exactly what the induction hypothesis is in the second case.
+    *)
 
 (** *** Informal version *)
 
@@ -541,10 +548,10 @@ Theorem app_length : forall l1 l2 : natlist,
   length (l1 ++ l2) = (length l1) + (length l2).
 Proof.
   (* WORKED IN CLASS *)
-  intros l1 l2. induction l1 as [| n l1'].
-  Case "l1 = nil".
+  intros l1 l2. induction l1 as [| n l1' IHl1'].
+  - (* l1 = nil *)
     reflexivity.
-  Case "l1 = cons".
+  - (* l1 = cons *)
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
 
@@ -583,10 +590,10 @@ Proof. reflexivity.  Qed.
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
 Proof.
-  intros l. induction l as [| n l'].
-  Case "l = []".
+  intros l. induction l as [| n l' IHl'].
+  - (* l = [] *)
     reflexivity.
-  Case "l = n :: l'".
+  - (* l = n :: l' *)
     (* This is the tricky case.  Let's begin as usual 
        by simplifying. *)
     simpl. 
@@ -608,11 +615,11 @@ Abort.
 Theorem length_snoc : forall n : nat, forall l : natlist,
   length (snoc l n) = S (length l).
 Proof.
-  intros n l. induction l as [| n' l'].
-  Case "l = nil".
+  intros n l. induction l as [| n' l' IHl'].
+  - (* l = nil *)
     reflexivity.
-  Case "l = cons n' l'".
-    simpl. rewrite -> IHl'. reflexivity.  Qed. 
+  - (* l = cons n' l' *)
+    simpl. rewrite -> IHl'. reflexivity.  Qed.
 
 (**
     Note that we make the lemma as _general_ as possible: in particular,
@@ -628,11 +635,11 @@ Proof.
 Theorem rev_length : forall l : natlist,
   length (rev l) = length l.
 Proof.
-  intros l. induction l as [| n l'].
-  Case "l = nil".
+  intros l. induction l as [| n l' IHl'].
+  - (* l = nil *)
     reflexivity.
-  Case "l = cons".
-    simpl. rewrite -> length_snoc. 
+  - (* l = cons *)
+    simpl. rewrite -> length_snoc.
     rewrite -> IHl'. reflexivity.  Qed.
 
 (** For comparison, here are informal proofs of these two theorems: 
@@ -816,10 +823,10 @@ Proof.
 Theorem ble_n_Sn : forall n,
   ble_nat n (S n) = true.
 Proof.
-  intros n. induction n as [| n'].
-  Case "0".  
+  intros n. induction n as [| n' IHn'].
+  - (* 0 *)  
     simpl.  reflexivity.
-  Case "S n'".
+  - (* S n' *)
     simpl.  rewrite IHn'.  reflexivity.  Qed.
 
 Theorem remove_decreases_count: forall (s : bag),
@@ -972,18 +979,18 @@ Inductive dictionary : Type :=
 Definition insert (key value : nat) (d : dictionary) : dictionary :=
   (record key value d).
 
-(** Here is a function [find] that searches a [dictionary] for a
-    given key.  It evaluates evaluates to [None] if the key was not
-    found and [Some val] if the key was mapped to [val] in the
-    dictionary. If the same key is mapped to multiple values, [find]
-    will return the first one it finds. *)
+(** Here is a function [find] that searches a [dictionary] for a given
+    key.  It evaluates to [None] if the key was not found and [Some
+    val] if the key was mapped to [val] in the dictionary. If the same
+    key is mapped to multiple values, [find] will return the first one
+    it finds. *)
 
 Fixpoint find (key : nat) (d : dictionary) : natoption := 
   match d with 
   | empty         => None
-  | record k v d' => if (beq_nat key k) 
-                       then (Some v) 
-                       else (find key d')
+  | record k v d' => if beq_nat key k
+                     then Some v
+                     else find key d'
   end.
 
 
@@ -992,7 +999,7 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 (** Complete the following proof. *)
 
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
-  (find k (insert k v d)) = Some v.
+  find k (insert k v d) = Some v.
 Proof.
  (* FILL IN HERE *) Admitted.
 (** [] *)
@@ -1012,5 +1019,5 @@ End Dictionary.
 
 End NatList.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

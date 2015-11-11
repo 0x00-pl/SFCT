@@ -87,7 +87,7 @@ the base calculus, normalization is not entirely trivial to prove,
 since each reduction of a term can duplicate redexes in subterms. 
 <div class="paragraph"> </div>
 
-<a name="lab886"></a><h4 class="section">Exercise: 1 star</h4>
+<a name="lab880"></a><h4 class="section">Exercise: 1 star</h4>
  Where do we fail if we attempt to prove normalization by a
 straightforward induction on the size of a well-typed term? 
 </div>
@@ -106,7 +106,7 @@ straightforward induction on the size of a well-typed term?
 </div>
 
 <div class="doc">
-<a name="lab887"></a><h1 class="section">Language</h1>
+<a name="lab881"></a><h1 class="section">Language</h1>
 
 <div class="paragraph"> </div>
 
@@ -122,7 +122,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab888"></a><h3 class="section">Syntax and Operational Semantics</h3>
+<a name="lab882"></a><h3 class="section">Syntax and Operational Semantics</h3>
 
 </div>
 <div class="code code-space">
@@ -133,11 +133,6 @@ section...
 &nbsp;&nbsp;| <span class="id" type="var">TArrow</span> : <span class="id" type="var">ty</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">ty</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">ty</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">TProd</span>  : <span class="id" type="var">ty</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">ty</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">ty</span><br/>
 .<br/>
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "T_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "TBool" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "TArrow" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "TProd" ].<br/>
 
 <br/>
 <span class="id" type="keyword">Inductive</span> <span class="id" type="var">tm</span> : <span class="id" type="keyword">Type</span> :=<br/>
@@ -156,17 +151,10 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;i.e.,&nbsp;<span class="inlinecode"><span class="id" type="keyword">if</span></span> <span class="inlinecode"><span class="id" type="var">t0</span></span> <span class="inlinecode"><span class="id" type="keyword">then</span></span> <span class="inlinecode"><span class="id" type="var">t<sub>1</sub></span></span> <span class="inlinecode"><span class="id" type="keyword">else</span></span> <span class="inlinecode"><span class="id" type="var">t<sub>2</sub></span></span>&nbsp;*)</span><br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "t_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tvar" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tapp" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tabs"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tpair" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tfst" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tsnd"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ttrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tfalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tif" ].<br/>
-
-<br/>
 </div>
 
 <div class="doc">
-<a name="lab889"></a><h3 class="section">Substitution</h3>
+<a name="lab883"></a><h3 class="section">Substitution</h3>
 
 </div>
 <div class="code code-space">
@@ -192,7 +180,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab890"></a><h3 class="section">Reduction</h3>
+<a name="lab884"></a><h3 class="section">Reduction</h3>
 
 </div>
 <div class="code code-space">
@@ -261,15 +249,6 @@ section...
 <span class="id" type="keyword">where</span> "t<sub>1</sub> '<span style="font-family: arial;">&rArr;</span>' t<sub>2</sub>" := (<span class="id" type="var">step</span> <span class="id" type="var">t<sub>1</sub></span> <span class="id" type="var">t<sub>2</sub></span>).<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "step_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_AppAbs" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_App1" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_App2"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_Pair1" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_Pair2"<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_Fst" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_FstPair"<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_Snd" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_SndPair"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_IfTrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_IfFalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_If" ].<br/>
-
-<br/>
 <span class="id" type="keyword">Notation</span> <span class="id" type="var">multistep</span> := (<span class="id" type="var">multi</span> <span class="id" type="var">step</span>).<br/>
 <span class="id" type="keyword">Notation</span> "t<sub>1</sub> '<span style="font-family: arial;">&rArr;*</span>' t<sub>2</sub>" := (<span class="id" type="var">multistep</span> <span class="id" type="var">t<sub>1</sub></span> <span class="id" type="var">t<sub>2</sub></span>) (<span class="id" type="tactic">at</span> <span class="id" type="var">level</span> 40).<br/>
 
@@ -289,7 +268,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab891"></a><h3 class="section">Typing</h3>
+<a name="lab885"></a><h3 class="section">Typing</h3>
 
 </div>
 <div class="code code-space">
@@ -337,13 +316,6 @@ section...
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">has_type</span>.<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "has_type_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Var" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Abs" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_App" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Pair" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Fst" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Snd" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_True" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_False" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_If" ].<br/>
-
-<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="keyword">Extern</span> 2 (<span class="id" type="var">has_type</span> <span class="id" type="var">_</span> (<span class="id" type="var">tapp</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>) <span class="id" type="var">_</span>) ⇒ <span class="id" type="tactic">eapply</span> <span class="id" type="var">T_App</span>; <span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="keyword">Extern</span> 2 (<span class="id" type="var">_</span> = <span class="id" type="var">_</span>) ⇒ <span class="id" type="tactic">compute</span>; <span class="id" type="tactic">reflexivity</span>.<br/>
 
@@ -351,7 +323,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab892"></a><h3 class="section">Context Invariance</h3>
+<a name="lab886"></a><h3 class="section">Context Invariance</h3>
 
 </div>
 <div class="code code-space">
@@ -407,16 +379,16 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">has_type</span> <span style="font-family: serif; font-size:85%;">&Gamma;'</span> <span class="id" type="var">t</span> <span class="id" type="var">S</span>.<br/>
 <span class="id" type="keyword">Proof</span> <span class="id" type="keyword">with</span> <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span style="font-family: serif; font-size:85%;">&Gamma;'</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">has_type_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>) <span class="id" type="var">Case</span>; <br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>; <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span style="font-family: serif; font-size:85%;">&Gamma;'</span> <span class="id" type="var">Heqv</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Var".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Var&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">T_Var</span>... <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">Heqv</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Abs".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Abs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">T_Abs</span>... <span class="id" type="tactic">apply</span> <span class="id" type="var">IHhas_type</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">y</span> <span class="id" type="var">Hafi</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span>. <span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>)...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Pair".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Pair&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">T_Pair</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_If".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_If&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">T_If</span>...<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -427,8 +399,8 @@ section...
 &nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&exist;</span><span class="id" type="var">T'</span>, <span style="font-family: serif; font-size:85%;">&Gamma;</span> <span class="id" type="var">x</span> = <span class="id" type="var">Some</span> <span class="id" type="var">T'</span>.<br/>
 <span class="id" type="keyword">Proof</span> <span class="id" type="keyword">with</span> <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">t</span> <span class="id" type="var">T</span> <span style="font-family: serif; font-size:85%;">&Gamma;</span> <span class="id" type="var">Hafi</span> <span class="id" type="var">Htyp</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">has_type_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">Htyp</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hafi</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Abs".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">Htyp</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">Hafi</span>; <span class="id" type="tactic">subst</span>...<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Abs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">IHHtyp</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">T'</span> <span class="id" type="var">Hctx</span>]... <span style="font-family: arial;">&exist;</span><span class="id" type="var">T'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hctx</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span> <span class="id" type="keyword">in</span> <span class="id" type="var">Hctx</span>...<br/>
@@ -447,7 +419,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab893"></a><h3 class="section">Preservation</h3>
+<a name="lab887"></a><h3 class="section">Preservation</h3>
 
 </div>
 <div class="code code-space">
@@ -466,9 +438,9 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;the&nbsp;IH,&nbsp;with&nbsp;the&nbsp;exception&nbsp;of&nbsp;tvar&nbsp;and&nbsp;tabs.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;former&nbsp;aren't&nbsp;automatic&nbsp;because&nbsp;we&nbsp;must&nbsp;reason&nbsp;about&nbsp;how&nbsp;the<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variables&nbsp;interact.&nbsp;*)</span><br/>
-&nbsp;&nbsp;<span class="id" type="var">t_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">S</span> <span style="font-family: serif; font-size:85%;">&Gamma;</span> <span class="id" type="var">Htypt</span>; <span class="id" type="tactic">simpl</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">Htypt</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "tvar".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;tvar&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rename</span> <span class="id" type="var">i</span> <span class="id" type="var">into</span> <span class="id" type="var">y</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;t&nbsp;=&nbsp;y,&nbsp;we&nbsp;know&nbsp;that<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span class="id" type="var">empty</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">v</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">U</span></span>&nbsp;and<br/>
@@ -478,7 +450,7 @@ section...
 <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There&nbsp;are&nbsp;two&nbsp;cases&nbsp;to&nbsp;consider:&nbsp;either&nbsp;<span class="inlinecode"><span class="id" type="var">x</span>=<span class="id" type="var">y</span></span>&nbsp;or&nbsp;<span class="inlinecode"><span class="id" type="var">x</span>≠<span class="id" type="var">y</span></span>.&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "x=y".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;x=y&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;<span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">y</span></span>,&nbsp;then&nbsp;we&nbsp;know&nbsp;that&nbsp;<span class="inlinecode"><span class="id" type="var">U</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">S</span></span>,&nbsp;and&nbsp;that&nbsp;<span class="inlinecode">[<span class="id" type="var">x</span>:=<span class="id" type="var">v</span>]<span class="id" type="var">y</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">v</span></span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So&nbsp;what&nbsp;we&nbsp;really&nbsp;must&nbsp;show&nbsp;is&nbsp;that&nbsp;if&nbsp;<span class="inlinecode"><span class="id" type="var">empty</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">v</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">U</span></span>&nbsp;then<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">v</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">U</span></span>.&nbsp;&nbsp;We&nbsp;have&nbsp;already&nbsp;proven&nbsp;a&nbsp;more&nbsp;general&nbsp;version<br/>
@@ -490,11 +462,11 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">Hcontra</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">free_in_context</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">S</span> <span class="id" type="var">empty</span> <span class="id" type="var">Hcontra</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">T'</span> <span class="id" type="var">HT'</span>]...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">HT'</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "x≠y".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;x&lt;&gt;y&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;<span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">≠</span> <span class="inlinecode"><span class="id" type="var">y</span></span>,&nbsp;then&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span></span> <span class="inlinecode"><span class="id" type="var">y</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">Some</span></span> <span class="inlinecode"><span class="id" type="var">S</span></span>&nbsp;and&nbsp;the&nbsp;substitution&nbsp;has&nbsp;no<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;effect.&nbsp;&nbsp;We&nbsp;can&nbsp;show&nbsp;that&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">y</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">S</span></span>&nbsp;by&nbsp;<span class="inlinecode"><span class="id" type="var">T_Var</span></span>.&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">T_Var</span>... <span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H1</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H1</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "tabs".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;tabs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rename</span> <span class="id" type="var">i</span> <span class="id" type="var">into</span> <span class="id" type="var">y</span>. <span class="id" type="tactic">rename</span> <span class="id" type="var">t</span> <span class="id" type="var">into</span> <span class="id" type="var">T<sub>11</sub></span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;<span class="inlinecode"><span class="id" type="var">t</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">tabs</span></span> <span class="inlinecode"><span class="id" type="var">y</span></span> <span class="inlinecode"><span class="id" type="var">T<sub>11</sub></span></span> <span class="inlinecode"><span class="id" type="var">t0</span></span>,&nbsp;then&nbsp;we&nbsp;know&nbsp;that<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span>,<span class="id" type="var">x</span>:<span class="id" type="var">U</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">tabs</span></span> <span class="inlinecode"><span class="id" type="var">y</span></span> <span class="inlinecode"><span class="id" type="var">T<sub>11</sub></span></span> <span class="inlinecode"><span class="id" type="var">t0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">T<sub>11</sub></span><span style="font-family: arial;">&rarr;</span><span class="id" type="var">T<sub>12</sub></span></span><br/>
@@ -512,7 +484,7 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">T_Abs</span>...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "x=y".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;x=y&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;<span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">y</span></span>,&nbsp;then&nbsp;the&nbsp;substitution&nbsp;has&nbsp;no&nbsp;effect.&nbsp;&nbsp;Context<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invariance&nbsp;shows&nbsp;that&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span>,<span class="id" type="var">y</span>:<span class="id" type="var">U</span>,<span class="id" type="var">y</span>:<span class="id" type="var">T<sub>11</sub></span></span>&nbsp;and&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span>,<span class="id" type="var">y</span>:<span class="id" type="var">T<sub>11</sub></span></span>&nbsp;are<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;equivalent.&nbsp;&nbsp;Since&nbsp;the&nbsp;former&nbsp;context&nbsp;shows&nbsp;that&nbsp;<span class="inlinecode"><span class="id" type="var">t0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">T<sub>12</sub></span></span>,&nbsp;so<br/>
@@ -521,7 +493,7 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">Hafi</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">y</span> <span class="id" type="var">x</span>)...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "x≠y".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;x&lt;&gt;y&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;<span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">≠</span> <span class="inlinecode"><span class="id" type="var">y</span></span>,&nbsp;then&nbsp;the&nbsp;IH&nbsp;and&nbsp;context&nbsp;invariance&nbsp;allow&nbsp;us&nbsp;to&nbsp;show&nbsp;that<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span>,<span class="id" type="var">x</span>:<span class="id" type="var">U</span>,<span class="id" type="var">y</span>:<span class="id" type="var">T<sub>11</sub></span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">t0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">T<sub>12</sub></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span style="font-family: serif; font-size:85%;">&Gamma;</span>,<span class="id" type="var">y</span>:<span class="id" type="var">T<sub>11</sub></span>,<span class="id" type="var">x</span>:<span class="id" type="var">U</span></span> <span class="inlinecode"><span style="font-family: arial;">&#8866;</span></span> <span class="inlinecode"><span class="id" type="var">t0</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">T<sub>12</sub></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;<br/>
@@ -544,15 +516,15 @@ section...
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">t'</span>.<br/>
 &nbsp;&nbsp;<span class="comment">(*&nbsp;Proof:&nbsp;By&nbsp;induction&nbsp;on&nbsp;the&nbsp;given&nbsp;typing&nbsp;derivation.&nbsp;&nbsp;Many&nbsp;cases&nbsp;are<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contradictory&nbsp;(<span class="inlinecode"><span class="id" type="var">T_Var</span></span>,&nbsp;<span class="inlinecode"><span class="id" type="var">T_Abs</span></span>).&nbsp;&nbsp;We&nbsp;show&nbsp;just&nbsp;the&nbsp;interesting&nbsp;ones.&nbsp;*)</span><br/>
-&nbsp;&nbsp;<span class="id" type="var">has_type_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">HT</span>) <span class="id" type="var">Case</span>; <br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">HT</span>; <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">t'</span> <span class="id" type="var">HeqGamma</span> <span class="id" type="var">HE</span>; <span class="id" type="tactic">subst</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">HE</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_App".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_App&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;If&nbsp;the&nbsp;last&nbsp;rule&nbsp;used&nbsp;was&nbsp;<span class="inlinecode"><span class="id" type="var">T_App</span></span>,&nbsp;then&nbsp;<span class="inlinecode"><span class="id" type="var">t</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">t<sub>1</sub></span></span> <span class="inlinecode"><span class="id" type="var">t<sub>2</sub></span></span>,&nbsp;and&nbsp;three&nbsp;rules<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;could&nbsp;have&nbsp;been&nbsp;used&nbsp;to&nbsp;show&nbsp;<span class="inlinecode"><span class="id" type="var">t</span></span> <span class="inlinecode"><span style="font-family: arial;">&rArr;</span></span> <span class="inlinecode"><span class="id" type="var">t'</span></span>:&nbsp;<span class="inlinecode"><span class="id" type="var">ST_App1</span></span>,&nbsp;<span class="inlinecode"><span class="id" type="var">ST_App2</span></span>,&nbsp;and&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span class="id" type="var">ST_AppAbs</span></span>.&nbsp;In&nbsp;the&nbsp;first&nbsp;two&nbsp;cases,&nbsp;the&nbsp;result&nbsp;follows&nbsp;directly&nbsp;from&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;IH.&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">HE</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "ST_AppAbs".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;ST_AppAbs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;For&nbsp;the&nbsp;third&nbsp;case,&nbsp;suppose&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span class="id" type="var">t<sub>1</sub></span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">tabs</span></span> <span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode"><span class="id" type="var">T<sub>11</sub></span></span> <span class="inlinecode"><span class="id" type="var">t<sub>12</sub></span></span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and<br/>
@@ -567,9 +539,9 @@ section...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by&nbsp;assumption,&nbsp;so&nbsp;we&nbsp;are&nbsp;done.&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">substitution_preserves_typing</span> <span class="id" type="keyword">with</span> <span class="id" type="var">T<sub>1</sub></span>...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">HT1</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Fst".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Fst&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">HT</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Snd".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Snd&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">HT</span>...<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 </div>
@@ -583,7 +555,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab894"></a><h3 class="section">Determinism</h3>
+<a name="lab888"></a><h3 class="section">Determinism</h3>
 
 </div>
 <div class="code code-space">
@@ -599,7 +571,7 @@ section...
 </div>
 
 <div class="doc">
-<a name="lab895"></a><h1 class="section">Normalization</h1>
+<a name="lab889"></a><h1 class="section">Normalization</h1>
 
 <div class="paragraph"> </div>
 
@@ -793,7 +765,7 @@ value.
 </div>
 
 <div class="doc">
-<a name="lab896"></a><h2 class="section">Membership in <span class="inlinecode"><span class="id" type="var">R_T</span></span> is invariant under evaluation</h2>
+<a name="lab890"></a><h2 class="section">Membership in <span class="inlinecode"><span class="id" type="var">R_T</span></span> is invariant under evaluation</h2>
 
 <div class="paragraph"> </div>
 
@@ -818,12 +790,12 @@ languages, but the proof would be harder!
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">t</span> <span class="id" type="var">t'</span> <span class="id" type="var">ST</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">halts</span>.<br/>
 &nbsp;<span class="id" type="tactic">split</span>.<br/>
-&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>".<br/>
+&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">t''</span> [<span class="id" type="var">STM</span> <span class="id" type="var">V</span>]].<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">STM</span>; <span class="id" type="tactic">subst</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">value__normal</span> <span class="id" type="keyword">in</span> <span class="id" type="var">V</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">normal_form</span> <span class="id" type="keyword">in</span> <span class="id" type="var">V</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">V</span>. <span style="font-family: arial;">&exist;</span><span class="id" type="var">t'</span>. <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">step_deterministic</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">ST</span> <span class="id" type="var">H</span>). <span style="font-family: arial;">&exist;</span><span class="id" type="var">t''</span>. <span class="id" type="tactic">split</span>; <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>".<br/>
+&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">t'0</span> [<span class="id" type="var">STM</span> <span class="id" type="var">V</span>]].<br/>
 &nbsp;&nbsp;<span style="font-family: arial;">&exist;</span><span class="id" type="var">t'0</span>. <span class="id" type="tactic">split</span>; <span class="id" type="tactic">eauto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
@@ -909,7 +881,7 @@ In the reverse direction, we must add the fact that <span class="inlinecode"><sp
 </div>
 
 <div class="doc">
-<a name="lab897"></a><h2 class="section">Closed instances of terms of type <span class="inlinecode"><span class="id" type="var">T</span></span> belong to <span class="inlinecode"><span class="id" type="var">R_T</span></span></h2>
+<a name="lab891"></a><h2 class="section">Closed instances of terms of type <span class="inlinecode"><span class="id" type="var">T</span></span> belong to <span class="inlinecode"><span class="id" type="var">R_T</span></span></h2>
 
 <div class="paragraph"> </div>
 
@@ -950,7 +922,7 @@ for abstraction.
 </div>
 
 <div class="doc">
-<a name="lab898"></a><h3 class="section">Multisubstitutions, multi-extensions, and instantiations</h3>
+<a name="lab892"></a><h3 class="section">Multisubstitutions, multi-extensions, and instantiations</h3>
 
 <div class="paragraph"> </div>
 
@@ -1073,7 +1045,7 @@ We now proceed to prove various properties of these definitions.
 </div>
 
 <div class="doc">
-<a name="lab899"></a><h3 class="section">More Substitution Facts</h3>
+<a name="lab893"></a><h3 class="section">More Substitution Facts</h3>
 
 <div class="paragraph"> </div>
 
@@ -1099,27 +1071,27 @@ We now proceed to prove various properties of these definitions.
 <span class="id" type="keyword">Lemma</span> <span class="id" type="var">subst_not_afi</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">t</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span>, <span class="id" type="var">closed</span> <span class="id" type="var">v</span> <span style="font-family: arial;">&rarr;</span>  ¬ <span class="id" type="var">appears_free_in</span> <span class="id" type="var">x</span> ([<span class="id" type="var">x</span>:=<span class="id" type="var">v</span>]<span class="id" type="var">t</span>).<br/>
 <span class="id" type="keyword">Proof</span> <span class="id" type="keyword">with</span> <span class="id" type="tactic">eauto</span>. <span class="comment">(*&nbsp;rather&nbsp;slow&nbsp;this&nbsp;way&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">closed</span>, <span class="id" type="var">not</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">t_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span> <span class="id" type="var">P</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">A</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tvar".<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>; <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span> <span class="id" type="var">P</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">A</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tvar&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">i</span>)...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>. <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tapp".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tapp&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tabs".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tabs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">i</span>)...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tpair".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tpair&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tfst".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tfst&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tsnd".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tsnd&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "ttrue".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;ttrue&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tfalse".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tfalse&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "tif".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;tif&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">A</span>; <span class="id" type="tactic">subst</span>...<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -1136,8 +1108,8 @@ We now proceed to prove various properties of these definitions.
 <span class="id" type="keyword">Lemma</span> <span class="id" type="var">swap_subst</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">t</span> <span class="id" type="var">x</span> <span class="id" type="var">x1</span> <span class="id" type="var">v</span> <span class="id" type="var">v<sub>1</sub></span>, <span class="id" type="var">x</span> ≠ <span class="id" type="var">x1</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">closed</span> <span class="id" type="var">v</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">closed</span> <span class="id" type="var">v<sub>1</sub></span> <span style="font-family: arial;">&rarr;</span> <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="id" type="var">x1</span>:=<span class="id" type="var">v<sub>1</sub></span>]([<span class="id" type="var">x</span>:=<span class="id" type="var">v</span>]<span class="id" type="var">t</span>) = [<span class="id" type="var">x</span>:=<span class="id" type="var">v</span>]([<span class="id" type="var">x1</span>:=<span class="id" type="var">v<sub>1</sub></span>]<span class="id" type="var">t</span>).<br/>
 <span class="id" type="keyword">Proof</span> <span class="id" type="keyword">with</span> <span class="id" type="tactic">eauto</span>.<br/>
-&nbsp;<span class="id" type="var">t_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span>; <span class="id" type="tactic">simpl</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "tvar".<br/>
+&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">t</span>; <span class="id" type="tactic">intros</span>; <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;tvar&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">i</span>); <span class="id" type="tactic">destruct</span> (<span class="id" type="var">eq_id_dec</span> <span class="id" type="var">x1</span> <span class="id" type="var">i</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">subst_closed</span>...<br/>
@@ -1149,7 +1121,7 @@ We now proceed to prove various properties of these definitions.
 </div>
 
 <div class="doc">
-<a name="lab900"></a><h3 class="section">Properties of multi-substitutions</h3>
+<a name="lab894"></a><h3 class="section">Properties of multi-substitutions</h3>
 
 </div>
 <div class="code code-space">
@@ -1249,7 +1221,7 @@ You'll need similar functions for the other term constructors.
 </div>
 
 <div class="doc">
-<a name="lab901"></a><h3 class="section">Properties of multi-extensions</h3>
+<a name="lab895"></a><h3 class="section">Properties of multi-extensions</h3>
 
 <div class="paragraph"> </div>
 
@@ -1287,7 +1259,7 @@ You'll need similar functions for the other term constructors.
 </div>
 
 <div class="doc">
-<a name="lab902"></a><h3 class="section">Properties of Instantiations</h3>
+<a name="lab896"></a><h3 class="section">Properties of Instantiations</h3>
 
 <div class="paragraph"> </div>
 
@@ -1340,7 +1312,7 @@ You'll need similar functions for the other term constructors.
 </div>
 
 <div class="doc">
-<a name="lab903"></a><h3 class="section">Congruence lemmas on multistep</h3>
+<a name="lab897"></a><h3 class="section">Congruence lemmas on multistep</h3>
 
 <div class="paragraph"> </div>
 
@@ -1365,7 +1337,7 @@ You'll need similar functions for the other term constructors.
 </div>
 
 <div class="doc">
-<a name="lab904"></a><h3 class="section">The R Lemma.</h3>
+<a name="lab898"></a><h3 class="section">The R Lemma.</h3>
 
 <div class="paragraph"> </div>
 
@@ -1412,16 +1384,16 @@ And at long last, the main lemma.
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">HeqGamma</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">mextend_lookup</span>. <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">clear</span> <span class="id" type="var">HeqGamma</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">c</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">has_type_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">HT</span>) <span class="id" type="var">Case</span>; <span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">HT</span>; <span class="id" type="tactic">intros</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Var".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Var&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H0</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">destruct</span> (<span class="id" type="var">instantiation_domains_match</span> <span class="id" type="var">V</span> <span class="id" type="var">H</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">t</span> <span class="id" type="var">P</span>].<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">eapply</span> <span class="id" type="var">instantiation_R</span>; <span class="id" type="tactic">eauto</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">msubst_var</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">P</span>. <span class="id" type="tactic">auto</span>. <span class="id" type="tactic">eapply</span> <span class="id" type="var">instantiation_env_closed</span>; <span class="id" type="tactic">eauto</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_Abs".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_Abs&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">msubst_abs</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;We'll&nbsp;need&nbsp;variants&nbsp;of&nbsp;the&nbsp;following&nbsp;fact&nbsp;several&nbsp;times,&nbsp;so&nbsp;its&nbsp;simplest&nbsp;to<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;establish&nbsp;it&nbsp;just&nbsp;once.&nbsp;*)</span><br/>
@@ -1455,7 +1427,7 @@ And at long last, the main lemma.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">constructor</span>; <span class="id" type="tactic">auto</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "T_App".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;T_App&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">msubst_app</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">IHHT1</span> <span class="id" type="var">c</span> <span class="id" type="var">H</span> <span class="id" type="var">env0</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> [<span class="id" type="var">_</span> [<span class="id" type="var">_</span> <span class="id" type="var">P1</span>]].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">pose</span> <span class="id" type="var">proof</span> (<span class="id" type="var">IHHT2</span> <span class="id" type="var">c</span> <span class="id" type="var">H</span> <span class="id" type="var">env0</span> <span class="id" type="var">V</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">P2</span>. <span class="id" type="var">fold</span> <span class="id" type="var">R</span> <span class="id" type="keyword">in</span> <span class="id" type="var">P1</span>. <span class="id" type="tactic">auto</span>.<br/>
@@ -1467,7 +1439,7 @@ And at long last, the main lemma.
 </div>
 
 <div class="doc">
-<a name="lab905"></a><h3 class="section">Normalization Theorem</h3>
+<a name="lab899"></a><h3 class="section">Normalization Theorem</h3>
 
 </div>
 <div class="code code-space">

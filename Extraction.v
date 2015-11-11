@@ -122,4 +122,4 @@ Extraction "imp.ml" empty_state ceval_step parse.
     course, the parser is not certified in any interesting sense,
     since we didn't prove anything about it.) *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

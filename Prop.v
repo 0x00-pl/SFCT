@@ -267,8 +267,8 @@ Theorem gorgeous__beautiful_FAILED : forall n,
   gorgeous n -> beautiful n.
 Proof.
    intros. induction n as [| n'].
-   Case "n = 0". apply b_0.
-   Case "n = S n'". (* We are stuck! *)
+   - (* n = 0 *) apply b_0.
+   - (* n = S n' *) (* We are stuck! *)
 Abort.
 
 (** The problem here is that doing induction on [n] doesn't yield a
@@ -290,12 +290,12 @@ Theorem gorgeous__beautiful : forall n,
 Proof.
    intros n H.
    induction H as [|n'|n'].
-   Case "g_0".
+   - (* g_0 *)
        apply b_0.
-   Case "g_plus3". 
+   - (* g_plus3 *) 
        apply b_sum. apply b_3.
        apply IHgorgeous.
-   Case "g_plus5".
+   - (* g_plus5 *)
        apply b_sum. apply b_5. apply IHgorgeous. 
 Qed.
 
@@ -342,9 +342,9 @@ Theorem ev__even : forall n,
   ev n -> even n.
 Proof.
   intros n E. induction E as [| n' E'].
-  Case "E = ev_0". 
+  - (* E = ev_0 *) 
     unfold even. reflexivity.
-  Case "E = ev_SS n' E'".  
+  - (* E = ev_SS n' E' *)  
     unfold even. apply IHE'.  
 Qed.
 
@@ -355,7 +355,7 @@ Qed.
 (* FILL IN HERE *)
 (** [] *)
 
-(** Intuitively, the induction principle [ev n] evidence [ev n] is
+(** Intuitively, the induction principle for evidence [ev n] is
     similar to induction on [n], but restricts our attention to only
     those numbers for which evidence [ev n] could be generated. *)
 
@@ -365,8 +365,8 @@ Qed.
        ev n.
      Proof.
        intros n. induction n.
-         Case "O". simpl. apply ev_0.
-         Case "S".
+         - (* O *) simpl. apply ev_0.
+         - (* S *)
            ...
    Intuitively, we expect the proof to fail because not every
    number is even. However, what exactly causes the proof to fail?
@@ -402,8 +402,8 @@ Theorem ev_minus2: forall n,  ev n -> ev (pred (pred n)).
 Proof.
   intros n E.
   inversion E as [| n' E'].
-  Case "E = ev_0". simpl. apply ev_0. 
-  Case "E = ev_SS n' E'". simpl. apply E'.  Qed.
+  - (* E = ev_0 *) simpl. apply ev_0. 
+  - (* E = ev_SS n' E' *) simpl. apply E'.  Qed.
 
 (** **** Exercise: 1 star, optional (ev_minus2_n)  *)
 (** What happens if we try to use [destruct] on [n] instead of [inversion] on [E]? *)
@@ -545,8 +545,8 @@ length of the list is even. *)
 Lemma ev_list__ev_length: forall X (l : list X), ev_list l -> ev (length l).
 Proof. 
     intros X l H. induction H.
-    Case "el_nil". simpl. apply ev_0.
-    Case "el_cc".  simpl.  apply ev_SS. apply IHev_list.
+    - (* el_nil *) simpl. apply ev_0.
+    - (* el_cc *)  simpl.  apply ev_SS. apply IHev_list.
 Qed.
 
 (** However, because evidence for [ev] contains less information than
@@ -557,13 +557,13 @@ Lemma ev_length__ev_list: forall X n, ev n -> forall (l : list X), n = length l 
 Proof.
   intros X n H. 
   induction H.
-  Case "ev_0". intros l H. destruct l.
-    SCase "[]". apply el_nil. 
-    SCase "x::l". inversion H.
-  Case "ev_SS". intros l H2. destruct l. 
-    SCase "[]". inversion H2. destruct l.
-    SCase "[x]". inversion H2.
-    SCase "x :: x0 :: l". apply el_cc. apply IHev. inversion H2. reflexivity.
+  - (* ev_0 *) intros l H. destruct l.
+    + (* [] *) apply el_nil. 
+    + (* x::l *) inversion H.
+  - (* ev_SS *) intros l H2. destruct l as [| x [| x0 l]]. 
+    + (* [] *) inversion H2. 
+    + (* [x] *) inversion H2.
+    + (* x :: x0 :: l *) apply el_cc. apply IHev. inversion H2. reflexivity.
 Qed.
     
 
@@ -814,31 +814,31 @@ End R.
 (** A list is a _subsequence_ of another list if all of the elements
     in the first list occur in the same order in the second list,
     possibly with some extra elements in between. For example,
-    [1,2,3]
+    [1;2;3]
     is a subsequence of each of the lists
-    [1,2,3]
-    [1,1,1,2,2,3]
-    [1,2,7,3]
-    [5,6,1,9,9,2,7,3,8]
+    [1;2;3]
+    [1;1;1;2;2;3]
+    [1;2;7;3]
+    [5;6;1;9;9;2;7;3;8]
     but it is _not_ a subsequence of any of the lists
-    [1,2]
-    [1,3]
-    [5,6,2,1,7,3,8]
+    [1;2]
+    [1;3]
+    [5;6;2;1;7;3;8]
 
     - Define an inductive proposition [subseq] on [list nat] that
       captures what it means to be a subsequence. (Hint: You'll need
       three cases.)
 
-    - Prove [subseq_refl] that subsequence is reflexive, that is, 
-      any list is a subsequence of itself.  
+    - Prove [subseq_refl] that subsequence is reflexive, that is,
+      any list is a subsequence of itself.
 
-    - Prove [subseq_app] that for any lists [l1], [l2], and [l3], 
+    - Prove [subseq_app] that for any lists [l1], [l2], and [l3],
       if [l1] is a subsequence of [l2], then [l1] is also a subsequence
       of [l2 ++ l3].
 
-    - (Optional, harder) Prove [subseq_trans] that subsequence is 
-      transitive -- that is, if [l1] is a subsequence of [l2] and [l2] 
-      is a subsequence of [l3], then [l1] is a subsequence of [l3].  
+    - (Optional, harder) Prove [subseq_trans] that subsequence is
+      transitive -- that is, if [l1] is a subsequence of [l2] and [l2]
+      is a subsequence of [l3], then [l1] is a subsequence of [l3].
       Hint: choose your induction carefully!
 *)
 
@@ -853,9 +853,9 @@ End R.
       | c3 : forall n l, R (S n) l -> R n l.
     Which of the following propositions are provable?
 
-    - [R 2 [1,0]]
-    - [R 1 [1,2,1,0]]
-    - [R 6 [3,2,1,0]]
+    - [R 2 [1;0]]
+    - [R 1 [1;2;1;0]]
+    - [R 6 [3;2;1;0]]
 *)
 
 (** [] *)
@@ -1055,6 +1055,6 @@ Proof. reflexivity.  Qed.
 *)
 (** [] *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 
 

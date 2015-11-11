@@ -74,23 +74,22 @@ Definition empty_pe_state : pe_state := [].
     contain some [id], then that [pe_state] must map that [id] to
     [None].  Before we prove this fact, we first define a useful
     tactic for reasoning with [id] equality.  The tactic
-        compare V V' SCase
+        compare V V'
     means to reason by cases over [eq_id_dec V V'].
     In the case where [V = V'], the tactic 
     substitutes [V] for [V'] throughout. *)
 
-Tactic Notation "compare" ident(i) ident(j) ident(c) :=
+Tactic Notation "compare" ident(i) ident(j) :=
   let H := fresh "Heq" i j in
   destruct (eq_id_dec i j); 
-  [ Case_aux c "equal"; subst j
-  | Case_aux c "not equal" ].
+  [ subst j | ].
 
 Theorem pe_domain: forall pe_st V n,
   pe_lookup pe_st V = Some n ->
   In V (map (@fst _ _) pe_st). 
 Proof. intros pe_st V n H. induction pe_st as [| [V' n'] pe_st].
-  Case "[]". inversion H.
-  Case "::". simpl in H. simpl. compare V V' SCase; auto. Qed.
+  - (* [] *) inversion H.
+  - (* :: *) simpl in H. simpl. compare V V'; auto. Qed.
 
 (** *** Aside on [In].
 
@@ -181,17 +180,17 @@ Definition pe_consistent (st:state) (pe_st:pe_state) :=
 Theorem pe_aexp_correct_weak: forall st pe_st, pe_consistent st pe_st ->
   forall a, aeval st a = aeval st (pe_aexp pe_st a).
 Proof. unfold pe_consistent. intros st pe_st H a.
-  aexp_cases (induction a) Case; simpl;
+  induction a; simpl;
     try reflexivity;
     try (destruct (pe_aexp pe_st a1);
          destruct (pe_aexp pe_st a2);
          rewrite IHa1; rewrite IHa2; reflexivity).
   (* Compared to fold_constants_aexp_sound,
      the only interesting case is AId *)
-  Case "AId".
+  - (* AId *)
     remember (pe_lookup pe_st i) as l. destruct l.
-    SCase "Some". rewrite H with (n:=n) by apply Heql. reflexivity.
-    SCase "None". reflexivity.
+    + (* Some *) rewrite H with (n:=n) by apply Heql. reflexivity.
+    + (* None *) reflexivity.
 Qed.
 
 (** However, we will soon want our partial evaluator to remove
@@ -246,7 +245,7 @@ Theorem pe_override_correct: forall st pe_st V0,
   end.
 Proof. intros. induction pe_st as [| [V n] pe_st]. reflexivity.
   simpl in *. unfold update. 
-  compare V0 V Case; auto. rewrite eq_id; auto. rewrite neq_id; auto. Qed.
+  compare V0 V; auto. rewrite eq_id; auto. rewrite neq_id; auto. Qed.
 
 (** We can relate [pe_consistent] to [pe_override] in two ways.
     First, overriding a state with a partial state always gives a
@@ -282,7 +281,7 @@ Theorem pe_aexp_correct: forall (pe_st:pe_state) (a:aexp) (st:state),
   aeval (pe_override st pe_st) a = aeval st (pe_aexp pe_st a).
 Proof.
   intros pe_st a st.
-  aexp_cases (induction a) Case; simpl;
+  induction a; simpl;
     try reflexivity;
     try (destruct (pe_aexp pe_st a1);
          destruct (pe_aexp pe_st a2);
@@ -345,7 +344,7 @@ Theorem pe_bexp_correct: forall (pe_st:pe_state) (b:bexp) (st:state),
   beval (pe_override st pe_st) b = beval st (pe_bexp pe_st b).
 Proof.
   intros pe_st b st.
-  bexp_cases (induction b) Case; simpl;
+  induction b; simpl;
     try reflexivity;
     try (remember (pe_aexp pe_st a) as a';
          remember (pe_aexp pe_st a0) as a0';
@@ -431,13 +430,13 @@ Theorem pe_remove_correct: forall pe_st V V0,
   pe_lookup (pe_remove pe_st V) V0
   = if eq_id_dec V V0 then None else pe_lookup pe_st V0.
 Proof. intros pe_st V V0. induction pe_st as [| [V' n'] pe_st].
-  Case "[]". destruct (eq_id_dec V V0); reflexivity.
-  Case "::". simpl. compare V V' SCase.
-    SCase "equal". rewrite IHpe_st.
+  - (* [] *) destruct (eq_id_dec V V0); reflexivity.
+  - (* :: *) simpl. compare V V'.
+    + (* equal *) rewrite IHpe_st.
       destruct (eq_id_dec V V0).  reflexivity.  rewrite neq_id; auto. 
-    SCase "not equal". simpl. compare V0 V' SSCase.
-      SSCase "equal". rewrite neq_id; auto. 
-      SSCase "not equal". rewrite IHpe_st. reflexivity.
+    + (* not equal *) simpl. compare V0 V'.
+      * (* equal *) rewrite neq_id; auto. 
+      * (* not equal *) rewrite IHpe_st. reflexivity.
 Qed.
 
 Definition pe_add (pe_st:pe_state) (V:id) (n:nat) : pe_state :=
@@ -447,9 +446,9 @@ Theorem pe_add_correct: forall pe_st V n V0,
   pe_lookup (pe_add pe_st V n) V0
   = if eq_id_dec V V0 then Some n else pe_lookup pe_st V0.
 Proof. intros pe_st V n V0. unfold pe_add. simpl. 
-  compare V V0 Case.
-  Case "equal". rewrite eq_id; auto. 
-  Case "not equal". rewrite pe_remove_correct. repeat rewrite neq_id; auto. 
+  compare V V0.
+  - (* equal *) rewrite eq_id; auto. 
+  - (* not equal *) rewrite pe_remove_correct. repeat rewrite neq_id; auto. 
 Qed.
 
 (** We will use the two theorems below to show that our partial
@@ -552,7 +551,7 @@ Theorem pe_unique_correct: forall l x,
   In x l <-> In x (pe_unique l).
 Proof. intros l x. induction l as [| h t]. reflexivity.
   simpl in *. split. 
-  Case "->". 
+  - (* -> *) 
     intros. inversion H; clear H. 
       left. assumption. 
       destruct (eq_id_dec h x). 
@@ -560,7 +559,7 @@ Proof. intros l x. induction l as [| h t]. reflexivity.
          right.  apply filter_In. split. 
            apply IHt. assumption.
            rewrite neq_id; auto. 
-  Case "<-". 
+  - (* <- *) 
     intros. inversion H; clear H. 
        left. assumption.
        apply filter_In in H0.  inversion H0. right. apply IHt. assumption.
@@ -576,18 +575,18 @@ Theorem pe_compare_correct: forall pe_st1 pe_st2 V,
 Proof. intros pe_st1 pe_st2 V.
   unfold pe_compare. rewrite <- pe_unique_correct. rewrite filter_In.
   split; intros Heq.
-  Case "->".
+  - (* -> *)
     intro. destruct H. unfold pe_disagree_at in H0. rewrite Heq in H0.
     destruct (pe_lookup pe_st2 V).
     rewrite <- beq_nat_refl in H0. inversion H0. 
     inversion H0. 
-  Case "<-".
+  - (* <- *)
     assert (Hagree: pe_disagree_at pe_st1 pe_st2 V = false).
-      SCase "Proof of assertion".
+    { (* Proof of assertion *)
       remember (pe_disagree_at pe_st1 pe_st2 V) as disagree.
       destruct disagree; [| reflexivity].
       apply  pe_disagree_domain in Heqdisagree.
-      apply ex_falso_quodlibet. apply Heq. split. assumption. reflexivity.
+      apply ex_falso_quodlibet. apply Heq. split. assumption. reflexivity. }
     unfold pe_disagree_at in Hagree.
     destruct (pe_lookup pe_st1 V) as [n1|];
     destruct (pe_lookup pe_st2 V) as [n2|];
@@ -620,7 +619,7 @@ Theorem pe_removes_correct: forall pe_st ids V,
   if in_dec eq_id_dec V ids then None else pe_lookup pe_st V.
 Proof. intros pe_st ids V. induction ids as [| V' ids]. reflexivity.
   simpl. rewrite pe_remove_correct. rewrite IHids.
-  compare V' V Case. 
+  compare V' V. 
     reflexivity. 
     destruct (in_dec eq_id_dec V ids);  
       reflexivity.
@@ -686,19 +685,19 @@ Proof. intros c st st1 st2 H Heq.
 Theorem eval_assign: forall pe_st ids st,
   assign pe_st ids / st || assigned pe_st ids st.
 Proof. intros pe_st ids st. induction ids as [| V ids]; simpl.
-  Case "[]". eapply ceval_extensionality. apply E_Skip. reflexivity.
-  Case "V::ids".
+  - (* [] *) eapply ceval_extensionality. apply E_Skip. reflexivity.
+  - (* V::ids *)
     remember (pe_lookup pe_st V) as lookup. destruct lookup.
-    SCase "Some". eapply E_Seq. apply IHids. unfold assigned. simpl.
+    + (* Some *) eapply E_Seq. apply IHids. unfold assigned. simpl.
       eapply ceval_extensionality. apply E_Ass. simpl. reflexivity.
-      intros V0. unfold update.  compare V V0 SSCase.
-      SSCase "equal". rewrite <- Heqlookup. reflexivity. 
-      SSCase "not equal". destruct (in_dec eq_id_dec V0 ids); auto.  
-    SCase "None". eapply ceval_extensionality. apply IHids.
-      unfold assigned. intros V0. simpl. compare V V0 SSCase.
-      SSCase "equal". rewrite <- Heqlookup. 
+      intros V0. unfold update.  compare V V0.
+      * (* equal *) rewrite <- Heqlookup. reflexivity. 
+      * (* not equal *) destruct (in_dec eq_id_dec V0 ids); auto.  
+    + (* None *) eapply ceval_extensionality. apply IHids.
+      unfold assigned. intros V0. simpl. compare V V0.
+      * (* equal *) rewrite <- Heqlookup. 
         destruct (in_dec eq_id_dec V ids); reflexivity.
-      SSCase "not equal". destruct (in_dec eq_id_dec V0 ids); reflexivity. Qed.
+      * (* not equal *) destruct (in_dec eq_id_dec V0 ids); reflexivity. Qed.
 
 (** ** The Partial Evaluation Relation *)
 
@@ -745,13 +744,6 @@ Inductive pe_com : com -> pe_state -> com -> pe_state -> Prop :=
             / pe_removes pe_st1 (pe_compare pe_st1 pe_st2)
 
   where "c1 '/' st '||' c1' '/' st'" := (pe_com c1 st c1' st').
-
-Tactic Notation "pe_com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "PE_Skip"
-  | Case_aux c "PE_AssStatic" | Case_aux c "PE_AssDynamic"
-  | Case_aux c "PE_Seq"
-  | Case_aux c "PE_IfTrue" | Case_aux c "PE_IfFalse" | Case_aux c "PE_If" ].
 
 Hint Constructors pe_com.
 Hint Constructors ceval.
@@ -817,27 +809,27 @@ Theorem pe_com_complete:
   (c / pe_override st pe_st || st'') ->
   (c' / pe_st' / st || st'').
 Proof. intros c pe_st pe_st' c' Hpe.
-  pe_com_cases (induction Hpe) Case; intros st st'' Heval;
+  induction Hpe; intros st st'' Heval;
   try (inversion Heval; subst;
        try (rewrite -> pe_bexp_correct, -> H in *; solve by inversion);
        []);
   eauto.
-  Case "PE_AssStatic". econstructor. econstructor.
+  - (* PE_AssStatic *) econstructor. econstructor.
     rewrite -> pe_aexp_correct. rewrite <- pe_override_update_add.
     rewrite -> H. reflexivity.
-  Case "PE_AssDynamic". econstructor. econstructor. reflexivity.
+  - (* PE_AssDynamic *) econstructor. econstructor. reflexivity.
     rewrite -> pe_aexp_correct. rewrite <- pe_override_update_remove.
     reflexivity.
-  Case "PE_Seq".
+  - (* PE_Seq *)
     edestruct IHHpe1. eassumption. subst.
     edestruct IHHpe2. eassumption.
     eauto.
-  Case "PE_If". inversion Heval; subst.
-    SCase "E'IfTrue". edestruct IHHpe1. eassumption.
+  - (* PE_If *) inversion Heval; subst.
+    + (* E'IfTrue *) edestruct IHHpe1. eassumption.
       econstructor. apply E_IfTrue. rewrite <- pe_bexp_correct. assumption.
       eapply E_Seq. eassumption. apply eval_assign.
       rewrite <- assign_removes. eassumption.
-    SCase "E_IfFalse". edestruct IHHpe2. eassumption.
+    + (* E_IfFalse *) edestruct IHHpe2. eassumption.
       econstructor. apply E_IfFalse. rewrite <- pe_bexp_correct. assumption.
       eapply E_Seq. eassumption. apply eval_assign.
       rewrite -> pe_compare_override.
@@ -850,25 +842,25 @@ Theorem pe_com_sound:
   (c' / pe_st' / st || st'') ->
   (c / pe_override st pe_st || st'').
 Proof. intros c pe_st pe_st' c' Hpe.
-  pe_com_cases (induction Hpe) Case;
+  induction Hpe;
     intros st st'' [st' Heval Heq];
     try (inversion Heval; []; subst); auto.
-  Case "PE_AssStatic". rewrite <- pe_override_update_add. apply E_Ass.
+  - (* PE_AssStatic *) rewrite <- pe_override_update_add. apply E_Ass.
     rewrite -> pe_aexp_correct. rewrite -> H. reflexivity.
-  Case "PE_AssDynamic". rewrite <- pe_override_update_remove. apply E_Ass.
+  - (* PE_AssDynamic *) rewrite <- pe_override_update_remove. apply E_Ass.
     rewrite <- pe_aexp_correct. reflexivity.
-  Case "PE_Seq". eapply E_Seq; eauto.
-  Case "PE_IfTrue". apply E_IfTrue.
+  - (* PE_Seq *) eapply E_Seq; eauto.
+  - (* PE_IfTrue *) apply E_IfTrue.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity. eauto.
-  Case "PE_IfFalse". apply E_IfFalse.
+  - (* PE_IfFalse *) apply E_IfFalse.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity. eauto.
-  Case "PE_If".
+  - (* PE_If *)
     inversion Heval; subst; inversion H7;
       (eapply ceval_deterministic in H8; [| apply eval_assign]); subst.
-    SCase "E_IfTrue".
+    + (* E_IfTrue *)
       apply E_IfTrue. rewrite -> pe_bexp_correct. assumption.
       rewrite <- assign_removes. eauto.
-    SCase "E_IfFalse".
+    + (* E_IfFalse *)
       rewrite -> pe_compare_override.
       apply E_IfFalse. rewrite -> pe_bexp_correct. assumption.
       rewrite <- assign_removes. eauto.
@@ -882,8 +874,8 @@ Corollary pe_com_correct:
   (c / pe_override st pe_st || st'') <->
   (c' / pe_st' / st || st'').
 Proof. intros c pe_st pe_st' c' H st st''. split.
-  Case "->". apply pe_com_complete. apply H.
-  Case "<-". apply pe_com_sound. apply H.
+  - (* -> *) apply pe_com_complete. apply H.
+  - (* <- *) apply pe_com_sound. apply H.
 Qed.
 
 (* ####################################################### *)
@@ -1026,16 +1018,6 @@ Inductive pe_com : com -> pe_state -> com -> pe_state -> com -> Prop :=
 
   where "c1 '/' st '||' c1' '/' st' '/' c''" := (pe_com c1 st c1' st' c'').
 
-Tactic Notation "pe_com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "PE_Skip"
-  | Case_aux c "PE_AssStatic" | Case_aux c "PE_AssDynamic"
-  | Case_aux c "PE_Seq"
-  | Case_aux c "PE_IfTrue" | Case_aux c "PE_IfFalse" | Case_aux c "PE_If"
-  | Case_aux c "PE_WhileEnd" | Case_aux c "PE_WhileLoop"
-  | Case_aux c "PE_While" | Case_aux c "PE_WhileFixedEnd"
-  | Case_aux c "PE_WhileFixedLoop" | Case_aux c "PE_WhileFixed" ].
-
 Hint Constructors pe_com.
 
 (** ** Examples *)
@@ -1158,12 +1140,6 @@ Inductive ceval_count : com -> state -> state -> nat -> Prop :=
 
   where "c1 '/' st '||' st' # n" := (ceval_count c1 st st' n).
 
-Tactic Notation "ceval_count_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E'Skip" | Case_aux c "E'Ass" | Case_aux c "E'Seq"
-  | Case_aux c "E'IfTrue" | Case_aux c "E'IfFalse"
-  | Case_aux c "E'WhileEnd" | Case_aux c "E'WhileLoop" ].
-
 Hint Constructors ceval_count.
 
 Theorem ceval_count_complete: forall c st st',
@@ -1224,44 +1200,44 @@ Theorem pe_com_complete:
   (c / pe_override st pe_st || st'' # n) ->
   (c' / pe_st' / c'' / st || st'' # n).
 Proof. intros c pe_st pe_st' c' c'' Hpe.
-  pe_com_cases (induction Hpe) Case; intros st st'' n Heval;
+  induction Hpe; intros st st'' n Heval;
   try (inversion Heval; subst;
        try (rewrite -> pe_bexp_correct, -> H in *; solve by inversion);
        []);
   eauto.
-  Case "PE_AssStatic". econstructor. econstructor.
+  - (* PE_AssStatic *) econstructor. econstructor.
     rewrite -> pe_aexp_correct. rewrite <- pe_override_update_add.
     rewrite -> H. apply E'Skip. auto.
-  Case "PE_AssDynamic". econstructor. econstructor. reflexivity.
+  - (* PE_AssDynamic *) econstructor. econstructor. reflexivity.
     rewrite -> pe_aexp_correct. rewrite <- pe_override_update_remove.
     apply E'Skip. auto.
-  Case "PE_Seq".
+  - (* PE_Seq *)
     edestruct IHHpe1 as [? ? ? Hskip ?]. eassumption.
     inversion Hskip. subst.
     edestruct IHHpe2. eassumption.
     econstructor; eauto. omega.
-  Case "PE_If". inversion Heval; subst.
-    SCase "E'IfTrue". edestruct IHHpe1. eassumption.
+  - (* PE_If *) inversion Heval; subst.
+    + (* E'IfTrue *) edestruct IHHpe1. eassumption.
       econstructor. apply E_IfTrue. rewrite <- pe_bexp_correct. assumption.
       eapply E_Seq. eassumption. apply eval_assign.
       rewrite <- assign_removes. eassumption. eassumption.
-    SCase "E_IfFalse". edestruct IHHpe2. eassumption.
+    + (* E_IfFalse *) edestruct IHHpe2. eassumption.
       econstructor. apply E_IfFalse. rewrite <- pe_bexp_correct. assumption.
       eapply E_Seq. eassumption. apply eval_assign.
       rewrite -> pe_compare_override.
       rewrite <- assign_removes. eassumption. eassumption.
-  Case "PE_WhileLoop".
+  - (* PE_WhileLoop *)
     edestruct IHHpe1 as [? ? ? Hskip ?]. eassumption.
     inversion Hskip. subst.
     edestruct IHHpe2. eassumption.
     econstructor; eauto. omega.
-  Case "PE_While". inversion Heval; subst.
-    SCase "E_WhileEnd". econstructor. apply E_IfFalse.
+  - (* PE_While *) inversion Heval; subst.
+    + (* E_WhileEnd *) econstructor. apply E_IfFalse.
       rewrite <- pe_bexp_correct. assumption.
       apply eval_assign.
       rewrite <- assign_removes. inversion H2; subst; auto.
       auto.
-    SCase "E_WhileLoop".
+    + (* E_WhileLoop *)
       edestruct IHHpe1 as [? ? ? Hskip ?]. eassumption.
       inversion Hskip. subst.
       edestruct IHHpe2. eassumption.
@@ -1270,21 +1246,21 @@ Proof. intros c pe_st pe_st' c' c'' Hpe.
       repeat eapply E_Seq; eauto. apply eval_assign.
       rewrite -> pe_compare_override, <- assign_removes. eassumption.
       omega.
-  Case "PE_WhileFixedLoop". apply ex_falso_quodlibet.
+  - (* PE_WhileFixedLoop *) apply ex_falso_quodlibet.
     generalize dependent (S (n1 + n2)). intros n.
-    clear - Case H H0 IHHpe1 IHHpe2. generalize dependent st.
+    clear - H H0 IHHpe1 IHHpe2. generalize dependent st.
     induction n using lt_wf_ind; intros st Heval. inversion Heval; subst.
-    SCase "E'WhileEnd". rewrite pe_bexp_correct, H in H7. inversion H7.
-    SCase "E'WhileLoop".
+    + (* E'WhileEnd *) rewrite pe_bexp_correct, H in H7. inversion H7.
+    + (* E'WhileLoop *)
       edestruct IHHpe1 as [? ? ? Hskip ?]. eassumption.
       inversion Hskip. subst.
       edestruct IHHpe2. eassumption.
       rewrite <- (pe_compare_nil_override _ _ H0) in H7.
       apply H1 in H7; [| omega]. inversion H7.
-  Case "PE_WhileFixed". generalize dependent st.
+  - (* PE_WhileFixed *) generalize dependent st.
     induction n using lt_wf_ind; intros st Heval. inversion Heval; subst.
-    SCase "E'WhileEnd". rewrite pe_bexp_correct in H8. eauto.
-    SCase "E'WhileLoop". rewrite pe_bexp_correct in H5.
+    + (* E'WhileEnd *) rewrite pe_bexp_correct in H8. eauto.
+    + (* E'WhileLoop *) rewrite pe_bexp_correct in H5.
       edestruct IHHpe1 as [? ? ? Hskip ?]. eassumption.
       inversion Hskip. subst.
       edestruct IHHpe2. eassumption.
@@ -1299,40 +1275,40 @@ Theorem pe_com_sound:
   (c' / pe_st' / c'' / st || st'' # n) ->
   (c / pe_override st pe_st || st'').
 Proof. intros c pe_st pe_st' c' c'' Hpe.
-  pe_com_cases (induction Hpe) Case;
+  induction Hpe;
     intros st st'' n [st' n' Heval Heval' Hle];
     try (inversion Heval; []; subst);
     try (inversion Heval'; []; subst); eauto.
-  Case "PE_AssStatic". rewrite <- pe_override_update_add. apply E_Ass.
+  - (* PE_AssStatic *) rewrite <- pe_override_update_add. apply E_Ass.
     rewrite -> pe_aexp_correct. rewrite -> H. reflexivity.
-  Case "PE_AssDynamic". rewrite <- pe_override_update_remove. apply E_Ass.
+  - (* PE_AssDynamic *) rewrite <- pe_override_update_remove. apply E_Ass.
     rewrite <- pe_aexp_correct. reflexivity.
-  Case "PE_Seq". eapply E_Seq; eauto.
-  Case "PE_IfTrue". apply E_IfTrue.
+  - (* PE_Seq *) eapply E_Seq; eauto.
+  - (* PE_IfTrue *) apply E_IfTrue.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity.
     eapply IHHpe. eauto.
-  Case "PE_IfFalse". apply E_IfFalse.
+  - (* PE_IfFalse *) apply E_IfFalse.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity.
     eapply IHHpe. eauto.
-  Case "PE_If". inversion Heval; subst; inversion H7; subst; clear H7.
-    SCase "E_IfTrue".
+  - (* PE_If *) inversion Heval; subst; inversion H7; subst; clear H7.
+    + (* E_IfTrue *)
       eapply ceval_deterministic in H8; [| apply eval_assign]. subst.
       rewrite <- assign_removes in Heval'.
       apply E_IfTrue. rewrite -> pe_bexp_correct. assumption.
       eapply IHHpe1. eauto.
-    SCase "E_IfFalse".
+    + (* E_IfFalse *)
       eapply ceval_deterministic in H8; [| apply eval_assign]. subst.
       rewrite -> pe_compare_override in Heval'.
       rewrite <- assign_removes in Heval'.
       apply E_IfFalse. rewrite -> pe_bexp_correct. assumption.
       eapply IHHpe2. eauto.
-  Case "PE_WhileEnd". apply E_WhileEnd.
+  - (* PE_WhileEnd *) apply E_WhileEnd.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity.
-  Case "PE_WhileLoop". eapply E_WhileLoop.
+  - (* PE_WhileLoop *) eapply E_WhileLoop.
     rewrite -> pe_bexp_correct. rewrite -> H. reflexivity.
     eapply IHHpe1. eauto. eapply IHHpe2. eauto.
-  Case "PE_While". inversion Heval; subst.
-    SCase "E_IfTrue".
+  - (* PE_While *) inversion Heval; subst.
+    + (* E_IfTrue *)
       inversion H9. subst. clear H9.
       inversion H10. subst. clear H10.
       eapply ceval_deterministic in H11; [| apply eval_assign]. subst.
@@ -1341,24 +1317,24 @@ Proof. intros c pe_st pe_st' c' c'' Hpe.
       eapply E_WhileLoop. rewrite -> pe_bexp_correct. assumption.
       eapply IHHpe1. eauto.
       eapply IHHpe2. eauto.
-    SCase "E_IfFalse". apply ceval_count_sound in Heval'.
+    + (* E_IfFalse *) apply ceval_count_sound in Heval'.
       eapply ceval_deterministic in H9; [| apply eval_assign]. subst.
       rewrite <- assign_removes in Heval'.
       inversion H2; subst.
-      SSCase "c2'' = SKIP". inversion Heval'. subst. apply E_WhileEnd.
+      * (* c2'' = SKIP *) inversion Heval'. subst. apply E_WhileEnd.
         rewrite -> pe_bexp_correct. assumption.
-      SSCase "c2'' = WHILE b1 DO c1 END". assumption.
-  Case "PE_WhileFixedEnd". eapply ceval_count_sound. apply Heval'.
-  Case "PE_WhileFixedLoop".
+      * (* c2'' = WHILE b1 DO c1 END *) assumption.
+  - (* PE_WhileFixedEnd *) eapply ceval_count_sound. apply Heval'.
+  - (* PE_WhileFixedLoop *)
     apply loop_never_stops in Heval. inversion Heval.
-  Case "PE_WhileFixed".
-    clear - Case H1 IHHpe1 IHHpe2 Heval.
+  - (* PE_WhileFixed *)
+    clear - H1 IHHpe1 IHHpe2 Heval.
     remember (WHILE pe_bexp pe_st b1 DO c1';; c2' END) as c'.
-    ceval_cases (induction Heval) SCase;
+    induction Heval;
       inversion Heqc'; subst; clear Heqc'.
-    SCase "E_WhileEnd". apply E_WhileEnd.
+    + (* E_WhileEnd *) apply E_WhileEnd.
       rewrite pe_bexp_correct. assumption.
-    SCase "E_WhileLoop".
+    + (* E_WhileLoop *)
       assert (IHHeval2' := IHHeval2 (refl_equal _)).
       apply ceval_count_complete in IHHeval2'. inversion IHHeval2'.
       clear IHHeval1 IHHeval2 IHHeval2'.
@@ -1374,12 +1350,12 @@ Corollary pe_com_correct:
   (c / pe_override st pe_st || st'') <->
   (exists st', c' / st || st' /\ pe_override st' pe_st' = st'').
 Proof. intros c pe_st pe_st' c' H st st''. split.
-  Case "->". intros Heval.
+  - (* -> *) intros Heval.
     apply ceval_count_complete in Heval. inversion Heval as [n Heval'].
     apply pe_com_complete with (st:=st) (st'':=st'') (n:=n) in H.
     inversion H as [? ? ? Hskip ?]. inversion Hskip. subst. eauto.
     assumption.
-  Case "<-". intros [st' [Heval Heq]]. subst st''.
+  - (* <- *) intros [st' [Heval Heq]]. subst st''.
     eapply pe_com_sound in H. apply H.
     econstructor. apply Heval. apply E'Skip. apply le_n.
 Qed.
@@ -1412,10 +1388,6 @@ Inductive block (Label:Type) : Type :=
   | Goto : Label -> block Label
   | If : bexp -> Label -> Label -> block Label
   | Assign : id -> aexp -> block Label -> block Label.
-
-Tactic Notation "block_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "Goto" | Case_aux c "If" | Case_aux c "Assign" ].
 
 Arguments Goto {Label} _.
 Arguments If   {Label} _ _ _.
@@ -1498,10 +1470,6 @@ Proof. erewrite f_equal with (f := fun st => peval _ _ _ st _).
   apply functional_extensionality. intros i. rewrite update_same; auto.
 Qed.
 
-Tactic Notation "peval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_None" | Case_aux c "E_Some" ].
-
 (** ** Partial evaluation of basic blocks and flowchart programs *)
 
 (** Partial evaluation changes the label type in a systematic way: if
@@ -1539,16 +1507,16 @@ Theorem pe_block_correct: forall (L:Type) st pe_st k st' pe_st' (l':L),
   keval st (pe_block pe_st k) = (st', (pe_st', l')) ->
   keval (pe_override st pe_st) k = (pe_override st' pe_st', l').
 Proof. intros. generalize dependent pe_st. generalize dependent st.
-  block_cases (induction k as [l | b l1 l2 | i a k]) Case;
+  induction k as [l | b l1 l2 | i a k];
     intros st pe_st H.
-  Case "Goto". inversion H; reflexivity.
-  Case "If".
+  - (* Goto *) inversion H; reflexivity.
+  - (* If *)
     replace (keval st (pe_block pe_st (If b l1 l2)))
        with (keval st (If (pe_bexp pe_st b) (pe_st, l1) (pe_st, l2)))
        in H by (simpl; destruct (pe_bexp pe_st b); reflexivity).
     simpl in *. rewrite pe_bexp_correct.
     destruct (beval st (pe_bexp pe_st b)); inversion H; reflexivity.
-  Case "Assign".
+  - (* Assign *)
     simpl in *. rewrite pe_aexp_correct.
     destruct (pe_aexp pe_st a); simpl;
       try solve [rewrite pe_override_update_add; apply IHk; apply H];
@@ -1573,16 +1541,16 @@ Theorem pe_program_correct:
   peval p (pe_override st pe_st) l st'o l' <->
   pe_peval p st pe_st l st'o l'.
 Proof. intros.
-  split; [Case "->" | Case "<-"].
-  Case "->". intros Heval.
+  split.
+  - (* -> *) intros Heval.
     remember (pe_override st pe_st) as sto.
     generalize dependent pe_st. generalize dependent st.
-    peval_cases (induction Heval as
-      [ sto l Hlookup | sto l k st'o l' st''o l'' Hlookup Hkeval Heval ])
-      SCase; intros st pe_st Heqsto; subst sto.
-    SCase "E_None". eapply pe_peval_intro. apply E_None.
+    induction Heval as
+      [ sto l Hlookup | sto l k st'o l' st''o l'' Hlookup Hkeval Heval ]; 
+      intros st pe_st Heqsto; subst sto.
+    + (* E_None *) eapply pe_peval_intro. apply E_None.
       simpl. rewrite Hlookup. reflexivity. reflexivity.
-    SCase "E_Some".
+    + (* E_Some *)
       remember (keval st (pe_block pe_st k)) as x.
       destruct x as [st' [pe_st' l'_]].
       symmetry in Heqx. erewrite pe_block_correct in Hkeval by apply Heqx.
@@ -1590,22 +1558,22 @@ Proof. intros.
       edestruct IHHeval. reflexivity. subst st''o. clear IHHeval.
       eapply pe_peval_intro; [| reflexivity]. eapply E_Some; eauto.
       simpl. rewrite Hlookup. reflexivity.
-  Case "<-". intros [st' pe_st' Heval Heqst'o].
+  - (* <- *) intros [st' pe_st' Heval Heqst'o].
     remember (pe_st, l) as pe_st_l.
     remember (pe_st', l') as pe_st'_l'.
     generalize dependent pe_st. generalize dependent l.
-    peval_cases (induction Heval as
+    induction Heval as
       [ st [pe_st_ l_] Hlookup
       | st [pe_st_ l_] pe_k st' [pe_st'_ l'_] st'' [pe_st'' l'']
-        Hlookup Hkeval Heval ])
-      SCase; intros l pe_st Heqpe_st_l;
+        Hlookup Hkeval Heval ];
+      intros l pe_st Heqpe_st_l;
       inversion Heqpe_st_l; inversion Heqpe_st'_l'; repeat subst.
-    SCase "E_None". apply E_None. simpl in Hlookup.
+    + (* E_None *) apply E_None. simpl in Hlookup.
       destruct (p l'); [ solve [ inversion Hlookup ] | reflexivity ].
-    SCase "E_Some".
+    + (* E_Some *)
       simpl in Hlookup. remember (p l) as k.
       destruct k as [k|]; inversion Hlookup; subst.
       eapply E_Some; eauto. apply pe_block_correct. apply Hkeval.
 Qed.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

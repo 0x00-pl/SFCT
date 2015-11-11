@@ -175,19 +175,19 @@ Proof.
   (* WORKED IN CLASS *)
   intros n.
   induction n as [|n'].
-  Case "n = 0".
+  - (* n = 0 *)
     intros m.
     destruct m as [|m'].
-    SCase "m = 0".
+    + (* m = 0 *)
       left. reflexivity.
-    SCase "m = S m'".
+    + (* m = S m' *)
       right. intros contra. inversion contra.
-  Case "n = S n'".
+  - (* n = S n' *)
     intros m.
     destruct m as [|m'].
-    SCase "m = 0".
+    + (* m = 0 *)
       right. intros contra. inversion contra.
-    SCase "m = S m'". 
+    + (* m = S m' *) 
       destruct IHn' with (m := m') as [eq | neq].
       left. apply f_equal.  apply eq.
       right. intros Heq. inversion Heq as [Heq']. apply neq. apply Heq'.
@@ -220,13 +220,13 @@ Proof.
   intros X x1 k1 k2 f. intros Hx1.
   unfold override'.
   destruct (eq_nat_dec k1 k2).   (* observe what appears as a hypothesis *)
-  Case "k1 = k2".
+  - (* k1 = k2 *)
     rewrite <- e.
     symmetry. apply Hx1.
-  Case "k1 <> k2". 
+  - (* k1 <> k2 *) 
     reflexivity.  Qed.
 
-(** Compare this to the more laborious proof (in MoreCoq.v) for the
+(** Compare this to the more laborious proof (in BasicTactics.v) for the
     version of [override] defined using [beq_nat], where we had to use
     the auxiliary lemma [beq_nat_true] to convert a fact about
     booleans to a Prop. *)
@@ -465,4 +465,4 @@ Proof.
 (* FILL IN HERE *)
 
 
-(** $Date: 2014-12-31 16:01:37 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

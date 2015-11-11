@@ -612,13 +612,6 @@ Inductive ty : Type :=
   | TUnit  : ty
 .
 
-Tactic Notation "T_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "TTop" | Case_aux c "TBool" 
-  | Case_aux c "TBase" | Case_aux c "TArrow" 
-  | Case_aux c "TUnit" | 
-  ].
-
 Inductive tm : Type :=
   | tvar : id -> tm
   | tapp : tm -> tm -> tm
@@ -628,14 +621,6 @@ Inductive tm : Type :=
   | tif : tm -> tm -> tm -> tm
   | tunit : tm 
 .
-
-Tactic Notation "t_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" 
-  | Case_aux c "tabs" | Case_aux c "ttrue" 
-  | Case_aux c "tfalse" | Case_aux c "tif"
-  | Case_aux c "tunit" 
-  ].
 
 (* ################################### *)
 (** *** Substitution *)
@@ -704,13 +689,6 @@ Inductive step : tm -> tm -> Prop :=
       (tif t1 t2 t3) ==> (tif t1' t2 t3)
 where "t1 '==>' t2" := (step t1 t2).
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" 
-  | Case_aux c "ST_App2" | Case_aux c "ST_IfTrue" 
-  | Case_aux c "ST_IfFalse" | Case_aux c "ST_If"  
-  ].
-
 Hint Constructors step.
 
 (* ###################################################################### *)
@@ -745,12 +723,6 @@ where "T '<:' U" := (subtype T U).
     [S_Top]), and that's all we want. *)
 
 Hint Constructors subtype.
-
-Tactic Notation "subtype_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "S_Refl" | Case_aux c "S_Trans"
-  | Case_aux c "S_Top" | Case_aux c "S_Arrow" 
-  ].
 
 Module Examples.
 
@@ -878,14 +850,6 @@ Inductive has_type : context -> tm -> ty -> Prop :=
 where "Gamma '|-' t '\in' T" := (has_type Gamma t T).
 
 Hint Constructors has_type.
-
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" 
-  | Case_aux c "T_App" | Case_aux c "T_True" 
-  | Case_aux c "T_False" | Case_aux c "T_If"
-  | Case_aux c "T_Unit"     
-  | Case_aux c "T_Sub" ].
 
 (* To make your job simpler, the following hints help construct typing
    derivations. *)
@@ -1020,8 +984,8 @@ Lemma canonical_forms_of_Bool : forall Gamma s,
 Proof with eauto.
   intros Gamma s Hty Hv.
   remember TBool as T.
-  has_type_cases (induction Hty) Case; try solve by inversion...
-  Case "T_Sub".
+  induction Hty; try solve by inversion...
+  - (* T_Sub *)
     subst. apply sub_inversion_Bool in H. subst...
 Qed.
 
@@ -1090,31 +1054,31 @@ Proof with eauto.
   intros t T Ht.
   remember empty as Gamma.
   revert HeqGamma.
-  has_type_cases (induction Ht) Case; 
+  induction Ht; 
     intros HeqGamma; subst...
-  Case "T_Var".
+  - (* T_Var *)
     inversion H.
-  Case "T_App".
+  - (* T_App *)
     right.
     destruct IHHt1; subst...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2; subst...
-      SSCase "t2 is a value".
+      * (* t2 is a value *)
         destruct (canonical_forms_of_arrow_types empty t1 T1 T2)
           as [x [S1 [t12 Heqt1]]]...
         subst. exists ([x:=t2]t12)...
-      SSCase "t2 steps".
+      * (* t2 steps *)
         inversion H0 as [t2' Hstp]. exists (tapp t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       inversion H as [t1' Hstp]. exists (tapp t1' t2)...
-  Case "T_If".
+  - (* T_If *)
     right.
     destruct IHHt1.
-    SCase "t1 is a value"...
-      assert (t1 = ttrue \/ t1 = tfalse) 
+    + (* t1 is a value *) eauto.
+    + assert (t1 = ttrue \/ t1 = tfalse) 
         by (eapply canonical_forms_of_Bool; eauto).
       inversion H0; subst...
-      inversion H. rename x into t1'. eauto.
+    + inversion H. rename x into t1'. eauto.
 
 Qed.
 
@@ -1165,11 +1129,11 @@ Lemma typing_inversion_abs : forall Gamma x S1 t2 T,
 Proof with eauto.
   intros Gamma x S1 t2 T H.
   remember (tabs x S1 t2) as t.
-  has_type_cases (induction H) Case; 
+  induction H; 
     inversion Heqt; subst; intros; try solve by inversion.
-  Case "T_Abs".
+  - (* T_Abs *)
     exists T12...
-  Case "T_Sub".
+  - (* T_Sub *)
     destruct IHhas_type as [S2 [Hsub Hty]]...
   Qed.
 
@@ -1182,11 +1146,11 @@ Lemma typing_inversion_var : forall Gamma x T,
 Proof with eauto.
   intros Gamma x T Hty.
   remember (tvar x) as t.
-  has_type_cases (induction Hty) Case; intros; 
+  induction Hty; intros; 
     inversion Heqt; subst; try solve by inversion.
-  Case "T_Var".
+  - (* T_Var *)
     exists T...
-  Case "T_Sub".
+  - (* T_Sub *)
     destruct IHHty as [U [Hctx HsubU]]... Qed.
 
 Lemma typing_inversion_app : forall Gamma t1 t2 T2,
@@ -1197,11 +1161,11 @@ Lemma typing_inversion_app : forall Gamma t1 t2 T2,
 Proof with eauto.
   intros Gamma t1 t2 T2 Hty.
   remember (tapp t1 t2) as t.
-  has_type_cases (induction Hty) Case; intros;
+  induction Hty; intros;
     inversion Heqt; subst; try solve by inversion.
-  Case "T_App".
+  - (* T_App *)
     exists T1...
-  Case "T_Sub".
+  - (* T_Sub *)
     destruct IHHty as [U1 [Hty1 Hty2]]...
 Qed.
 
@@ -1210,7 +1174,7 @@ Lemma typing_inversion_true : forall Gamma T,
   TBool <: T.
 Proof with eauto.
   intros Gamma T Htyp. remember ttrue as tu.
-  has_type_cases (induction Htyp) Case;
+  induction Htyp;
     inversion Heqtu; subst; intros...
 Qed.
 
@@ -1219,7 +1183,7 @@ Lemma typing_inversion_false : forall Gamma T,
   TBool <: T.
 Proof with eauto.
   intros Gamma T Htyp. remember tfalse as tu.
-  has_type_cases (induction Htyp) Case;
+  induction Htyp;
     inversion Heqtu; subst; intros...
 Qed.
 
@@ -1231,11 +1195,11 @@ Lemma typing_inversion_if : forall Gamma t1 t2 t3 T,
 Proof with eauto.
   intros Gamma t1 t2 t3 T Hty.
   remember (tif t1 t2 t3) as t.
-  has_type_cases (induction Hty) Case; intros;
+  induction Hty; intros;
     inversion Heqt; subst; try solve by inversion.
-  Case "T_If".
+  - (* T_If *)
     auto.
-  Case "T_Sub".
+  - (* T_Sub *)
     destruct (IHHty H0) as [H1 [H2 H3]]...
 Qed.
 
@@ -1244,7 +1208,7 @@ Lemma typing_inversion_unit : forall Gamma T,
     TUnit <: T.
 Proof with eauto.
   intros Gamma T Htyp. remember tunit as tu.
-  has_type_cases (induction Htyp) Case;
+  induction Htyp;
     inversion Heqtu; subst; intros...
 Qed.
 
@@ -1301,14 +1265,14 @@ Lemma context_invariance : forall Gamma Gamma' t S,
      Gamma' |- t \in S.
 Proof with eauto.
   intros. generalize dependent Gamma'.
-  has_type_cases (induction H) Case; 
+  induction H; 
     intros Gamma' Heqv...
-  Case "T_Var".
+  - (* T_Var *)
     apply T_Var... rewrite <- Heqv...
-  Case "T_Abs".
+  - (* T_Abs *)
     apply T_Abs... apply IHhas_type. intros x0 Hafi.
     unfold extend. destruct (eq_id_dec x x0)...
-  Case "T_If".
+  - (* T_If *)
     apply T_If...
 
 Qed.
@@ -1319,9 +1283,9 @@ Lemma free_in_context : forall x t T Gamma,
    exists T', Gamma x = Some T'.
 Proof with eauto.
   intros x t T Gamma Hafi Htyp.
-  has_type_cases (induction Htyp) Case; 
+  induction Htyp; 
       subst; inversion Hafi; subst...
-  Case "T_Abs".
+  - (* T_Abs *)
     destruct (IHHtyp H4) as [T Hctx]. exists T.
     unfold extend in Hctx. rewrite neq_id in Hctx...  Qed.
 
@@ -1342,14 +1306,14 @@ Lemma substitution_preserves_typing : forall Gamma x U v t S,
 Proof with eauto.
   intros Gamma x U v t S Htypt Htypv.
   generalize dependent S. generalize dependent Gamma.
-  t_cases (induction t) Case; intros; simpl.
-  Case "tvar".
+  induction t; intros; simpl.
+  - (* tvar *)
     rename i into y.
     destruct (typing_inversion_var _ _ _ Htypt) 
         as [T [Hctx Hsub]].
     unfold extend in Hctx.
     destruct (eq_id_dec x y)...
-    SCase "x=y".
+    + (* x=y *)
       subst.
       inversion Hctx; subst. clear Hctx.
       apply context_invariance with empty...
@@ -1357,33 +1321,33 @@ Proof with eauto.
       destruct (free_in_context _ _ S empty Hcontra) 
           as [T' HT']...
       inversion HT'.
-  Case "tapp".
+  - (* tapp *)
     destruct (typing_inversion_app _ _ _ _ Htypt) 
         as [T1 [Htypt1 Htypt2]].
     eapply T_App...
-  Case "tabs".
+  - (* tabs *)
     rename i into y. rename t into T1.
     destruct (typing_inversion_abs _ _ _ _ _ Htypt) 
       as [T2 [Hsub Htypt2]].
     apply T_Sub with (TArrow T1 T2)... apply T_Abs...
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
       eapply context_invariance...
       subst.
       intros x Hafi. unfold extend.
       destruct (eq_id_dec y x)...
-    SCase "x<>y".
+    + (* x<>y *)
       apply IHt. eapply context_invariance...
       intros z Hafi. unfold extend.
       destruct (eq_id_dec y z)...
       subst. rewrite neq_id... 
-  Case "ttrue".
+  - (* ttrue *)
       assert (TBool <: S) 
         by apply (typing_inversion_true _ _  Htypt)...
-  Case "tfalse".
+  - (* tfalse *)
       assert (TBool <: S) 
         by apply (typing_inversion_false _ _  Htypt)...
-  Case "tif".
+  - (* tif *)
     assert ((extend Gamma x U) |- t1 \in TBool 
             /\ (extend Gamma x U) |- t2 \in S
             /\ (extend Gamma x U) |- t3 \in S) 
@@ -1391,7 +1355,7 @@ Proof with eauto.
     inversion H as [H1 [H2 H3]].
     apply IHt1 in H1. apply IHt2 in H2. apply IHt3 in H3.
     auto.
-  Case "tunit".
+  - (* tunit *)
     assert (TUnit <: S) 
       by apply (typing_inversion_unit _ _  Htypt)...
 Qed.
@@ -1463,11 +1427,11 @@ Proof with eauto.
   intros t t' T HT.
   remember empty as Gamma. generalize dependent HeqGamma.
   generalize dependent t'.
-  has_type_cases (induction HT) Case; 
+  induction HT; 
     intros t' HeqGamma HE; subst; inversion HE; subst...
-  Case "T_App".
+  - (* T_App *)
     inversion HE; subst...
-    SCase "ST_AppAbs".
+    + (* ST_AppAbs *)
       destruct (abs_arrow _ _ _ _ _ HT1) as [HA1 HA2].
       apply substitution_preserves_typing with T...
 Qed.
@@ -1578,5 +1542,5 @@ Qed.
 [] *)
 
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

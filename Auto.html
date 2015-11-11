@@ -74,49 +74,49 @@ This topic will be defered for a while longer.
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Skip". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Ass". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Skip&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Ass&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion". <span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_1</span>; <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="comment">(*&nbsp;Proof&nbsp;of&nbsp;assertion&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_1</span>; <span class="id" type="tactic">assumption</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_2</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfTrue".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfFalse".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1</span>. <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileEnd".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H2</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Proof of assertion". <span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_1</span>; <span class="id" type="tactic">assumption</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_2</span>. <span class="id" type="tactic">assumption</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1</span>. <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1</span>. <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H2</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="comment">(*&nbsp;Proof&nbsp;of&nbsp;assertion&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_1</span>; <span class="id" type="tactic">assumption</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHE1_2</span>. <span class="id" type="tactic">assumption</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab625"></a><h1 class="section">The <span class="inlinecode"><span class="id" type="tactic">auto</span></span> and <span class="inlinecode"><span class="id" type="tactic">eauto</span></span> tactics</h1>
+<a name="lab619"></a><h1 class="section">The <span class="inlinecode"><span class="id" type="tactic">auto</span></span> and <span class="inlinecode"><span class="id" type="tactic">eauto</span></span> tactics</h1>
 
 <div class="paragraph"> </div>
 
  Thus far, we have (nearly) always written proof scripts that
-    apply relevant hypothoses or lemmas by name. In particular, when
+    apply relevant hypotheses or lemmas by name. In particular, when
     a chain of hypothesis applications is needed, we have specified
     them explicitly.  (The only exceptions introduced so far are using
     <span class="inlinecode"><span class="id" type="tactic">assumption</span></span> to find a matching unqualified hypothesis
@@ -393,30 +393,28 @@ Now let's take a pass over <span class="inlinecode"><span class="id" type="var">
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfTrue".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfFalse".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileEnd".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H2</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -444,28 +442,26 @@ When we are using a particular tactic many times in a proof,
 <span class="id" type="keyword">Proof</span> <span class="id" type="keyword">with</span> <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion"...<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>...<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>...<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfTrue".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfFalse".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H5</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileEnd".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H2</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Proof of assertion"...<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>...<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">H</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H4</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H4</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>...<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>...<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 </div>
 
@@ -473,7 +469,7 @@ When we are using a particular tactic many times in a proof,
 </div>
 
 <div class="doc">
-<a name="lab626"></a><h1 class="section">Searching Hypotheses</h1>
+<a name="lab620"></a><h1 class="section">Searching Hypotheses</h1>
 
 <div class="paragraph"> </div>
 
@@ -527,30 +523,28 @@ When we are using a particular tactic many times in a proof,
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfTrue".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfTrue&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rwinv</span> <span class="id" type="var">H</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_IfFalse".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_IfFalse&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rwinv</span> <span class="id" type="var">H</span> <span class="id" type="var">H5</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileEnd".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_WhileEnd&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rwinv</span> <span class="id" type="var">H</span> <span class="id" type="var">H2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rwinv</span> <span class="id" type="var">H</span> <span class="id" type="var">H4</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rwinv</span> <span class="id" type="var">H</span> <span class="id" type="var">H4</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -592,17 +586,15 @@ In words, this <span class="inlinecode"><span class="id" type="keyword">match</s
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">try</span> <span class="id" type="var">find_rwinv</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "Proof of assertion". <span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">st'</span> = <span class="id" type="var">st'0</span>) <span class="id" type="keyword">as</span> <span class="id" type="var">EQ1</span> <span class="id" type="tactic">by</span> <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span> <span class="id" type="var">st'0</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -628,12 +620,12 @@ Finally, let's see about the remaining cases. Each of them involves
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">try</span> <span class="id" type="var">find_rwinv</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_Seq".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_Seq&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">IHE1_1</span> <span class="id" type="var">st'0</span> <span class="id" type="var">H1</span>) <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_WhileLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_WhileLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">IHE1_1</span> <span class="id" type="var">st'0</span> <span class="id" type="var">H3</span>) <span class="id" type="keyword">in</span> ×. <span class="id" type="tactic">auto</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -691,7 +683,7 @@ But there are several pairs of hypotheses that have the right
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">try</span> <span class="id" type="var">find_rwinv</span>; <span class="id" type="tactic">repeat</span> <span class="id" type="var">find_eqn</span>; <span class="id" type="tactic">auto</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
 
@@ -728,13 +720,6 @@ The big pay-off in this approach is that our proof script
     the body will always execute at least once. 
 </div>
 <div class="code code-tight">
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "com_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "SKIP" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "::=" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> ";"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "IFB" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "WHILE"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "CRepeat" ].<br/>
 
 <br/>
 <span class="id" type="keyword">Notation</span> "'SKIP'" := <br/>
@@ -789,16 +774,6 @@ The big pay-off in this approach is that our proof script
 .<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "ceval_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_Skip" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_Ass"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_Seq"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_IfTrue" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_IfFalse"<br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_WhileEnd" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_WhileLoop" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_RepeatEnd" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "E_RepeatLoop" <br/>
-].<br/>
-
-<br/>
 <span class="id" type="keyword">Notation</span> "c1 '/' st '<span style="font-family: arial;">&dArr;</span>' st'" := (<span class="id" type="var">ceval</span> <span class="id" type="var">st</span> <span class="id" type="var">c1</span> <span class="id" type="var">st'</span>) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="tactic">at</span> <span class="id" type="var">level</span> 40, <span class="id" type="var">st</span> <span class="id" type="tactic">at</span> <span class="id" type="var">level</span> 39).<br/>
 
@@ -810,15 +785,15 @@ The big pay-off in this approach is that our proof script
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">try</span> <span class="id" type="var">find_rwinv</span>; <span class="id" type="tactic">repeat</span> <span class="id" type="var">find_eqn</span>; <span class="id" type="tactic">auto</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "E_RepeatEnd".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to false (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_RepeatEnd&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;false&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">find_rwinv</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;oops:&nbsp;why&nbsp;didn't&nbsp;<span class="inlinecode"><span class="id" type="var">find_rwinv</span></span>&nbsp;solve&nbsp;this&nbsp;for&nbsp;us&nbsp;already?&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;answer:&nbsp;we&nbsp;did&nbsp;things&nbsp;in&nbsp;the&nbsp;wrong&nbsp;order.&nbsp;*)</span><br/>
-&nbsp;&nbsp;<span class="id" type="tactic">case</span> "E_RepeatLoop".<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "b evaluates to true (contradiction)".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;E_RepeatLoop&nbsp;*)</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;b&nbsp;evaluates&nbsp;to&nbsp;true&nbsp;(contradiction)&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">find_rwinv</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -830,7 +805,7 @@ The big pay-off in this approach is that our proof script
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">st</span> <span class="id" type="var">st1</span> <span class="id" type="var">st2</span> <span class="id" type="var">E1</span> <span class="id" type="var">E2</span>;<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">generalize</span> <span class="id" type="tactic">dependent</span> <span class="id" type="var">st2</span>;<br/>
-&nbsp;&nbsp;<span class="id" type="var">ceval_cases</span> (<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>) <span class="id" type="var">Case</span>;<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">E1</span>;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">st2</span> <span class="id" type="var">E2</span>; <span class="id" type="var">inv</span> <span class="id" type="var">E2</span>; <span class="id" type="tactic">repeat</span> <span class="id" type="var">find_eqn</span>; <span class="id" type="tactic">try</span> <span class="id" type="var">find_rwinv</span>; <span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 

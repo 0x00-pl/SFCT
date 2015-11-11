@@ -299,11 +299,11 @@ with parseConjunctionExp (steps:nat) (symtable : string->nat) (xs : list token) 
 
 Definition parseBExp := parseConjunctionExp.
 
-(* 
-Eval compute in 
+(*
+Compute
   (parseProductExp 100 (tokenize "x*y*(x*x)*x")).
 
-Eval compute in 
+Compute
   (parseDisjunctionExp 100 (tokenize "not((x==x||x*x<=(x*x)*x)&&x==x)")). 
 *)
 
@@ -359,9 +359,8 @@ Definition parse (str : string) : optionE (com * list token) :=
 (* ####################################################### *)
 (** * Examples *)
 
-
 (*
-Eval compute in parse "
+Compute parse "
     IF x == y + 1 + 2 - y * 6 + 3 THEN
       x := x * 1;;
       y := 0
@@ -380,7 +379,7 @@ Eval compute in parse "
 *)
 
 (*
-Eval compute in parse "
+Compute parse "
     SKIP;;
     z:=x*y*(x*x);;
     WHILE x==x DO
@@ -410,7 +409,7 @@ Eval compute in parse "
 *)
 
 (*
-Eval compute in parse "
+Compute parse "
    SKIP;;
    z:=x*y*(x*x);;
    WHILE x==x DO
@@ -441,5 +440,5 @@ Eval compute in parse "
          []).
 *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

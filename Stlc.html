@@ -35,7 +35,7 @@
 </div>
 
 <div class="doc">
-<a name="lab661"></a><h1 class="section">The Simply Typed Lambda-Calculus</h1>
+<a name="lab655"></a><h1 class="section">The Simply Typed Lambda-Calculus</h1>
 
 <div class="paragraph"> </div>
 
@@ -59,7 +59,7 @@
 </div>
 
 <div class="doc">
-<a name="lab662"></a><h2 class="section">Overview</h2>
+<a name="lab656"></a><h2 class="section">Overview</h2>
 
 <div class="paragraph"> </div>
 
@@ -303,7 +303,7 @@
 </div>
 
 <div class="doc">
-<a name="lab663"></a><h2 class="section">Syntax</h2>
+<a name="lab657"></a><h2 class="section">Syntax</h2>
 
 </div>
 <div class="code code-space">
@@ -315,7 +315,7 @@
 </div>
 
 <div class="doc">
-<a name="lab664"></a><h3 class="section">Types</h3>
+<a name="lab658"></a><h3 class="section">Types</h3>
 
 </div>
 <div class="code code-space">
@@ -329,7 +329,7 @@
 </div>
 
 <div class="doc">
-<a name="lab665"></a><h3 class="section">Terms</h3>
+<a name="lab659"></a><h3 class="section">Terms</h3>
 
 </div>
 <div class="code code-space">
@@ -342,16 +342,6 @@
 &nbsp;&nbsp;| <span class="id" type="var">ttrue</span> : <span class="id" type="var">tm</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">tfalse</span> : <span class="id" type="var">tm</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">tif</span> : <span class="id" type="var">tm</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">tm</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">tm</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">tm</span>.<br/>
-
-<br/>
-<div class="togglescript" id="proofcontrol1" onclick="toggleDisplay('proof1');toggleDisplay('proofcontrol1')"><span class="show"></span></div>
-<div class="proofscript" id="proof1" onclick="toggleDisplay('proof1');toggleDisplay('proofcontrol1')">
-<span class="id" type="keyword">Tactic Notation</span> "t_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tvar" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tapp" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tabs" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ttrue" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tfalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "tif" ].<br/>
-</div>
 
 <br/>
 </div>
@@ -372,8 +362,8 @@ Note that an abstraction <span class="inlinecode">\<span class="id" type="var">x
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">x</span> := (<span class="id" type="var">Id</span> 0).<br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">y</span> := (<span class="id" type="var">Id</span> 1).<br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">z</span> := (<span class="id" type="var">Id</span> 2).<br/>
-<div class="togglescript" id="proofcontrol2" onclick="toggleDisplay('proof2');toggleDisplay('proofcontrol2')"><span class="show"></span></div>
-<div class="proofscript" id="proof2" onclick="toggleDisplay('proof2');toggleDisplay('proofcontrol2')">
+<div class="togglescript" id="proofcontrol1" onclick="toggleDisplay('proof1');toggleDisplay('proofcontrol1')"><span class="show"></span></div>
+<div class="proofscript" id="proof1" onclick="toggleDisplay('proof1');toggleDisplay('proofcontrol1')">
 <span class="id" type="keyword">Hint</span> <span class="id" type="keyword">Unfold</span> <span class="id" type="var">x</span>.<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="keyword">Unfold</span> <span class="id" type="var">y</span>.<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="keyword">Unfold</span> <span class="id" type="var">z</span>.<br/>
@@ -452,7 +442,7 @@ Note that an abstraction <span class="inlinecode">\<span class="id" type="var">x
 </div>
 
 <div class="doc">
-<a name="lab666"></a><h2 class="section">Operational Semantics</h2>
+<a name="lab660"></a><h2 class="section">Operational Semantics</h2>
 
 <div class="paragraph"> </div>
 
@@ -468,7 +458,7 @@ Note that an abstraction <span class="inlinecode">\<span class="id" type="var">x
 </div>
 
 <div class="doc">
-<a name="lab667"></a><h3 class="section">Values</h3>
+<a name="lab661"></a><h3 class="section">Values</h3>
 
 <div class="paragraph"> </div>
 
@@ -515,7 +505,7 @@ Note that an abstraction <span class="inlinecode">\<span class="id" type="var">x
 <div class="paragraph"> </div>
 
 <div class="code code-tight">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">Eval</span>&nbsp;<span class="id" type="tactic">simpl</span>&nbsp;<span class="id" type="keyword">in</span>&nbsp;(<span class="id" type="keyword">fun</span>&nbsp;<span class="id" type="var">x</span>:<span class="id" type="var">bool</span>&nbsp;⇒&nbsp;3&nbsp;+&nbsp;4)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Compute</span>&nbsp;(<span class="id" type="keyword">fun</span>&nbsp;<span class="id" type="var">x</span>:<span class="id" type="var">bool</span>&nbsp;⇒&nbsp;3&nbsp;+&nbsp;4)
 <div class="paragraph"> </div>
 
 </div>
@@ -572,7 +562,7 @@ Finally, we must consider what constitutes a <i>complete</i> program.
 </div>
 
 <div class="doc">
-<a name="lab668"></a><h3 class="section">Substitution</h3>
+<a name="lab662"></a><h3 class="section">Substitution</h3>
 
 <div class="paragraph"> </div>
 
@@ -737,8 +727,8 @@ Finally, we must consider what constitutes a <i>complete</i> program.
     formalizing richer languages. 
 <div class="paragraph"> </div>
 
-<a name="lab669"></a><h3 class="section"> </h3>
-<a name="lab670"></a><h4 class="section">Exercise: 3 stars (substi)</h4>
+<a name="lab663"></a><h3 class="section"> </h3>
+<a name="lab664"></a><h4 class="section">Exercise: 3 stars (substi)</h4>
 
 <div class="paragraph"> </div>
 
@@ -777,7 +767,7 @@ Finally, we must consider what constitutes a <i>complete</i> program.
 </div>
 
 <div class="doc">
-<a name="lab671"></a><h3 class="section">Reduction</h3>
+<a name="lab665"></a><h3 class="section">Reduction</h3>
 
 <div class="paragraph"> </div>
 
@@ -912,13 +902,6 @@ Finally, we must consider what constitutes a <i>complete</i> program.
 <span class="id" type="keyword">where</span> "t<sub>1</sub> '<span style="font-family: arial;">&rArr;</span>' t<sub>2</sub>" := (<span class="id" type="var">step</span> <span class="id" type="var">t<sub>1</sub></span> <span class="id" type="var">t<sub>2</sub></span>).<br/>
 
 <br/>
-<span class="id" type="keyword">Tactic Notation</span> "step_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_AppAbs" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_App1" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_App2" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_IfTrue" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_IfFalse" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "ST_If" ].<br/>
-
-<br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">step</span>.<br/>
 
 <br/>
@@ -931,7 +914,7 @@ Finally, we must consider what constitutes a <i>complete</i> program.
 </div>
 
 <div class="doc">
-<a name="lab672"></a><h3 class="section">Examples</h3>
+<a name="lab666"></a><h3 class="section">Examples</h3>
 
 <div class="paragraph"> </div>
 
@@ -1129,7 +1112,7 @@ Again, we can use the <span class="inlinecode"><span class="id" type="var">norma
 </div>
 
 <div class="doc">
-<a name="lab673"></a><h4 class="section">Exercise: 2 stars (step_example3)</h4>
+<a name="lab667"></a><h4 class="section">Exercise: 2 stars (step_example3)</h4>
  Try to do this one both with and without <span class="inlinecode"><span class="id" type="var">normalize</span></span>. 
 </div>
 <div class="code code-tight">
@@ -1154,7 +1137,7 @@ Again, we can use the <span class="inlinecode"><span class="id" type="var">norma
 </div>
 
 <div class="doc">
-<a name="lab674"></a><h2 class="section">Typing</h2>
+<a name="lab668"></a><h2 class="section">Typing</h2>
 
 </div>
 <div class="code code-space">
@@ -1163,7 +1146,7 @@ Again, we can use the <span class="inlinecode"><span class="id" type="var">norma
 </div>
 
 <div class="doc">
-<a name="lab675"></a><h3 class="section">Contexts</h3>
+<a name="lab669"></a><h3 class="section">Contexts</h3>
 
 <div class="paragraph"> </div>
 
@@ -1217,8 +1200,8 @@ Informally, we'll write <span class="inlinecode"><span style="font-family: serif
 <br/>
 <span class="id" type="keyword">Lemma</span> <span class="id" type="var">extend_eq</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">A</span> (<span class="id" type="var">ctxt</span>: <span class="id" type="var">partial_map</span> <span class="id" type="var">A</span>) <span class="id" type="var">x</span> <span class="id" type="var">T</span>,<br/>
 &nbsp;&nbsp;(<span class="id" type="var">extend</span> <span class="id" type="var">ctxt</span> <span class="id" type="var">x</span> <span class="id" type="var">T</span>) <span class="id" type="var">x</span> = <span class="id" type="var">Some</span> <span class="id" type="var">T</span>.<br/>
-<div class="togglescript" id="proofcontrol3" onclick="toggleDisplay('proof3');toggleDisplay('proofcontrol3')"><span class="show"></span></div>
-<div class="proofscript" id="proof3" onclick="toggleDisplay('proof3');toggleDisplay('proofcontrol3')">
+<div class="togglescript" id="proofcontrol2" onclick="toggleDisplay('proof2');toggleDisplay('proofcontrol2')"><span class="show"></span></div>
+<div class="proofscript" id="proof2" onclick="toggleDisplay('proof2');toggleDisplay('proofcontrol2')">
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">eq_id</span>. <span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
@@ -1228,8 +1211,8 @@ Informally, we'll write <span class="inlinecode"><span style="font-family: serif
 <span class="id" type="keyword">Lemma</span> <span class="id" type="var">extend_neq</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">A</span> (<span class="id" type="var">ctxt</span>: <span class="id" type="var">partial_map</span> <span class="id" type="var">A</span>) <span class="id" type="var">x1</span> <span class="id" type="var">T</span> <span class="id" type="var">x2</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">x2</span> ≠ <span class="id" type="var">x1</span> <span style="font-family: arial;">&rarr;</span>                       <br/>
 &nbsp;&nbsp;(<span class="id" type="var">extend</span> <span class="id" type="var">ctxt</span> <span class="id" type="var">x2</span> <span class="id" type="var">T</span>) <span class="id" type="var">x1</span> = <span class="id" type="var">ctxt</span> <span class="id" type="var">x1</span>.<br/>
-<div class="togglescript" id="proofcontrol4" onclick="toggleDisplay('proof4');toggleDisplay('proofcontrol4')"><span class="show"></span></div>
-<div class="proofscript" id="proof4" onclick="toggleDisplay('proof4');toggleDisplay('proofcontrol4')">
+<div class="togglescript" id="proofcontrol3" onclick="toggleDisplay('proof3');toggleDisplay('proofcontrol3')"><span class="show"></span></div>
+<div class="proofscript" id="proof3" onclick="toggleDisplay('proof3');toggleDisplay('proofcontrol3')">
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">extend</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">neq_id</span>; <span class="id" type="tactic">auto</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
@@ -1245,7 +1228,7 @@ Informally, we'll write <span class="inlinecode"><span style="font-family: serif
 </div>
 
 <div class="doc">
-<a name="lab676"></a><h3 class="section">Typing Relation</h3>
+<a name="lab670"></a><h3 class="section">Typing Relation</h3>
 
 <div class="paragraph"> </div>
 
@@ -1367,16 +1350,6 @@ Informally, we'll write <span class="inlinecode"><span style="font-family: serif
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: serif; font-size:85%;">&Gamma;</span> <span style="font-family: arial;">&#8866;</span> <span class="id" type="var">tif</span> <span class="id" type="var">t<sub>1</sub></span> <span class="id" type="var">t<sub>2</sub></span> <span class="id" type="var">t<sub>3</sub></span> &#x2208; <span class="id" type="var">T</span><br/>
 <br/>
 <span class="id" type="keyword">where</span> "Gamma '<span style="font-family: arial;">&#8866;</span>' t '&#x2208;' T" := (<span class="id" type="var">has_type</span> <span style="font-family: serif; font-size:85%;">&Gamma;</span> <span class="id" type="var">t</span> <span class="id" type="var">T</span>).<br/>
-<div class="togglescript" id="proofcontrol5" onclick="toggleDisplay('proof5');toggleDisplay('proofcontrol5')"><span class="show"></span></div>
-<div class="proofscript" id="proof5" onclick="toggleDisplay('proof5');toggleDisplay('proofcontrol5')">
-
-<br/>
-<span class="id" type="keyword">Tactic Notation</span> "has_type_cases" <span class="id" type="var">tactic</span>(<span class="id" type="var">first</span>) <span class="id" type="var">ident</span>(<span class="id" type="var">c</span>) :=<br/>
-&nbsp;&nbsp;<span class="id" type="var">first</span>;<br/>
-&nbsp;&nbsp;[ <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Var" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_Abs" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_App" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_True" <br/>
-&nbsp;&nbsp;| <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_False" | <span class="id" type="var">Case_aux</span> <span class="id" type="var">c</span> "T_If" ].<br/>
-</div>
 
 <br/>
 <span class="id" type="keyword">Hint</span> <span class="id" type="var">Constructors</span> <span class="id" type="var">has_type</span>.<br/>
@@ -1385,7 +1358,7 @@ Informally, we'll write <span class="inlinecode"><span style="font-family: serif
 </div>
 
 <div class="doc">
-<a name="lab677"></a><h3 class="section">Examples</h3>
+<a name="lab671"></a><h3 class="section">Examples</h3>
 
 </div>
 <div class="code code-space">
@@ -1429,8 +1402,8 @@ Another example:
 <div class="code code-tight">
 
 <br/>
-<div class="togglescript" id="proofcontrol6" onclick="toggleDisplay('proof6');toggleDisplay('proofcontrol6')"><span class="show"></span></div>
-<div class="proofscript" id="proof6" onclick="toggleDisplay('proof6');toggleDisplay('proofcontrol6')">
+<div class="togglescript" id="proofcontrol4" onclick="toggleDisplay('proof4');toggleDisplay('proofcontrol4')"><span class="show"></span></div>
+<div class="proofscript" id="proof4" onclick="toggleDisplay('proof4');toggleDisplay('proofcontrol4')">
 <span class="id" type="keyword">Example</span> <span class="id" type="var">typing_example_2</span> :<br/>
 &nbsp;&nbsp;<span class="id" type="var">empty</span> <span style="font-family: arial;">&#8866;</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">tabs</span> <span class="id" type="var">x</span> <span class="id" type="var">TBool</span><br/>
@@ -1450,7 +1423,7 @@ Another example:
 </div>
 
 <div class="doc">
-<a name="lab678"></a><h4 class="section">Exercise: 2 stars, optional (typing_example_2_full)</h4>
+<a name="lab672"></a><h4 class="section">Exercise: 2 stars, optional (typing_example_2_full)</h4>
  Prove the same result without using <span class="inlinecode"><span class="id" type="tactic">auto</span></span>, <span class="inlinecode"><span class="id" type="tactic">eauto</span></span>, or
     <span class="inlinecode"><span class="id" type="tactic">eapply</span></span>. 
 </div>
@@ -1471,7 +1444,7 @@ Another example:
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab679"></a><h4 class="section">Exercise: 2 stars (typing_example_3)</h4>
+<a name="lab673"></a><h4 class="section">Exercise: 2 stars (typing_example_3)</h4>
  Formally prove the following typing derivation holds:  
 <div class="paragraph"> </div>
 
@@ -1520,8 +1493,8 @@ Another example:
 <div class="code code-tight">
 
 <br/>
-<div class="togglescript" id="proofcontrol7" onclick="toggleDisplay('proof7');toggleDisplay('proofcontrol7')"><span class="show"></span></div>
-<div class="proofscript" id="proof7" onclick="toggleDisplay('proof7');toggleDisplay('proofcontrol7')">
+<div class="togglescript" id="proofcontrol5" onclick="toggleDisplay('proof5');toggleDisplay('proofcontrol5')"><span class="show"></span></div>
+<div class="proofscript" id="proof5" onclick="toggleDisplay('proof5');toggleDisplay('proofcontrol5')">
 <span class="id" type="keyword">Example</span> <span class="id" type="var">typing_nonexample_1</span> :<br/>
 &nbsp;&nbsp;¬ <span style="font-family: arial;">&exist;</span><span class="id" type="var">T</span>,<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">empty</span> <span style="font-family: arial;">&#8866;</span> <br/>
@@ -1546,7 +1519,7 @@ Another example:
 </div>
 
 <div class="doc">
-<a name="lab680"></a><h4 class="section">Exercise: 3 stars, optional (typing_nonexample_3)</h4>
+<a name="lab674"></a><h4 class="section">Exercise: 3 stars, optional (typing_nonexample_3)</h4>
  Another nonexample:
 
 <div class="paragraph"> </div>

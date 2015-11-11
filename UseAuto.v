@@ -673,37 +673,37 @@ Theorem ceval_deterministic: forall c st st1 st2,
 Proof. 
   intros c st st1 st2 E1 E2.
   generalize dependent st2.
-  (ceval_cases (induction E1) Case); intros st2 E2; inversion E2; subst. 
-  Case "E_Skip". reflexivity.
-  Case "E_Ass". reflexivity.
-  Case "E_Seq". 
+  (induction E1); intros st2 E2; inversion E2; subst. 
+  - (* E_Skip *) reflexivity.
+  - (* E_Ass *) reflexivity.
+  - (* E_Seq *) 
     assert (st' = st'0) as EQ1.
-      SCase "Proof of assertion". apply IHE1_1; assumption.
+    { (* Proof of assertion *) apply IHE1_1; assumption. }
     subst st'0.
     apply IHE1_2. assumption. 
-  Case "E_IfTrue". 
-    SCase "b1 evaluates to true".
+  (* E_IfTrue *) 
+  - (* b1 evaluates to true *)
+    apply IHE1. assumption.
+  - (* b1 evaluates to false (contradiction) *)
+    rewrite H in H5. inversion H5.
+  (* E_IfFalse *) 
+  - (* b1 evaluates to true (contradiction) *)
+    rewrite H in H5. inversion H5.
+  - (* b1 evaluates to false *)
       apply IHE1. assumption.
-    SCase "b1 evaluates to false (contradiction)".
-      rewrite H in H5. inversion H5.
-  Case "E_IfFalse". 
-    SCase "b1 evaluates to true (contradiction)".
-      rewrite H in H5. inversion H5.
-    SCase "b1 evaluates to false".
-      apply IHE1. assumption.
-  Case "E_WhileEnd". 
-    SCase "b1 evaluates to true".
-      reflexivity.
-    SCase "b1 evaluates to false (contradiction)".
-      rewrite H in H2. inversion H2.
-  Case "E_WhileLoop". 
-    SCase "b1 evaluates to true (contradiction)".
-      rewrite H in H4. inversion H4.
-    SCase "b1 evaluates to false".
-      assert (st' = st'0) as EQ1.
-        SSCase "Proof of assertion". apply IHE1_1; assumption.
-      subst st'0.
-      apply IHE1_2. assumption. 
+  (* E_WhileEnd *) 
+  - (* b1 evaluates to true *)
+    reflexivity.
+  - (* b1 evaluates to false (contradiction) *)
+    rewrite H in H2. inversion H2.
+  (* E_WhileLoop *) 
+  - (* b1 evaluates to true (contradiction) *)
+    rewrite H in H4. inversion H4.
+  - (* b1 evaluates to false *)
+    assert (st' = st'0) as EQ1.
+    { (* Proof of assertion *) apply IHE1_1; assumption. }
+    subst st'0.
+    apply IHE1_2. assumption. 
 Qed.
 
 (** Exercise: rewrite this proof using [auto] whenever possible.
@@ -828,24 +828,23 @@ Theorem preservation : forall t t' T,
 Proof with eauto.
   remember (@empty ty) as Gamma. 
   intros t t' T HT. generalize dependent t'.   
-  (has_type_cases (induction HT) Case); intros t' HE; subst Gamma.
-  Case "T_Var".
+  (induction HT); intros t' HE; subst Gamma.
+  - (* T_Var *)
     inversion HE. 
-  Case "T_Abs".
+  - (* T_Abs *)
     inversion HE.  
-  Case "T_App".
+  - (* T_App *)
     inversion HE; subst...
-    (* (step_cases (inversion HE) SCase); subst...*)
     (* The ST_App1 and ST_App2 cases are immediate by induction, and
        auto takes care of them *)
-    SCase "ST_AppAbs".
+    + (* ST_AppAbs *)
       apply substitution_preserves_typing with T11...
       inversion HT1...  
-  Case "T_True". 
+  - (* T_True *) 
     inversion HE.
-  Case "T_False".
+  - (* T_False *)
     inversion HE.
-  Case "T_If".
+  - (* T_If *)
     inversion HE; subst...
 Qed.
 
@@ -875,21 +874,21 @@ Theorem progress : forall t T,
 Proof with eauto.
   intros t T Ht.
   remember (@empty ty) as Gamma.
-  (has_type_cases (induction Ht) Case); subst Gamma...
-  Case "T_Var".
+  (induction Ht); subst Gamma...
+  - (* T_Var *)
     inversion H. 
-  Case "T_App".
+  - (* T_App *)
     right. destruct IHHt1...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2...
-      SSCase "t2 is a value".
+      * (* t2 is a value *)
         inversion H; subst; try solve by inversion. 
         exists ([x0:=t2]t)...
-      SSCase "t2 steps".
+      * (* t2 steps *)
        destruct H0 as [t2' Hstp]. exists (tapp t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       destruct H as [t1' Hstp]. exists (tapp t1' t2)...
-  Case "T_If". 
+  - (* T_If *) 
     right. destruct IHHt1...
     destruct t1; try solve by inversion...
     inversion H. exists (tif x0 t2 t3)...
@@ -926,10 +925,10 @@ Proof.
   inversion Hnorm as [Hs Hnf]; clear Hnorm.
   rewrite nf_same_as_value in Hnf. inversion Hnf. clear Hnf.
   exists n. split. reflexivity.
-  multi_cases (induction Hs) Case; subst.
-  Case "multi_refl".
+  induction Hs; subst.
+  - (* multi_refl *)
     apply E_Const.
-  Case "multi_step".
+  - (* multi_step *)
     eapply step__eval. eassumption. apply IHHs. reflexivity.  
 Qed.
 
@@ -1016,7 +1015,7 @@ Proof.
      order to restrict the scope of the hints. *)
 
   remember (@empty ty) as Gamma. introv Ht. gen t'.
-  (has_type_cases (induction Ht) Case); introv HST Hstep; 
+  (induction Ht); introv HST Hstep; 
     (* old: [subst; try (solve by inversion); inversion Hstep; subst;
              try (eauto using store_weakening, extends_refl)] 
        new: [subst Gamma; inverts Hstep; eauto.]
@@ -1025,8 +1024,8 @@ Proof.
        is way to slow. *)
    subst Gamma; inverts Hstep; eauto.
 
-  Case "T_App". 
-  SCase "ST_AppAbs". 
+  (* T_App *) 
+  - (* ST_AppAbs *) 
   (* old:
       exists ST. inversion Ht1; subst.
       split; try split... eapply substitution_preserves_typing... *)
@@ -1034,7 +1033,7 @@ Proof.
      split the conjunction, and [applys*] in place of [eapply...] *)
   exists ST. inverts Ht1. splits*. applys* substitution_preserves_typing.
 
-  SCase "ST_App1".
+  - (* ST_App1 *)
   (* old:  
       eapply IHHt1 in H0...
       inversion H0 as [ST' [Hext [Hty Hsty]]].
@@ -1055,7 +1054,7 @@ Proof.
   (* All the subgoals produced can then be solved by [eauto]. *)
   eauto. eauto. eauto. 
 
-  SCase "ST_App2".
+  -(* ST_App2 *)
   (* old:
       eapply IHHt2 in H5...
       inversion H5 as [ST' [Hext [Hty Hsty]]].
@@ -1066,14 +1065,14 @@ Proof.
   forwards*: IHHt2.
   
   (* The same trick works for many of the other subgoals. *)
-  forwards*: IHHt. 
-  forwards*: IHHt. 
-  forwards*: IHHt1. 
-  forwards*: IHHt2. 
-  forwards*: IHHt1. 
+  - forwards*: IHHt. 
+  - forwards*: IHHt. 
+  - forwards*: IHHt1. 
+  - forwards*: IHHt2. 
+  - forwards*: IHHt1. 
 
-  Case "T_Ref".
-  SCase "ST_RefValue". 
+  - (* T_Ref *)
+  + (* ST_RefValue *) 
   (* old:
       exists (snoc ST T1). 
       inversion HST; subst.
@@ -1107,10 +1106,10 @@ Proof.
   (* Last, we replace [apply ..; assumption] with [apply* ..] *)
     apply* store_well_typed_snoc.
 
-  forwards*: IHHt.  
+  - forwards*: IHHt.  
 
-  Case "T_Deref".
-  SCase "ST_DerefLoc".
+  - (* T_Deref *)
+  + (* ST_DerefLoc *)
   (* old:
       exists ST. split; try split...
       destruct HST as [_ Hsty].
@@ -1127,10 +1126,10 @@ Proof.
   (* new: we then can call [inverts] in place of [inversion;subst] *)
   inverts* Ht.
 
-  forwards*: IHHt. 
+  - forwards*: IHHt. 
 
-  Case "T_Assign".
-  SCase "ST_Assign".
+  - (* T_Assign *)
+  + (* ST_Assign *)
   (* old: 
       exists ST. split; try split...
       eapply assign_pres_store_typing...
@@ -1138,8 +1137,8 @@ Proof.
   (* new: simply using nicer tactics *)
   exists ST. splits*. applys* assign_pres_store_typing. inverts* Ht1.
 
-  forwards*: IHHt1. 
-  forwards*: IHHt2. 
+  - forwards*: IHHt1. 
+  - forwards*: IHHt2. 
 Qed.
 
 (** Let's come back to the proof case that was hard to optimize. 
@@ -1292,8 +1291,7 @@ Qed.
     illustrate the working of [lets] and [applys] in chapter
     [UseTactics]. Optimize further this proof using automation (with
     the star symbol), and using the tactic [cases_if']. The solution
-    is 33 lines, including the [Case] instructions (21 lines without
-    them). *)
+    is 33 lines). *)
 
 Lemma substitution_preserves_typing : forall Gamma x U v t S,
   has_type (extend Gamma x U) t S ->
@@ -1891,4 +1889,4 @@ Proof. congruence. Qed.
     some investment, however this investment will pay off very quickly.
 *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

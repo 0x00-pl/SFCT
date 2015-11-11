@@ -1,84 +1,58 @@
-(** * Preface *)
+(** * 前言 *)
 
 (* ###################################################################### *)
-(** * Welcome *)
+(** * 简介 *)
 
-(** This electronic book is a course on _Software Foundations_, the
-    mathematical underpinnings of reliable software.  Topics include
-    basic concepts of logic, computer-assisted theorem proving, the
-    Coq proof assistant, functional programming, operational
-    semantics, Hoare logic, and static type systems.  The exposition
-    is intended for a broad range of readers, from advanced
-    undergraduates to PhD students and researchers.  No specific
-    background in logic or programming languages is assumed, though a
-    degree of mathematical maturity will be helpful.
+(** 这本电子书是一个关于软件基础 ，可靠软件背后的数学的课程.
+    主题包含基本逻辑概念，用计算机辅助定理证明，Coq证明助理，函数式编程。
+    操作语义，霍尔逻辑，还有静态类型系统。
+    这个体验的预期受众是从高级本科生到博士与及研究生的读者、
+    尽管一定的数学熟练度会有帮助，
+    本书没有对读者做任何的逻辑学或程序语言的背景。
 
-    The principal novelty of the course is that it is one hundred per
-    cent formalized and machine-checked: the entire text is literally
-    a script for Coq.  It is intended to be read alongside an
-    interactive session with Coq.  All the details in the text are
-    fully formalized in Coq, and the exercises are designed to be
-    worked using Coq.
+    这个教程的最大创新是，本教程是百分之百形式化，并且机械严重的：
+    所有的文字都是字面意义上的Coq脚本。
 
-    The files are organized into a sequence of core chapters, covering
-    about one semester's worth of material and organized into a
-    coherent linear narrative, plus a number of "appendices" covering
-    additional topics.  All the core chapters are suitable for both
-    upper-level undergraduate and graduate students. *)
+    它是用于于一个Coq交互式会话一起阅读的。
+    本书的所有细节都完全用Coq形式化了，习题也是被设计于来Coq做出。
+
+    文件被整理为一系列覆盖了一学期内容，环环相扣的核心章节，
+    与及一定的包含额外主题的“附录”。
+    所有的核心章节都适合高级本科生与及研究生。 *)
 
 
 (* ###################################################################### *)
-(** * Overview *)
+(** * 导论 *)
 
-(** Building reliable software is hard.  The scale and complexity of
-    modern systems, the number of people involved in building them,
-    and the range of demands placed on them make it extremely
-    difficult even to build software that is more or less correct,
-    much less to get it 100%% correct.  At the same time, the
-    increasing degree to which information processing is woven into
-    every aspect of society continually amplifies the cost of bugs and
-    insecurities.
+(** 构建可靠的软件很难。现代系统的规模，复杂性，介入构建过程的人数，
+    还有置于系统之上的需求的范围，使得构建或多或少正确的软件很难，
+    更不用说百分百正确。同一时间，因为信息处理继续融入社会的各个方面，
+    程序错误于漏洞的代价越来越严重.
 
-    Computer scientists and software engineers have responded to these
-    challenges by developing a whole host of techniques for improving
-    software reliability, ranging from recommendations about managing
-    software projects and organizing programming teams (e.g., extreme
-    programming) to design philosophies for libraries (e.g.,
-    model-view-controller, publish-subscribe, etc.) and programming
-    languages (e.g., object-oriented programming, aspect-oriented
-    programming, functional programming, ...) and to mathematical
-    techniques for specifying and reasoning about properties of
-    software and tools for helping validate these properties.
+    计算机科学家与及软件工程师对这些挑战，通过设计一系列的改进软件质量的技手法，
+    包含对管理软件项目与及编程团队的建议（比如极限编程），
+    库（比如模型-试图-控制器，发布-订阅）与及编程语言
+    （面向对象编程，面向切面编程，函数式编程）的设计哲学，还有
+    用来指定，论证软件属性的数学与及数学工具来应对。
 
-    The present course is focused on this last set of techniques.  The
-    text weaves together five conceptual threads:
+    这门课的重点是最后一个方法。本书教程把五个概念穿插在一起：
 
-    (1) basic tools from _logic_ for making and justifying precise
-        claims about programs;
+    （1）逻辑学里面的基础工具，用于构建并且证明精确的关于程序的假设；
 
-    (2) the use of _proof assistants_ to construct rigorous logical
-        arguments;
+    （2）用证明助理构建严谨的逻辑论据；
 
-    (3) the idea of _functional programming_, both as a method of
-        programming and as a bridge between programming and logic;
+    （3）函数式编程思想，同时作为编程方法与及程序跟逻辑学之间的桥梁；
 
-    (4) formal techniques for _reasoning about the properties of
-        specific programs_ (e.g., the fact that a loop terminates on
-        all inputs, or that a sorting function or a compiler obeys a
-        particular specification); and
+    （4）形式化的用于论证程序属性（一个循环对所有输入都会终止。
+         或者一个排序函数或者编译器满足特定规格）的手段；与及
 
-    (5) the use of _type systems_ for establishing well-behavedness
-        guarantees for _all_ programs in a given programming
-        language (e.g., the fact that well-typed Java programs cannot
-        be subverted at runtime).
+    （5）用类型系统建立一个对于某一个编程语言的所有程序的瞒住特效
+        （所有类型正确的Java程序不能在运行时被破坏）。
 
-    Each of these topics is easily rich enough to fill a whole course
-    in its own right; taking all of them together naturally means that
-    much will be left unsaid.  But we hope readers will find that the
-    themes illuminate and amplify each other in useful ways, and that
-    bringing them together creates a foundation from which it will be
-    easy to dig into any of them more deeply.  Some suggestions for
-    further reading can be found in the [Postscript] chapter. *)
+    这五个主题任一个都可以轻易填满一整个课程；
+    把它们五个塞在一个课程中很自然地表面很多会被遗留在外。
+    但是我们洗完读者会认为5个主题互补。与及同时教授五个内容创建一个
+    可以轻松进入任一主题的根基。一些更深的阅读的建议在 [Postscript] 一章*)
 
 (** ** Logic *)
 
@@ -420,5 +394,5 @@
     Foundations_ can now be enjoyed in Japanese at [http://proofcafe.org/sf]
 *)
 
-(** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

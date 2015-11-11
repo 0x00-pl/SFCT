@@ -66,10 +66,6 @@ Inductive ty : Type :=
   | TProd  : ty -> ty -> ty
 .
 
-Tactic Notation "T_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "TBool" | Case_aux c "TArrow" | Case_aux c "TProd" ]. 
-
 Inductive tm : Type :=
     (* pure STLC *)
   | tvar : id -> tm
@@ -84,13 +80,6 @@ Inductive tm : Type :=
   | tfalse : tm
   | tif : tm -> tm -> tm -> tm.  
           (* i.e., [if t0 then t1 else t2] *)
-
-Tactic Notation "t_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" | Case_aux c "tabs"
-  | Case_aux c "tpair" | Case_aux c "tfst" | Case_aux c "tsnd"
-  | Case_aux c "ttrue" | Case_aux c "tfalse" | Case_aux c "tif" ].
-
 
 (* ###################################################################### *)
 (** *** Substitution *)
@@ -172,14 +161,6 @@ Inductive step : tm -> tm -> Prop :=
 
 where "t1 '==>' t2" := (step t1 t2).
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" | Case_aux c "ST_App2"
-  | Case_aux c "ST_Pair1" | Case_aux c "ST_Pair2"
-    | Case_aux c "ST_Fst" | Case_aux c "ST_FstPair"
-    | Case_aux c "ST_Snd" | Case_aux c "ST_SndPair"
-  | Case_aux c "ST_IfTrue" | Case_aux c "ST_IfFalse" | Case_aux c "ST_If" ].
-
 Notation multistep := (multi step).
 Notation "t1 '==>*' t2" := (multistep t1 t2) (at level 40).
 
@@ -235,12 +216,6 @@ Inductive has_type : context -> tm -> ty -> Prop :=
 
 Hint Constructors has_type.
 
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" | Case_aux c "T_App" 
-  | Case_aux c "T_Pair" | Case_aux c "T_Fst" | Case_aux c "T_Snd" 
-  | Case_aux c "T_True" | Case_aux c "T_False" | Case_aux c "T_If" ].
-
 Hint Extern 2 (has_type _ (tapp _ _) _) => eapply T_App; auto.
 Hint Extern 2 (_ = _) => compute; reflexivity.
 
@@ -294,16 +269,16 @@ Lemma context_invariance : forall Gamma Gamma' t S,
      has_type Gamma' t S.
 Proof with eauto.
   intros. generalize dependent Gamma'.
-  has_type_cases (induction H) Case; 
+  induction H; 
     intros Gamma' Heqv...
-  Case "T_Var".
+  - (* T_Var *)
     apply T_Var... rewrite <- Heqv...
-  Case "T_Abs".
+  - (* T_Abs *)
     apply T_Abs... apply IHhas_type. intros y Hafi.
     unfold extend. destruct (eq_id_dec x y)...
-  Case "T_Pair".
+  - (* T_Pair *)
     apply T_Pair...
-  Case "T_If".
+  - (* T_If *)
     eapply T_If... 
 Qed.
 
@@ -313,8 +288,8 @@ Lemma free_in_context : forall x t T Gamma,
    exists T', Gamma x = Some T'.
 Proof with eauto.
   intros x t T Gamma Hafi Htyp.
-  has_type_cases (induction Htyp) Case; inversion Hafi; subst...
-  Case "T_Abs".
+  induction Htyp; inversion Hafi; subst...
+  - (* T_Abs *)
     destruct IHHtyp as [T' Hctx]... exists T'.
     unfold extend in Hctx. 
     rewrite neq_id in Hctx... 
@@ -344,9 +319,9 @@ Proof with eauto.
      from the IH, with the exception of tvar and tabs.
      The former aren't automatic because we must reason about how the
      variables interact. *)
-  t_cases (induction t) Case;
+  induction t;
     intros S Gamma Htypt; simpl; inversion Htypt; subst...
-  Case "tvar".
+  - (* tvar *)
     simpl. rename i into y.
     (* If t = y, we know that
          [empty |- v : U] and
@@ -356,7 +331,7 @@ Proof with eauto.
 
        There are two cases to consider: either [x=y] or [x<>y]. *)
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then we know that [U = S], and that [[x:=v]y = v].
        So what we really must show is that if [empty |- v : U] then
        [Gamma |- v : U].  We have already proven a more general version
@@ -368,11 +343,11 @@ Proof with eauto.
       intros x Hcontra.
       destruct (free_in_context _ _ S empty Hcontra) as [T' HT']...
       inversion HT'.
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then [Gamma y = Some S] and the substitution has no
        effect.  We can show that [Gamma |- y : S] by [T_Var]. *)
       apply T_Var... unfold extend in H1. rewrite neq_id in H1... 
-  Case "tabs".
+  - (* tabs *)
     rename i into y. rename t into T11.
     (* If [t = tabs y T11 t0], then we know that
          [Gamma,x:U |- tabs y T11 t0 : T11->T12]
@@ -390,7 +365,7 @@ Proof with eauto.
     *)
     apply T_Abs...
     destruct (eq_id_dec x y). 
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then the substitution has no effect.  Context
        invariance shows that [Gamma,y:U,y:T11] and [Gamma,y:T11] are
        equivalent.  Since the former context shows that [t0 : T12], so
@@ -399,7 +374,7 @@ Proof with eauto.
       subst. 
       intros x Hafi. unfold extend.
       destruct (eq_id_dec y x)...
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then the IH and context invariance allow us to show that
          [Gamma,x:U,y:T11 |- t0 : T12]       =>
          [Gamma,y:T11,x:U |- t0 : T12]       =>
@@ -421,15 +396,15 @@ Proof with eauto.
   generalize dependent t'.
   (* Proof: By induction on the given typing derivation.  Many cases are
      contradictory ([T_Var], [T_Abs]).  We show just the interesting ones. *)
-  has_type_cases (induction HT) Case; 
+  induction HT; 
     intros t' HeqGamma HE; subst; inversion HE; subst...
-  Case "T_App".
+  - (* T_App *)
     (* If the last rule used was [T_App], then [t = t1 t2], and three rules
        could have been used to show [t ==> t']: [ST_App1], [ST_App2], and 
        [ST_AppAbs]. In the first two cases, the result follows directly from 
        the IH. *)
     inversion HE; subst...
-    SCase "ST_AppAbs".
+    + (* ST_AppAbs *)
       (* For the third case, suppose 
            [t1 = tabs x T11 t12]
          and
@@ -444,9 +419,9 @@ Proof with eauto.
          by assumption, so we are done. *)
       apply substitution_preserves_typing with T1...
       inversion HT1...
-  Case "T_Fst".
+  - (* T_Fst *)
     inversion HT...
-  Case "T_Snd".
+  - (* T_Snd *)
     inversion HT...
 Qed.
 (** [] *)
@@ -606,12 +581,12 @@ Lemma step_preserves_halting : forall t t', (t ==> t') -> (halts t <-> halts t')
 Proof.
  intros t t' ST.  unfold halts. 
  split. 
- Case "->". 
+ - (* -> *) 
   intros [t'' [STM V]]. 
   inversion STM; subst. 
    apply ex_falso_quodlibet.  apply value__normal in V. unfold normal_form in V. apply V. exists t'. auto. 
    rewrite (step_deterministic _ _ _ ST H). exists t''. split; assumption.
- Case "<-".
+ - (* <- *)
   intros [t'0 [STM V]]. 
   exists t'0. split; eauto. 
 Qed.    
@@ -799,27 +774,27 @@ Proof.
 Lemma subst_not_afi : forall t x v, closed v ->  ~ appears_free_in x ([x:=v]t).
 Proof with eauto.  (* rather slow this way *)
   unfold closed, not. 
-  t_cases (induction t) Case; intros x v P A; simpl in A. 
-    Case "tvar". 
+  induction t; intros x v P A; simpl in A. 
+    - (* tvar *) 
      destruct (eq_id_dec x i)...
        inversion A; subst. auto. 
-    Case "tapp". 
+    - (* tapp *) 
      inversion A; subst... 
-    Case "tabs". 
+    - (* tabs *) 
      destruct (eq_id_dec x i)...
        inversion A; subst...  
        inversion A; subst... 
-    Case "tpair".
+    - (* tpair *)
      inversion A; subst...
-    Case "tfst".
+    - (* tfst *)
      inversion A; subst...
-    Case "tsnd".
+    - (* tsnd *)
      inversion A; subst...
-    Case "ttrue". 
+    - (* ttrue *) 
      inversion A. 
-    Case "tfalse".
+    - (* tfalse *)
      inversion A.
-    Case "tif".
+    - (* tif *)
      inversion A; subst...
 Qed.
 
@@ -833,8 +808,8 @@ Qed.
 Lemma swap_subst : forall t x x1 v v1, x <> x1 -> closed v -> closed v1 -> 
                    [x1:=v1]([x:=v]t) = [x:=v]([x1:=v1]t).
 Proof with eauto.
- t_cases (induction t) Case; intros; simpl.
-  Case "tvar". 
+ induction t; intros; simpl.
+  - (* tvar *) 
    destruct (eq_id_dec x i); destruct (eq_id_dec x1 i). 
       subst. apply ex_falso_quodlibet...
       subst. simpl. rewrite eq_id. apply subst_closed...
@@ -1035,14 +1010,14 @@ Proof.
     intros. rewrite HeqGamma. rewrite mextend_lookup. auto. 
   clear HeqGamma.  
   generalize dependent c. 
-  has_type_cases (induction HT) Case; intros. 
+  induction HT; intros. 
 
-  Case "T_Var". 
+  - (* T_Var *) 
    rewrite H0 in H. destruct (instantiation_domains_match V H) as [t P].
    eapply instantiation_R; eauto. 
    rewrite msubst_var.  rewrite P. auto. eapply instantiation_env_closed; eauto. 
 
-  Case "T_Abs". 
+  - (* T_Abs *) 
     rewrite msubst_abs. 
     (* We'll need variants of the following fact several times, so its simplest to
        establish it just once. *)
@@ -1075,7 +1050,7 @@ Proof.
           intros. unfold extend, lookup. destruct (eq_id_dec x x0); auto. 
        constructor; auto. 
 
-  Case "T_App".
+  - (* T_App *)
     rewrite msubst_app.  
     destruct (IHHT1 c H env0 V) as [_ [_ P1]]. 
     pose proof (IHHT2 c H env0 V) as P2.  fold R in P1.  auto. 
@@ -1094,4 +1069,4 @@ Proof.
   eapply V_nil.
 Qed.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

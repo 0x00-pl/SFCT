@@ -171,11 +171,11 @@ Proof.
   (* WORKED IN CLASS *)
   intros c st st'.
   split; intros H.
-  Case "->". 
+  - (* -> *) 
     inversion H. subst. 
     inversion H2. subst. 
     assumption.
-  Case "<-". 
+  - (* <- *) 
     apply E_Seq with st.
     apply E_Skip. 
     assumption.  
@@ -203,9 +203,9 @@ Theorem IFB_true_simple: forall c1 c2,
 Proof. 
   intros c1 c2. 
   split; intros H.
-  Case "->".
+  - (* -> *)
     inversion H; subst. assumption. inversion H5.
-  Case "<-".
+  - (* <- *)
     apply E_IfTrue. reflexivity. assumption.  Qed.
 
 
@@ -261,15 +261,15 @@ Theorem IFB_true: forall b c1 c2,
 Proof.
   intros b c1 c2 Hb.
   split; intros H.
-  Case "->".
+  - (* -> *)
     inversion H; subst.
-    SCase "b evaluates to true".
+    + (* b evaluates to true *)
       assumption.
-    SCase "b evaluates to false (contradiction)".
+    + (* b evaluates to false (contradiction) *)
       unfold bequiv in Hb. simpl in Hb.
       rewrite Hb in H5.
       inversion H5.
-  Case "<-".
+  - (* <- *)
     apply E_IfTrue; try assumption.
     unfold bequiv in Hb. simpl in Hb.
     rewrite Hb. reflexivity.  Qed.
@@ -311,13 +311,13 @@ Theorem WHILE_false : forall b c,
        SKIP.
 Proof. 
   intros b c Hb. split; intros H.
-  Case "->".
+  - (* -> *)
     inversion H; subst.
-    SCase "E_WhileEnd".
+    + (* E_WhileEnd *)
       apply E_Skip.
-    SCase "E_WhileLoop".
+    + (* E_WhileLoop *)
       rewrite Hb in H2. inversion H2.
-  Case "<-".
+  - (* <- *)
     inversion H; subst.
     apply E_WhileEnd.
     rewrite Hb.
@@ -364,16 +364,16 @@ Proof.
   intros b c st st' Hb.
   intros H.
   remember (WHILE b DO c END) as cw eqn:Heqcw.
-  ceval_cases (induction H) Case;
+  induction H;
     (* Most rules don't apply, and we can rule them out 
        by inversion *)
     inversion Heqcw; subst; clear Heqcw.
   (* The two interesting cases are the ones for WHILE loops: *)
-  Case "E_WhileEnd". (* contradictory -- b is always true! *)
+  - (* E_WhileEnd *) (* contradictory -- b is always true! *)
     unfold bequiv in Hb.
     (* [rewrite] is able to instantiate the quantifier in [st] *)
     rewrite Hb in H. inversion H.
-  Case "E_WhileLoop". (* immediate from the IH *)
+  - (* E_WhileLoop *) (* immediate from the IH *)
     apply IHceval2. reflexivity.  Qed.
 
 (** **** Exercise: 2 stars, optional (WHILE_true_nonterm_informal)  *)
@@ -404,20 +404,20 @@ Proof.
   (* WORKED IN CLASS *)
   intros b c st st'.
   split; intros Hce.
-  Case "->".
+  - (* -> *)
     inversion Hce; subst.  
-    SCase "loop doesn't run".
+    + (* loop doesn't run *)
       apply E_IfFalse. assumption. apply E_Skip.
-    SCase "loop runs".
+    + (* loop runs *)
       apply E_IfTrue. assumption.
       apply E_Seq with (st' := st'0). assumption. assumption.
-  Case "<-".
+  - (* <- *)
     inversion Hce; subst.
-    SCase "loop runs".
+    + (* loop runs *)
       inversion H5; subst.
       apply E_WhileLoop with (st' := st'0). 
       assumption. assumption. assumption.
-    SCase "loop doesn't run".
+    + (* loop doesn't run *)
       inversion H5; subst. apply E_WhileEnd. assumption.  Qed.
 
 (** **** Exercise: 2 stars, optional (seq_assoc)  *)
@@ -438,7 +438,7 @@ Theorem identity_assignment_first_try : forall (X:id),
   cequiv (X ::= AId X) SKIP.
 Proof. 
    intros. split; intro H.
-     Case "->". 
+     - (* -> *) 
        inversion H; subst.  simpl.
        replace (update st X (st X)) with st.  
        constructor. 
@@ -501,13 +501,13 @@ Theorem identity_assignment : forall (X:id),
     SKIP.
 Proof. 
    intros. split; intro H.
-     Case "->". 
+     - (* -> *) 
        inversion H; subst. simpl.
        replace (update st X (st X)) with st.  
        constructor. 
        apply functional_extensionality. intro. 
        rewrite update_same; reflexivity.  
-     Case "<-".
+     - (* <- *)
        inversion H; subst. 
        assert (st' = (update st' X (st' X))).
           apply functional_extensionality. intro. 
@@ -576,7 +576,7 @@ Lemma sym_cequiv : forall (c1 c2 : com),
 Proof.
   unfold cequiv. intros c1 c2 H st st'.
   assert (c1 / st || st' <-> c2 / st || st') as H'. 
-    SCase "Proof of assertion". apply H.
+  { (* Proof of assertion *) apply H. }
   apply iff_sym. assumption.
 Qed.
 
@@ -631,10 +631,10 @@ Theorem CAss_congruence : forall i a1 a1',
 Proof.
   intros i a1 a2 Heqv st st'.
   split; intros Hceval.
-  Case "->".
+  - (* -> *)
     inversion Hceval. subst. apply E_Ass. 
     rewrite Heqv. reflexivity.
-  Case "<-".
+  - (* <- *)
     inversion Hceval. subst. apply E_Ass.
     rewrite Heqv. reflexivity.  Qed.
 
@@ -684,29 +684,29 @@ Proof.
   unfold bequiv,cequiv.
   intros b1 b1' c1 c1' Hb1e Hc1e st st'.
   split; intros Hce.
-  Case "->".
+  - (* -> *)
     remember (WHILE b1 DO c1 END) as cwhile eqn:Heqcwhile.
     induction Hce; inversion Heqcwhile; subst.
-    SCase "E_WhileEnd".
+    + (* E_WhileEnd *)
       apply E_WhileEnd. rewrite <- Hb1e. apply H.
-    SCase "E_WhileLoop".
+    + (* E_WhileLoop *)
       apply E_WhileLoop with (st' := st').
-      SSCase "show loop runs". rewrite <- Hb1e. apply H.
-      SSCase "body execution". 
+      * (* show loop runs *) rewrite <- Hb1e. apply H.
+      * (* body execution *) 
         apply (Hc1e st st').  apply Hce1. 
-      SSCase "subsequent loop execution".
+      * (* subsequent loop execution *)
         apply IHHce2. reflexivity.
-  Case "<-".
+  - (* <- *)
     remember (WHILE b1' DO c1' END) as c'while eqn:Heqc'while.
     induction Hce; inversion Heqc'while; subst.
-    SCase "E_WhileEnd".
+    + (* E_WhileEnd *)
       apply E_WhileEnd. rewrite -> Hb1e. apply H.
-    SCase "E_WhileLoop".
+    + (* E_WhileLoop *)
       apply E_WhileLoop with (st' := st').
-      SSCase "show loop runs". rewrite -> Hb1e. apply H.
-      SSCase "body execution". 
+      * (* show loop runs *) rewrite -> Hb1e. apply H.
+      * (* body execution *) 
         apply (Hc1e st st').  apply Hce1. 
-      SSCase "subsequent loop execution".
+      * (* subsequent loop execution *)
         apply IHHce2. reflexivity.  Qed.
 
 (** **** Exercise: 3 stars, optional (CSeq_congruence)  *)
@@ -951,7 +951,7 @@ Theorem fold_constants_aexp_sound :
   atrans_sound fold_constants_aexp.
 Proof.
   unfold atrans_sound. intros a. unfold aequiv. intros st.
-  aexp_cases (induction a) Case; simpl;
+  induction a; simpl;
     (* ANum and AId follow immediately *)
     try reflexivity;
     (* APlus, AMinus, and AMult follow from the IH
@@ -1041,10 +1041,10 @@ Theorem fold_constants_bexp_sound:
   btrans_sound fold_constants_bexp.
 Proof.
   unfold btrans_sound. intros b. unfold bequiv. intros st.
-  bexp_cases (induction b) Case; 
+  induction b; 
     (* BTrue and BFalse are immediate *)
     try reflexivity. 
-  Case "BEq". 
+  - (* BEq *) 
     (* Doing induction when there are a lot of constructors makes
        specifying variable names a chore, but Coq doesn't always
        choose nice variable names.  We can rename entries in the
@@ -1061,13 +1061,13 @@ Proof.
       (* The only interesting case is when both a1 and a2 
          become constants after folding *)
       simpl. destruct (beq_nat n n0); reflexivity.
-  Case "BLe". 
+  - (* BLe *) 
     (* FILL IN HERE *) admit.
-  Case "BNot". 
+  - (* BNot *) 
     simpl. remember (fold_constants_bexp b) as b' eqn:Heqb'. 
     rewrite IHb.
     destruct b'; reflexivity. 
-  Case "BAnd". 
+  - (* BAnd *) 
     simpl. 
     remember (fold_constants_bexp b1) as b1' eqn:Heqb1'. 
     remember (fold_constants_bexp b2) as b2' eqn:Heqb2'.
@@ -1082,24 +1082,24 @@ Theorem fold_constants_com_sound :
   ctrans_sound fold_constants_com.
 Proof. 
   unfold ctrans_sound. intros c. 
-  com_cases (induction c) Case; simpl.
-  Case "SKIP". apply refl_cequiv.
-  Case "::=". apply CAss_congruence. apply fold_constants_aexp_sound.
-  Case ";;". apply CSeq_congruence; assumption.
-  Case "IFB". 
+  induction c; simpl.
+  - (* SKIP *) apply refl_cequiv.
+  - (* ::= *) apply CAss_congruence. apply fold_constants_aexp_sound.
+  - (* ;; *) apply CSeq_congruence; assumption.
+  - (* IFB *) 
     assert (bequiv b (fold_constants_bexp b)).
-      SCase "Pf of assertion". apply fold_constants_bexp_sound.
+    { (* Pf of assertion *) apply fold_constants_bexp_sound. }
     destruct (fold_constants_bexp b) eqn:Heqb;
       (* If the optimization doesn't eliminate the if, then the result
          is easy to prove from the IH and fold_constants_bexp_sound *)
       try (apply CIf_congruence; assumption).
-    SCase "b always true".
+    + (* b always true *)
       apply trans_cequiv with c1; try assumption.
       apply IFB_true; assumption.
-    SCase "b always false".
+    + (* b always false *)
       apply trans_cequiv with c2; try assumption.
       apply IFB_false; assumption.
-  Case "WHILE".
+  - (* WHILE *)
     (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -1355,11 +1355,6 @@ Inductive com : Type :=
   | CWhile : bexp -> com -> com
   | CHavoc : id -> com.                (* <---- new *)
 
-Tactic Notation "com_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";;"
-  | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "HAVOC" ].
-
 Notation "'SKIP'" :=
   CSkip.
 Notation "X '::=' a" :=
@@ -1402,14 +1397,6 @@ Inductive ceval : com -> state -> state -> Prop :=
 (* FILL IN HERE *)
 
   where "c1 '/' st '||' st'" := (ceval c1 st st').
-
-Tactic Notation "ceval_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "E_Skip" | Case_aux c "E_Ass" | Case_aux c "E_Seq"
-  | Case_aux c "E_IfTrue" | Case_aux c "E_IfFalse"
-  | Case_aux c "E_WhileEnd" | Case_aux c "E_WhileLoop"
-(* FILL IN HERE *)
-].
 
 (** As a sanity check, the following claims should be provable for
    your definition: *)
@@ -1647,35 +1634,35 @@ Lemma stequiv_ceval: forall (st1 st2 : state),
 Proof.
   intros st1 st2 STEQV c st1' CEV1. generalize dependent st2. 
   induction CEV1; intros st2 STEQV.  
-  Case "SKIP".
+  - (* SKIP *)
     exists st2. split.  
       constructor. 
       assumption.
-  Case ":=".
+  - (* := *)
     exists (update st2 x n). split. 
        constructor.  rewrite <- H. symmetry.  apply stequiv_aeval. 
        assumption. apply stequiv_update.  assumption.
-  Case ";".
+  - (* ; *)
     destruct (IHCEV1_1 st2 STEQV) as [st2' [P1 EQV1]].
     destruct (IHCEV1_2 st2' EQV1) as [st2'' [P2 EQV2]]. 
     exists st2''.  split.
       apply E_Seq with st2';  assumption. 
       assumption.
-  Case "IfTrue".
+  - (* IfTrue *)
     destruct (IHCEV1 st2 STEQV) as [st2' [P EQV]].
     exists st2'.  split. 
       apply E_IfTrue.  rewrite <- H. symmetry. apply stequiv_beval. 
       assumption. assumption. assumption.
-  Case "IfFalse".
+  - (* IfFalse *)
     destruct (IHCEV1 st2 STEQV) as [st2' [P EQV]].
     exists st2'. split. 
      apply E_IfFalse. rewrite <- H. symmetry. apply stequiv_beval. 
      assumption.  assumption. assumption.
-  Case "WhileEnd".
+  - (* WhileEnd *)
     exists st2. split.
       apply E_WhileEnd. rewrite <- H. symmetry. apply stequiv_beval. 
       assumption. assumption. 
-  Case "WhileLoop".
+  - (* WhileLoop *)
     destruct (IHCEV1_1 st2 STEQV) as [st2' [P1 EQV1]].
     destruct (IHCEV1_2 st2' EQV1) as [st2'' [P2 EQV2]].
     exists st2''. split. 
@@ -1727,13 +1714,13 @@ Example identity_assignment' :
   cequiv' SKIP (X ::= AId X).
 Proof.
     unfold cequiv'.  intros.  split; intros. 
-    Case "->".
+    - (* -> *)
       inversion H; subst; clear H. inversion H0; subst.   
       apply E_equiv with (update st'0 X (st'0 X)). 
       constructor. reflexivity.  apply stequiv_trans with st'0.  
       unfold stequiv. intros. apply update_same. 
       reflexivity. assumption. 
-    Case "<-".  
+    - (* <- *)  
       (* FILL IN HERE *) Admitted.
 (** [] *)
 

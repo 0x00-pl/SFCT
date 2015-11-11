@@ -35,7 +35,7 @@
 </div>
 
 <div class="doc">
-<a name="lab327"></a><h1 class="section">Induction Principles</h1>
+<a name="lab321"></a><h1 class="section">Induction Principles</h1>
 
 <div class="paragraph"> </div>
 
@@ -67,7 +67,7 @@
 </div>
 
 <div class="doc">
-<a name="lab328"></a><h3 class="section"> </h3>
+<a name="lab322"></a><h3 class="section"> </h3>
  The <span class="inlinecode"><span class="id" type="tactic">induction</span></span> tactic is a straightforward wrapper that, at
     its core, simply performs <span class="inlinecode"><span class="id" type="tactic">apply</span></span> <span class="inlinecode"><span class="id" type="var">t_ind</span></span>.  To see this more
     clearly, let's experiment a little with using <span class="inlinecode"><span class="id" type="tactic">apply</span></span> <span class="inlinecode"><span class="id" type="var">nat_ind</span></span>
@@ -82,8 +82,8 @@
 &nbsp;&nbsp;<span class="id" type="var">n</span> × 0 = 0.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">nat_ind</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "O". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "S". <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">IHn</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHn</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;O&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;S&nbsp;*)</span> <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">IHn</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHn</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -112,17 +112,17 @@ This proof is basically the same as the earlier one, but a
     specify (with the <span class="inlinecode"><span class="id" type="keyword">as</span>...</span>  clause) what names should be used.  The
     automatic choice is actually a little unfortunate, since it
     re-uses the name <span class="inlinecode"><span class="id" type="var">n</span></span> for a variable that is different from the <span class="inlinecode"><span class="id" type="var">n</span></span>
-    in the original theorem.  This is why the <span class="inlinecode"><span class="id" type="var">Case</span></span> annotation is
-    just <span class="inlinecode"><span class="id" type="var">S</span></span> &mdash; if we tried to write it out in the more explicit form
-    that we've been using for most proofs, we'd have to write <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">S</span></span>
-    <span class="inlinecode"><span class="id" type="var">n</span></span>, which doesn't make a lot of sense!  All of these conveniences
-    make <span class="inlinecode"><span class="id" type="tactic">induction</span></span> nicer to use in practice than applying induction
-    principles like <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> directly.  But it is important to
-    realize that, modulo this little bit of bookkeeping, applying
-    <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> is what we are really doing. 
+    in the original theorem.  This is we have labeled the second
+    subgoal just <span class="inlinecode"><span class="id" type="var">S</span></span> &mdash; if we tried to write it out in the more
+    explicit form that we've been using for most proofs, we'd have to
+    write <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">S</span></span> <span class="inlinecode"><span class="id" type="var">n</span></span>, which doesn't make a lot of sense!  All of these
+    conveniences make <span class="inlinecode"><span class="id" type="tactic">induction</span></span> nicer to use in practice than
+    applying induction principles like <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> directly.  But it is
+    important to realize that, modulo this little bit of bookkeeping,
+    applying <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> is what we are really doing. 
 <div class="paragraph"> </div>
 
-<a name="lab329"></a><h4 class="section">Exercise: 2 stars, optional (plus_one_r')</h4>
+<a name="lab323"></a><h4 class="section">Exercise: 2 stars, optional (plus_one_r')</h4>
  Complete this proof as we did <span class="inlinecode"><span class="id" type="var">mult_0_r'</span></span> above, without using
     the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> tactic. 
 </div>
@@ -188,7 +188,7 @@ This proof is basically the same as the earlier one, but a
 </div>
 
 <div class="doc">
-<a name="lab330"></a><h4 class="section">Exercise: 1 star, optional (rgb)</h4>
+<a name="lab324"></a><h4 class="section">Exercise: 1 star, optional (rgb)</h4>
  Write out the induction principle that Coq will generate for the
     following datatype.  Write down your answer on paper or type it
     into a comment, and then compare it with what Coq prints. 
@@ -230,7 +230,7 @@ This proof is basically the same as the earlier one, but a
 </div>
 
 <div class="doc">
-<a name="lab331"></a><h4 class="section">Exercise: 1 star, optional (natlist1)</h4>
+<a name="lab325"></a><h4 class="section">Exercise: 1 star, optional (natlist1)</h4>
  Suppose we had written the above definition a little
    differently: 
 </div>
@@ -282,7 +282,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 
 <div class="paragraph"> </div>
 
-<a name="lab332"></a><h4 class="section">Exercise: 1 star, optional (byntree_ind)</h4>
+<a name="lab326"></a><h4 class="section">Exercise: 1 star, optional (byntree_ind)</h4>
  Write out the induction principle that Coq will generate for the
     following datatype.  Write down your answer on paper or type it
     into a comment, and then compare it with what Coq prints. 
@@ -300,7 +300,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab333"></a><h4 class="section">Exercise: 1 star, optional (ex_set)</h4>
+<a name="lab327"></a><h4 class="section">Exercise: 1 star, optional (ex_set)</h4>
  Here is an induction principle for an inductively defined
     set.
 
@@ -362,14 +362,14 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 <div class="paragraph"> </div>
 
 </div>
-   Note the wording here (and, accordingly, the form of <span class="inlinecode"><span class="id" type="var">list_ind</span></span>):
-   The <i>whole</i> induction principle is parameterized on <span class="inlinecode"><span class="id" type="var">X</span></span>.  That is,
-   <span class="inlinecode"><span class="id" type="var">list_ind</span></span> can be thought of as a polymorphic function that, when
-   applied to a type <span class="inlinecode"><span class="id" type="var">X</span></span>, gives us back an induction principle
-   specialized to the type <span class="inlinecode"><span class="id" type="var">list</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span>. 
+    Note the wording here (and, accordingly, the form of <span class="inlinecode"><span class="id" type="var">list_ind</span></span>):
+    The <i>whole</i> induction principle is parameterized on <span class="inlinecode"><span class="id" type="var">X</span></span>.  That is,
+    <span class="inlinecode"><span class="id" type="var">list_ind</span></span> can be thought of as a polymorphic function that, when
+    applied to a type <span class="inlinecode"><span class="id" type="var">X</span></span>, gives us back an induction principle
+    specialized to the type <span class="inlinecode"><span class="id" type="var">list</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span>. 
 <div class="paragraph"> </div>
 
-<a name="lab334"></a><h4 class="section">Exercise: 1 star, optional (tree)</h4>
+<a name="lab328"></a><h4 class="section">Exercise: 1 star, optional (tree)</h4>
  Write out the induction principle that Coq will generate for
    the following datatype.  Compare your answer with what Coq
    prints. 
@@ -387,7 +387,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab335"></a><h4 class="section">Exercise: 1 star, optional (mytype)</h4>
+<a name="lab329"></a><h4 class="section">Exercise: 1 star, optional (mytype)</h4>
  Find an inductive definition that gives rise to the
     following induction principle:
 
@@ -407,7 +407,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab336"></a><h4 class="section">Exercise: 1 star, optional (foo)</h4>
+<a name="lab330"></a><h4 class="section">Exercise: 1 star, optional (foo)</h4>
  Find an inductive definition that gives rise to the
     following induction principle:
 
@@ -427,7 +427,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab337"></a><h4 class="section">Exercise: 1 star, optional (foo')</h4>
+<a name="lab331"></a><h4 class="section">Exercise: 1 star, optional (foo')</h4>
  Consider the following inductive definition: 
 </div>
 <div class="code code-tight">
@@ -468,7 +468,7 @@ What induction principle will Coq generate for <span class="inlinecode"><span cl
 </div>
 
 <div class="doc">
-<a name="lab338"></a><h2 class="section">Induction Hypotheses</h2>
+<a name="lab332"></a><h2 class="section">Induction Hypotheses</h2>
 
 <div class="paragraph"> </div>
 
@@ -533,8 +533,8 @@ Now when we do the proof it is easier to see where <span class="inlinecode"><spa
 &nbsp;&nbsp;<span class="id" type="var">P_m0r</span> <span class="id" type="var">n</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">nat_ind</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = O". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = S n'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;O&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;S&nbsp;n'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;Note&nbsp;the&nbsp;proof&nbsp;state&nbsp;at&nbsp;this&nbsp;point!&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">IHn</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">P_m0r</span> <span class="id" type="keyword">in</span> <span class="id" type="var">IHn</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">P_m0r</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">IHn</span>. <span class="id" type="keyword">Qed</span>.<br/>
@@ -562,7 +562,7 @@ This extra naming step isn't something that we'll do in
 </div>
 
 <div class="doc">
-<a name="lab339"></a><h2 class="section">More on the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> Tactic</h2>
+<a name="lab333"></a><h2 class="section">More on the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> Tactic</h2>
 
 <div class="paragraph"> </div>
 
@@ -621,8 +621,8 @@ This extra naming step isn't something that we'll do in
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;hence&nbsp;also&nbsp;for&nbsp;the&nbsp;particular&nbsp;<span class="inlinecode"><span class="id" type="var">n</span></span>&nbsp;that&nbsp;is&nbsp;in&nbsp;the&nbsp;context<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;the&nbsp;moment.&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = O". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = S n'".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;O&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;S&nbsp;n'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;In&nbsp;the&nbsp;second&nbsp;subgoal&nbsp;generated&nbsp;by&nbsp;<span class="inlinecode"><span class="id" type="tactic">induction</span></span>&nbsp;--&nbsp;the<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"inductive&nbsp;step"&nbsp;--&nbsp;we&nbsp;must&nbsp;prove&nbsp;that&nbsp;<span class="inlinecode"><span class="id" type="var">P</span></span> <span class="inlinecode"><span class="id" type="var">n'</span></span>&nbsp;implies&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="inlinecode"><span class="id" type="var">P</span></span> <span class="inlinecode">(<span class="id" type="var">S</span></span> <span class="inlinecode"><span class="id" type="var">n'</span>)</span>&nbsp;for&nbsp;all&nbsp;<span class="inlinecode"><span class="id" type="var">n'</span></span>.&nbsp;&nbsp;The&nbsp;<span class="inlinecode"><span class="id" type="tactic">induction</span></span>&nbsp;tactic&nbsp;<br/>
@@ -644,8 +644,8 @@ It also works to apply <span class="inlinecode"><span class="id" type="tactic">i
 &nbsp;&nbsp;<span class="id" type="var">n</span> + <span class="id" type="var">m</span> = <span class="id" type="var">m</span> + <span class="id" type="var">n</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">n'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = O". <span class="id" type="tactic">intros</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">plus_0_r</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "n = S n'". <span class="id" type="tactic">intros</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHn'</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;O&nbsp;*)</span> <span class="id" type="tactic">intros</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">plus_0_r</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;n&nbsp;=&nbsp;S&nbsp;n'&nbsp;*)</span> <span class="id" type="tactic">intros</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">IHn'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">plus_n_Sm</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -671,15 +671,15 @@ Note that <span class="inlinecode"><span class="id" type="tactic">induction</spa
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="comment">(*&nbsp;Let's&nbsp;do&nbsp;induction&nbsp;on&nbsp;<span class="inlinecode"><span class="id" type="var">m</span></span>&nbsp;this&nbsp;time,&nbsp;instead&nbsp;of&nbsp;<span class="inlinecode"><span class="id" type="var">n</span></span>...&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">m</span> <span class="id" type="keyword">as</span> [| <span class="id" type="var">m'</span>].<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "m = O". <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">plus_0_r</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "m = S m'". <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">IHm'</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;m&nbsp;=&nbsp;O&nbsp;*)</span> <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">plus_0_r</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;m&nbsp;=&nbsp;S&nbsp;m'&nbsp;*)</span> <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">IHm'</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span style="font-family: arial;">&larr;</span> <span class="id" type="var">plus_n_Sm</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
-<a name="lab340"></a><h4 class="section">Exercise: 1 star, optional (plus_explicit_prop)</h4>
+<a name="lab334"></a><h4 class="section">Exercise: 1 star, optional (plus_explicit_prop)</h4>
  Rewrite both <span class="inlinecode"><span class="id" type="var">plus_assoc'</span></span> and <span class="inlinecode"><span class="id" type="var">plus_comm'</span></span> and their proofs in
     the same style as <span class="inlinecode"><span class="id" type="var">mult_0_r''</span></span> above &mdash; that is, for each theorem,
     give an explicit <span class="inlinecode"><span class="id" type="keyword">Definition</span></span> of the proposition being proved by
@@ -696,7 +696,7 @@ Note that <span class="inlinecode"><span class="id" type="tactic">induction</spa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab341"></a><h2 class="section">Generalizing Inductions.</h2>
+<a name="lab335"></a><h2 class="section">Generalizing Inductions.</h2>
 
 <div class="paragraph"> </div>
 
@@ -743,26 +743,26 @@ The problem is that <span class="inlinecode"><span class="id" type="tactic">indu
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">n</span> <span class="id" type="var">E</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>  <span class="id" type="keyword">as</span> [| | | <span class="id" type="var">p</span> <span class="id" type="var">q</span> <span class="id" type="var">Hp</span> <span class="id" type="var">IHp</span> <span class="id" type="var">Hq</span> <span class="id" type="var">IHq</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b_0".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b_0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b_3".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b_3&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b_5".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b_5&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b_sum".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b_sum&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">(*&nbsp;the&nbsp;rest&nbsp;is&nbsp;a&nbsp;tedious&nbsp;case&nbsp;analysis&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span> <span class="id" type="keyword">as</span> [|<span class="id" type="var">p'</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "p = 0".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;p&nbsp;=&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span> <span class="id" type="keyword">as</span> [|<span class="id" type="var">q'</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "q = 0".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;q&nbsp;=&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "q = S q'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;q&nbsp;=&nbsp;S&nbsp;q'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "p = S p'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;p&nbsp;=&nbsp;S&nbsp;p'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span> <span class="id" type="keyword">as</span> [|<span class="id" type="var">q'</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "q = 0".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;q&nbsp;=&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">plus_0_r</span> <span class="id" type="keyword">in</span> <span class="id" type="var">E</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">E</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SSCase</span> "q = S q'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="comment">(*&nbsp;q&nbsp;=&nbsp;S&nbsp;q'&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">E</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">E</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p'</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H0</span>. <span class="id" type="tactic">inversion</span> <span class="id" type="var">H0</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
@@ -788,7 +788,7 @@ proof state out of the original one.
 </div>
 
 <div class="doc">
-<a name="lab342"></a><h1 class="section">Informal Proofs (Advanced)</h1>
+<a name="lab336"></a><h1 class="section">Informal Proofs (Advanced)</h1>
 
 <div class="paragraph"> </div>
 
@@ -842,7 +842,7 @@ proof state out of the original one.
    Another key point: if we're comparing a formal proof of a
    proposition <span class="inlinecode"><span class="id" type="var">P</span></span> and an informal proof of <span class="inlinecode"><span class="id" type="var">P</span></span>, the proposition <span class="inlinecode"><span class="id" type="var">P</span></span>
    doesn't change.  That is, formal and informal proofs are <i>talking
-   about the same world</i> and they <i>must play by the same rules</i>. <a name="lab343"></a><h2 class="section">Informal Proofs by Induction</h2>
+   about the same world</i> and they <i>must play by the same rules</i>. <a name="lab337"></a><h2 class="section">Informal Proofs by Induction</h2>
 
 <div class="paragraph"> </div>
 
@@ -866,7 +866,7 @@ proof state out of the original one.
     for <i>all</i> of your inductive proofs. 
 <div class="paragraph"> </div>
 
-<a name="lab344"></a><h3 class="section">Induction Over an Inductively Defined Set</h3>
+<a name="lab338"></a><h3 class="section">Induction Over an Inductively Defined Set</h3>
 
 <div class="paragraph"> </div>
 
@@ -928,7 +928,7 @@ proof state out of the original one.
 
 <ul class="doclist">
 <li> Suppose <span class="inlinecode"><span class="id" type="var">l</span></span> <span class="inlinecode">=</span> <span class="inlinecode">[]</span>.  We must show, for all numbers <span class="inlinecode"><span class="id" type="var">n</span></span>,
-          that, if length <span class="inlinecode">[]</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">n</span></span>, then <span class="inlinecode"><span class="id" type="var">index</span></span> <span class="inlinecode">(<span class="id" type="var">S</span></span> <span class="inlinecode"><span class="id" type="var">n</span>)</span> <span class="inlinecode">[]</span> <span class="inlinecode">=</span>
+          that, if <span class="inlinecode"><span class="id" type="var">length</span></span> <span class="inlinecode">[]</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">n</span></span>, then <span class="inlinecode"><span class="id" type="var">index</span></span> <span class="inlinecode">(<span class="id" type="var">S</span></span> <span class="inlinecode"><span class="id" type="var">n</span>)</span> <span class="inlinecode">[]</span> <span class="inlinecode">=</span>
           <span class="inlinecode"><span class="id" type="var">None</span></span>.
 
 <div class="paragraph"> </div>
@@ -966,7 +966,7 @@ proof state out of the original one.
 
 </div>
           But this follows directly from the induction hypothesis,
-          picking <span class="inlinecode"><span class="id" type="var">n'</span></span> to be length <span class="inlinecode"><span class="id" type="var">l'</span></span>.  <font size=-2>&#9744;</font> 
+          picking <span class="inlinecode"><span class="id" type="var">n'</span></span> to be <span class="inlinecode"><span class="id" type="var">length</span></span> <span class="inlinecode"><span class="id" type="var">l'</span></span>.  <font size=-2>&#9744;</font> 
 </li>
 </ul>
 
@@ -975,7 +975,7 @@ proof state out of the original one.
 
 <div class="paragraph"> </div>
 
-<a name="lab345"></a><h3 class="section">Induction Over an Inductively Defined Proposition</h3>
+<a name="lab339"></a><h3 class="section">Induction Over an Inductively Defined Proposition</h3>
 
 <div class="paragraph"> </div>
 
@@ -1079,7 +1079,7 @@ proof state out of the original one.
 </div>
 
 <div class="doc">
-<a name="lab346"></a><h1 class="section">Induction Principles in <span class="inlinecode"><span class="id" type="keyword">Prop</span></span> (Advanced)</h1>
+<a name="lab340"></a><h1 class="section">Induction Principles in <span class="inlinecode"><span class="id" type="keyword">Prop</span></span> (Advanced)</h1>
 
 <div class="paragraph"> </div>
 
@@ -1132,9 +1132,9 @@ proof state out of the original one.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">P</span>&nbsp;:&nbsp;(<span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span>&nbsp;:&nbsp;<span class="id" type="var">nat</span>,&nbsp;<span class="id" type="var">gorgeous</span>&nbsp;<span class="id" type="var">n</span>&nbsp;<span style="font-family: arial;">&rarr;</span>&nbsp;<span class="id" type="keyword">Prop</span>),<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">O</span>&nbsp;<span class="id" type="var">g_0</span>&nbsp;<span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span style="font-family: arial;">&forall;</span>(<span class="id" type="var">m</span>&nbsp;:&nbsp;<span class="id" type="var">nat</span>)&nbsp;(<span class="id" type="var">e</span>&nbsp;:&nbsp;<span class="id" type="var">gorgeous</span>&nbsp;<span class="id" type="var">m</span>),&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>&nbsp;<span style="font-family: arial;">&rarr;</span>&nbsp;<span class="id" type="var">P</span>&nbsp;(3+<span class="id" type="var">m</span>)&nbsp;(<span class="id" type="var">g_plus3</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>)&nbsp;<span style="font-family: arial;">&rarr;</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>&nbsp;<span style="font-family: arial;">&rarr;</span>&nbsp;<span class="id" type="var">P</span>&nbsp;(3+<span class="id" type="var">m</span>)&nbsp;(<span class="id" type="var">g_plus3</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>))&nbsp;<span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span style="font-family: arial;">&forall;</span>(<span class="id" type="var">m</span>&nbsp;:&nbsp;<span class="id" type="var">nat</span>)&nbsp;(<span class="id" type="var">e</span>&nbsp;:&nbsp;<span class="id" type="var">gorgeous</span>&nbsp;<span class="id" type="var">m</span>),&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>&nbsp;<span style="font-family: arial;">&rarr;</span>&nbsp;<span class="id" type="var">P</span>&nbsp;(5+<span class="id" type="var">m</span>)&nbsp;(<span class="id" type="var">g_plus5</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>)&nbsp;<span style="font-family: arial;">&rarr;</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>&nbsp;<span style="font-family: arial;">&rarr;</span>&nbsp;<span class="id" type="var">P</span>&nbsp;(5+<span class="id" type="var">m</span>)&nbsp;(<span class="id" type="var">g_plus5</span>&nbsp;<span class="id" type="var">m</span>&nbsp;<span class="id" type="var">e</span>))&nbsp;<span style="font-family: arial;">&rarr;</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span>(<span class="id" type="var">n</span>&nbsp;:&nbsp;<span class="id" type="var">nat</span>)&nbsp;(<span class="id" type="var">e</span>&nbsp;:&nbsp;<span class="id" type="var">gorgeous</span>&nbsp;<span class="id" type="var">n</span>),&nbsp;<span class="id" type="var">P</span>&nbsp;<span class="id" type="var">n</span>&nbsp;<span class="id" type="var">e</span>
 <div class="paragraph"> </div>
 
@@ -1171,7 +1171,7 @@ proof state out of the original one.
 <li> We must prove that, whenever <span class="inlinecode"><span class="id" type="var">n</span></span> is a gorgeous
            number and <span class="inlinecode"><span class="id" type="var">e</span></span> is an evidence of its gorgeousness,
            if <span class="inlinecode"><span class="id" type="var">P</span></span> holds of <span class="inlinecode"><span class="id" type="var">n</span></span> and <span class="inlinecode"><span class="id" type="var">e</span></span>,
-           then it also holds of <span class="inlinecode">3+<span class="id" type="var">m</span></span> and <span class="inlinecode"><span class="id" type="var">g_plus3</span></span> <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode"><span class="id" type="var">e</span></span>.
+           then it also holds of <span class="inlinecode">3+<span class="id" type="var">n</span></span> and <span class="inlinecode"><span class="id" type="var">g_plus3</span></span> <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode"><span class="id" type="var">e</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -1180,7 +1180,7 @@ proof state out of the original one.
 <li> We must prove that, whenever <span class="inlinecode"><span class="id" type="var">n</span></span> is a gorgeous
            number and <span class="inlinecode"><span class="id" type="var">e</span></span> is an evidence of its gorgeousness,
            if <span class="inlinecode"><span class="id" type="var">P</span></span> holds of <span class="inlinecode"><span class="id" type="var">n</span></span> and <span class="inlinecode"><span class="id" type="var">e</span></span>,
-           then it also holds of <span class="inlinecode">5+<span class="id" type="var">m</span></span> and <span class="inlinecode"><span class="id" type="var">g_plus5</span></span> <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode"><span class="id" type="var">e</span></span>.
+           then it also holds of <span class="inlinecode">5+<span class="id" type="var">n</span></span> and <span class="inlinecode"><span class="id" type="var">g_plus5</span></span> <span class="inlinecode"><span class="id" type="var">n</span></span> <span class="inlinecode"><span class="id" type="var">e</span></span>.
 
 <div class="paragraph"> </div>
 
@@ -1286,17 +1286,17 @@ In particular, Coq has dropped the evidence term <span class="inlinecode"><span 
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>.<br/>
 &nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">gorgeous_ind</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "g_0".<br/>
+&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;g_0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">b_0</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "g_plus3".<br/>
+&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;g_plus3&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">b_sum</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">b_3</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H1</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "g_plus5".<br/>
+&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;g_plus5&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">b_sum</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">b_5</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H1</span>.<br/>
-&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -1374,11 +1374,11 @@ By contrast, the induction principle that Coq calculates for the
 </div>
 
 <div class="doc">
-<a name="lab347"></a><h1 class="section">Additional Exercises</h1>
+<a name="lab341"></a><h1 class="section">Additional Exercises</h1>
 
 <div class="paragraph"> </div>
 
-<a name="lab348"></a><h4 class="section">Exercise: 2 stars, optional (foo_ind_principle)</h4>
+<a name="lab342"></a><h4 class="section">Exercise: 2 stars, optional (foo_ind_principle)</h4>
  Suppose we make the following inductive definition:
 
 <div class="paragraph"> </div>
@@ -1409,10 +1409,13 @@ By contrast, the induction principle that Coq calculates for the
 
 <div class="paragraph"> </div>
 
+
+<div class="paragraph"> </div>
+
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab349"></a><h4 class="section">Exercise: 2 stars, optional (bar_ind_principle)</h4>
+<a name="lab343"></a><h4 class="section">Exercise: 2 stars, optional (bar_ind_principle)</h4>
  Consider the following induction principle:
 
 <div class="paragraph"> </div>
@@ -1445,7 +1448,7 @@ By contrast, the induction principle that Coq calculates for the
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab350"></a><h4 class="section">Exercise: 2 stars, optional (no_longer_than_ind)</h4>
+<a name="lab344"></a><h4 class="section">Exercise: 2 stars, optional (no_longer_than_ind)</h4>
  Given the following inductively defined proposition:
 
 <div class="paragraph"> </div>
@@ -1490,7 +1493,7 @@ By contrast, the induction principle that Coq calculates for the
 </div>
 
 <div class="doc">
-<a name="lab351"></a><h2 class="section">Induction Principles for other Logical Propositions</h2>
+<a name="lab345"></a><h2 class="section">Induction Principles for other Logical Propositions</h2>
 
 <div class="paragraph"> </div>
 
@@ -1519,40 +1522,46 @@ In the Coq standard library, the definition of equality is
 </div>
 
 <div class="doc">
-The advantage of this definition is that the induction
-    principle that Coq derives for it is precisely the familiar
-    principle of <i>Leibniz equality</i>: what we mean when we say "<span class="inlinecode"><span class="id" type="var">x</span></span> and
-    <span class="inlinecode"><span class="id" type="var">y</span></span> are equal" is that every property on <span class="inlinecode"><span class="id" type="var">P</span></span> that is true of <span class="inlinecode"><span class="id" type="var">x</span></span>
-    is also true of <span class="inlinecode"><span class="id" type="var">y</span></span>.  (One philosophical quibble should be noted,
-    though: Here, the "Leibniz equality principle" is a <i>consequence</i>
-    of the way we've defined equality as an inductive type.  Leibniz
-    viewed things exactly the other way around: for him, this
-    principle itself <i>is the definition</i> of equality.) 
+The induction principle that Coq derives from this definition
+    is the following: 
 </div>
 <div class="code code-tight">
 
 <br/>
 <span class="id" type="keyword">Check</span> <span class="id" type="var">eq'_ind</span>.<br/>
-<span class="comment">(*&nbsp;===&gt;&nbsp;<br/>
+<span class="comment">(*&nbsp;===&gt;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forall&nbsp;(X&nbsp;:&nbsp;Type)&nbsp;(x&nbsp;:&nbsp;X)&nbsp;(P&nbsp;:&nbsp;X&nbsp;-&gt;&nbsp;Prop),<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;x&nbsp;-&gt;&nbsp;forall&nbsp;y&nbsp;:&nbsp;X,&nbsp;x&nbsp;='&nbsp;y&nbsp;-&gt;&nbsp;P&nbsp;y&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;x&nbsp;-&gt;&nbsp;forall&nbsp;y&nbsp;:&nbsp;X,&nbsp;x&nbsp;='&nbsp;y&nbsp;-&gt;&nbsp;P&nbsp;y&nbsp;*)</span><br/>
+
 <br/>
-&nbsp;&nbsp;&nbsp;===&gt;&nbsp;&nbsp;(i.e.,&nbsp;after&nbsp;a&nbsp;little&nbsp;reorganization)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forall&nbsp;(X&nbsp;:&nbsp;Type)&nbsp;(x&nbsp;:&nbsp;X)&nbsp;forall&nbsp;y&nbsp;:&nbsp;X,&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;='&nbsp;y&nbsp;-&gt;&nbsp;<br/>
+<span class="comment">(*&nbsp;&nbsp;===&gt;&nbsp;&nbsp;(i.e.,&nbsp;after&nbsp;a&nbsp;little&nbsp;reorganization)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forall&nbsp;(X&nbsp;:&nbsp;Type)&nbsp;(x&nbsp;:&nbsp;X)&nbsp;forall&nbsp;y&nbsp;:&nbsp;X,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;='&nbsp;y&nbsp;-&gt;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forall&nbsp;P&nbsp;:&nbsp;X&nbsp;-&gt;&nbsp;Prop,&nbsp;P&nbsp;x&nbsp;-&gt;&nbsp;P&nbsp;y&nbsp;*)</span><br/>
 
 <br/>
 </div>
 
 <div class="doc">
-The induction principles for conjunction and disjunction are a
+This principle says that if <span class="inlinecode"><span class="id" type="var">x</span></span> and <span class="inlinecode"><span class="id" type="var">y</span></span> are equal then every
+    property that is true of <span class="inlinecode"><span class="id" type="var">x</span></span> is also true of <span class="inlinecode"><span class="id" type="var">y</span></span>, i.e. there is no
+    context that distinguishes <span class="inlinecode"><span class="id" type="var">x</span></span> and <span class="inlinecode"><span class="id" type="var">y</span></span>.  (Formally, this is the
+    dual of a principle enunciated by Leibniz, which says that <span class="inlinecode"><span class="id" type="var">x</span></span> and
+    <span class="inlinecode"><span class="id" type="var">y</span></span> are equal if they cannot be distinguished by any context. Note
+    that the implication in this converse direction is trivially true
+    in Coq: we simply instantiate <span class="inlinecode"><span class="id" type="var">P</span></span> with the property of being equal
+    to <span class="inlinecode"><span class="id" type="var">x</span></span>.  Leibniz took this principle itself as the <i>definition</i> of
+    equality, whereas in Coq it is a <i>consequence</i> of defining
+    equality as an inductive type.) 
+<div class="paragraph"> </div>
+
+ The induction principles for conjunction and disjunction are a
     good illustration of Coq's way of generating simplified induction
     principles for <span class="inlinecode"><span class="id" type="keyword">Inductive</span></span>ly defined propositions, which we
     discussed above.  You try first: 
 <div class="paragraph"> </div>
 
-<a name="lab352"></a><h4 class="section">Exercise: 1 star, optional (and_ind_principle)</h4>
+<a name="lab346"></a><h4 class="section">Exercise: 1 star, optional (and_ind_principle)</h4>
  See if you can predict the induction principle for conjunction. 
 </div>
 <div class="code code-tight">
@@ -1565,7 +1574,7 @@ The induction principles for conjunction and disjunction are a
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab353"></a><h4 class="section">Exercise: 1 star, optional (or_ind_principle)</h4>
+<a name="lab347"></a><h4 class="section">Exercise: 1 star, optional (or_ind_principle)</h4>
  See if you can predict the induction principle for disjunction. 
 </div>
 <div class="code code-tight">
@@ -1660,7 +1669,7 @@ From the inductive definition of the proposition <span class="inlinecode"><span 
 
 <div class="paragraph"> </div>
 
-<a name="lab354"></a><h4 class="section">Exercise: 1 star, optional (False_ind_principle)</h4>
+<a name="lab348"></a><h4 class="section">Exercise: 1 star, optional (False_ind_principle)</h4>
  Can you predict the induction principle for falsehood? 
 </div>
 <div class="code code-tight">
@@ -1701,7 +1710,7 @@ This induction principle can be understood as follows: If we have
 </div>
 
 <div class="doc">
-<a name="lab355"></a><h2 class="section">Explicit Proof Objects for Induction</h2>
+<a name="lab349"></a><h2 class="section">Explicit Proof Objects for Induction</h2>
 
 <div class="paragraph"> </div>
 
@@ -1781,7 +1790,7 @@ We can read this as follows:
 
 <div class="paragraph"> </div>
 
-  We can adapt this approach to proving <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> to help prove
+ We can adapt this approach to proving <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> to help prove
     <i>non-standard</i> induction principles too.  Recall our desire to
     prove that
 
@@ -1804,41 +1813,37 @@ We can read this as follows:
 <div class="paragraph"> </div>
 
     We can make a much better proof by defining and proving a
-    non-standard induction principle that goes "by twos":
-
-<div class="paragraph"> </div>
-
- 
+    non-standard induction principle that goes "by twos": 
 </div>
 <div class="code code-tight">
 
 <br/>
-&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">nat_ind2</span> : <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span>(<span class="id" type="var">P</span> : <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="keyword">Prop</span>), <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span> 0 <span style="font-family: arial;">&rarr;</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span> 1 <span style="font-family: arial;">&rarr;</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;(<span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span> : <span class="id" type="var">nat</span>, <span class="id" type="var">P</span> <span class="id" type="var">n</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">P</span> (<span class="id" type="var">S</span>(<span class="id" type="var">S</span> <span class="id" type="var">n</span>))) <span style="font-family: arial;">&rarr;</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span> : <span class="id" type="var">nat</span> , <span class="id" type="var">P</span> <span class="id" type="var">n</span> :=<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">fun</span> <span class="id" type="var">P</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">P0</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">P1</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">PSS</span> ⇒ <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">fix</span> <span class="id" type="var">f</span> (<span class="id" type="var">n</span>:<span class="id" type="var">nat</span>) := <span class="id" type="keyword">match</span> <span class="id" type="var">n</span> <span class="id" type="keyword">with</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 ⇒ <span class="id" type="var">P0</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 1 ⇒ <span class="id" type="var">P1</span> <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">S</span> (<span class="id" type="var">S</span> <span class="id" type="var">n'</span>) ⇒ <span class="id" type="var">PSS</span> <span class="id" type="var">n'</span> (<span class="id" type="var">f</span> <span class="id" type="var">n'</span>) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">nat_ind2</span> : <br/>
+&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span>(<span class="id" type="var">P</span> : <span class="id" type="var">nat</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="keyword">Prop</span>), <br/>
+&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span> 0 <span style="font-family: arial;">&rarr;</span> <br/>
+&nbsp;&nbsp;&nbsp;<span class="id" type="var">P</span> 1 <span style="font-family: arial;">&rarr;</span> <br/>
+&nbsp;&nbsp;&nbsp;(<span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span> : <span class="id" type="var">nat</span>, <span class="id" type="var">P</span> <span class="id" type="var">n</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">P</span> (<span class="id" type="var">S</span>(<span class="id" type="var">S</span> <span class="id" type="var">n</span>))) <span style="font-family: arial;">&rarr;</span> <br/>
+&nbsp;&nbsp;&nbsp;<span style="font-family: arial;">&forall;</span><span class="id" type="var">n</span> : <span class="id" type="var">nat</span> , <span class="id" type="var">P</span> <span class="id" type="var">n</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">fun</span> <span class="id" type="var">P</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">P0</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">P1</span> ⇒ <span class="id" type="keyword">fun</span> <span class="id" type="var">PSS</span> ⇒ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">fix</span> <span class="id" type="var">f</span> (<span class="id" type="var">n</span>:<span class="id" type="var">nat</span>) := <span class="id" type="keyword">match</span> <span class="id" type="var">n</span> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 ⇒ <span class="id" type="var">P0</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 1 ⇒ <span class="id" type="var">P1</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">S</span> (<span class="id" type="var">S</span> <span class="id" type="var">n'</span>) ⇒ <span class="id" type="var">PSS</span> <span class="id" type="var">n'</span> (<span class="id" type="var">f</span> <span class="id" type="var">n'</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
 </div>
 
 <div class="doc">
 Once you get the hang of it, it is entirely straightforward to
-     give an explicit proof term for induction principles like this.
-     Proving this as a lemma using tactics is much less intuitive (try
-     it!).
+    give an explicit proof term for induction principles like this.
+    Proving this as a lemma using tactics is much less intuitive (try
+    it!).
 
 <div class="paragraph"> </div>
 
-     The <span class="inlinecode"><span class="id" type="tactic">induction</span></span> <span class="inlinecode">...</span> <span class="inlinecode"><span class="id" type="keyword">using</span></span> tactic variant gives a convenient way to
-     specify a non-standard induction principle like this. 
+    The <span class="inlinecode"><span class="id" type="tactic">induction</span></span> <span class="inlinecode">...</span> <span class="inlinecode"><span class="id" type="keyword">using</span></span> tactic variant gives a convenient way to
+    specify a non-standard induction principle like this. 
 </div>
 <div class="code code-tight">
 
@@ -1847,11 +1852,11 @@ Once you get the hang of it, it is entirely straightforward to
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;<span class="id" type="tactic">intros</span>.<br/>
 &nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span> <span class="id" type="keyword">as</span> [ | |<span class="id" type="var">n'</span>] <span class="id" type="keyword">using</span> <span class="id" type="var">nat_ind2</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "even 0".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;even&nbsp;0&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ev_0</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "even 1".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;even&nbsp;1&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "even (S(S n'))".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;even&nbsp;(S(S&nbsp;n'))&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ev_SS</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHn'</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">even</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">even</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
@@ -1860,7 +1865,7 @@ Once you get the hang of it, it is entirely straightforward to
 </div>
 
 <div class="doc">
-<a name="lab356"></a><h2 class="section">The Coq Trusted Computing Base</h2>
+<a name="lab350"></a><h2 class="section">The Coq Trusted Computing Base</h2>
 
 <div class="paragraph"> </div>
 

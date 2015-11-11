@@ -4191,4 +4191,4 @@ End LibTacticsCompatibility.
 
 Open Scope nat_scope.  
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

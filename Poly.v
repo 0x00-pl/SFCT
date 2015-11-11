@@ -69,6 +69,13 @@ Check nil.
 Check cons.
 (* ===> cons : forall X : Type, X -> list X -> list X *)
 
+(** (Side note on notation: In .v files, the "forall" quantifier is
+    spelled out in letters.  In the generated HTML files, [forall] is
+    usually typeset as the usual mathematical "upside down A," but
+    you'll see the spelled-out "forall" in a few places, as in the
+    above comments.  This is just a quirk of typesetting: there is no
+    difference in meaning. *)
+
 (** The "[forall X]" in these types can be read as an additional
     argument to the constructors that determines the expected types of
     the arguments that follow.  When [nil] and [cons] are used, these
@@ -286,17 +293,19 @@ Definition list123' := cons _ 1 (cons _ 2 (cons _ 3 (nil _))).
     type argument(s) of a given function. The [Arguments] directive
     specifies the name of the function or constructor, and then lists
     its argument names, with curly braces around any arguments to be
-    treated as implicit. 
-    *)
+    treated as implicit. If some arguments of a definition don't have
+    a name, as it is often the case for constructors, they can be
+    marked with a wildcard pattern [_]. *)
 
 Arguments nil {X}.
-Arguments cons {X} _ _.  (* use underscore for argument position that has no name *)
+Arguments cons {X} _ _.
 Arguments length {X} l.
 Arguments app {X} l1 l2.
 Arguments rev {X} l. 
 Arguments snoc {X} l v.
 
-(* note: no _ arguments required... *)
+(** Now, we don't have to supply type arguments for these functions: *)
+
 Definition list123'' := cons 1 (cons 2 (cons 3 nil)).
 Check (length list123'').
 
@@ -312,11 +321,23 @@ Fixpoint length'' {X:Type} (l:list X) : nat :=
   | cons h t => S (length'' t)
   end.
 
-(** (Note that we didn't even have to provide a type argument to
-    the recursive call to [length'']; indeed, it is invalid to provide
+(** (Note that we didn't even have to provide a type argument to the
+    recursive call to [length'']; indeed, it is invalid to provide
     one.)  We will use this style whenever possible, although we will
     continue to use use explicit [Argument] declarations for
-    [Inductive] constructors. *)
+    [Inductive] constructors. The reason for that is that marking the
+    parameter of an inductive type as implicit causes it to become
+    implicit for the type itself, not just its constructors.  For
+    instance, consider the following alternative definition of the
+    [list] type: *)
+
+Inductive list' {X:Type} : Type :=
+  | nil' : list'
+  | cons' : X -> list' -> list'.
+
+(** Because [X] is declared as implicit for the _entire_ inductive
+    definition, we can't write an expression such as [list' nat],
+    which is almost never what we want. *)
 
 (** *** *)
 
@@ -327,13 +348,17 @@ Fixpoint length'' {X:Type} (l:list X) : nat :=
     we've globally declared it to be [Implicit].  For example, suppose we
     write this: *)
 
-(* Definition mynil := nil.  *)
+Fail Definition mynil := nil.
 
-(** If we uncomment this definition, Coq will give us an error,
-    because it doesn't know what type argument to supply to [nil].  We
-    can help it by providing an explicit type declaration (so that Coq
-    has more information available when it gets to the "application"
-    of [nil]): *)
+(** The [Fail] qualifier that appears before [Definition] can be
+    used with _any_ command, and is used to ensure that that command
+    indeed fails when executed. If the command does fail, Coq prints
+    the corresponding error message, but continues processing the rest
+    of the file.  Here, Coq gives us an error because it doesn't know
+    what type argument to supply to [nil].  We can help it by
+    providing an explicit type declaration (so that Coq has more
+    information available when it gets to the "application" of [nil]):
+    *)
 
 Definition mynil : list nat := nil.
 
@@ -413,7 +438,7 @@ Proof.
     _polymorphic pairs_ (or _products_): *)
 
 Inductive prod (X Y : Type) : Type :=
-  pair : X -> Y -> prod X Y.
+| pair : X -> Y -> prod X Y.
 
 Arguments pair {X} {Y} _ _.
 
@@ -441,6 +466,8 @@ Notation "X * Y" := (prod X Y) : type_scope.
 (** The first and second projection functions now look pretty
     much as they would in any functional programming language. *)
 
+(** Note that the pair notation can also be used in patterns... *)
+
 Definition fst {X Y : Type} (p : X * Y) : X :=
   match p with (x,y) => x end.
 
@@ -451,15 +478,13 @@ Definition snd {X Y : Type} (p : X * Y) : Y :=
     into a list of pairs.  In many functional programming languages,
     it is called [zip].  We call it [combine] for consistency with
     Coq's standard library. *)
-(** Note that the pair notation can be used both in expressions and in
-    patterns... *)
 
 Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
            : list (X*Y) :=
-  match (lx,ly) with
-  | ([],_) => []
-  | (_,[]) => []
-  | (x::tx, y::ty) => (x,y) :: (combine tx ty)
+  match lx, ly with
+  | [], _ => []
+  | _, [] => []
+  | x :: tx, y :: ty => (x, y) :: (combine tx ty)
   end.
 
 (** **** Exercise: 1 star, optional (combine_checks)  *)
@@ -468,7 +493,7 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     - What is the type of [combine] (i.e., what does [Check
       @combine] print?)
     - What does
-        Eval compute in (combine [1;2] [false;false;true;true]).
+        Compute (combine [1;2] [false;false;true;true]).
       print?   []
 *)
 
@@ -1198,5 +1223,5 @@ End Church.
 
 (** [] *)
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

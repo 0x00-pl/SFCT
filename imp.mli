@@ -606,20 +606,6 @@ val fold_right : ('a2 -> 'a1 -> 'a1) -> 'a1 -> 'a2 list -> 'a1
 
 val forallb : ('a1 -> bool) -> 'a1 list -> bool
 
-val n_of_digits : bool list -> n
-
-val n_of_ascii : char -> n
-
-val nat_of_ascii : char -> int
-
-type string =
-| EmptyString
-| String of char * string
-
-val string_dec : string -> string -> bool
-
-val append : string -> string -> string
-
 val ble_nat : int -> int -> bool
 
 type id =
@@ -661,6 +647,20 @@ type com =
 | CWhile of bexp * com
 
 val ceval_step : state -> com -> int -> state option
+
+val n_of_digits : bool list -> n
+
+val n_of_ascii : char -> n
+
+val nat_of_ascii : char -> int
+
+type string =
+| EmptyString
+| String of char * string
+
+val string_dec : string -> string -> bool
+
+val append : string -> string -> string
 
 val isWhite : char -> bool
 

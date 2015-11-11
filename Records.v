@@ -106,11 +106,6 @@ Inductive ty : Type :=
   | TRNil : ty
   | TRCons : id -> ty -> ty -> ty.
 
-Tactic Notation "T_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "TBase" | Case_aux c "TArrow"
-  | Case_aux c "TRNil" | Case_aux c "TRCons" ].
-
 (** Similarly, at the level of terms, we have constructors [trnil]
     -- the empty record -- and [trcons], which adds a single field to
     the front of a list of fields. *)
@@ -123,11 +118,6 @@ Inductive tm : Type :=
   | tproj : tm -> id -> tm
   | trnil :  tm
   | trcons : id -> tm -> tm -> tm.
-
-Tactic Notation "t_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" | Case_aux c "tabs"
-  | Case_aux c "tproj" | Case_aux c "trnil" | Case_aux c "trcons" ].
 
 (** Some variables, for examples... *)
 
@@ -296,12 +286,6 @@ Inductive step : tm -> tm -> Prop :=
 
 where "t1 '==>' t2" := (step t1 t2).
 
-Tactic Notation "step_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" | Case_aux c "ST_App2"
-  | Case_aux c "ST_Proj1" | Case_aux c "ST_ProjRcd"
-  | Case_aux c "ST_Rcd_Head" | Case_aux c "ST_Rcd_Tail" ].
-
 Notation multistep := (multi step).
 Notation "t1 '==>*' t2" := (multistep t1 t2) (at level 40).
 
@@ -371,11 +355,6 @@ where "Gamma '|-' t '\in' T" := (has_type Gamma t T).
 
 Hint Constructors has_type.
 
-Tactic Notation "has_type_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" | Case_aux c "T_App"
-  | Case_aux c "T_Proj" | Case_aux c "T_RNil" | Case_aux c "T_RCons" ].
-
 (* ###################################################################### *)
 (** ** Examples *)
 
@@ -439,8 +418,8 @@ Lemma wf_rcd_lookup : forall i T Ti,
   well_formed_ty Ti.
 Proof with eauto.
   intros i T.
-  T_cases (induction T) Case; intros; try solve by inversion.
-  Case "TRCons".
+  induction T; intros; try solve by inversion.
+  - (* TRCons *)
     inversion H. subst. unfold Tlookup in H0.
     destruct (eq_id_dec i i0)...
     inversion H0. subst...  Qed.
@@ -458,10 +437,10 @@ Lemma has_type__wf : forall Gamma t T,
   Gamma |- t \in T -> well_formed_ty T.
 Proof with eauto.
   intros Gamma t T Htyp.
-  has_type_cases (induction Htyp) Case...
-  Case "T_App".
+  induction Htyp...
+  - (* T_App *)
     inversion IHHtyp1... 
-  Case "T_Proj".
+  - (* T_Proj *)
     eapply wf_rcd_lookup...
 Qed.
 
@@ -502,13 +481,13 @@ Lemma lookup_field_in_value : forall v T i Ti,
 Proof with eauto.
   intros v T i Ti Hval Htyp Hget.
   remember (@empty ty) as Gamma.
-  has_type_cases (induction Htyp) Case; subst; try solve by inversion...
-  Case "T_RCons".
+  induction Htyp; subst; try solve by inversion...
+  - (* T_RCons *)
     simpl in Hget. simpl. destruct (eq_id_dec i i0).
-    SCase "i is first".
+    + (* i is first *)
       simpl. inversion Hget. subst.
       exists t...
-    SCase "get tail".
+    + (* get tail *)
       destruct IHHtyp2 as [vi [Hgeti Htypi]]...
       inversion Hval... Qed.
 
@@ -526,17 +505,17 @@ Proof with eauto.
   intros t T Ht.
   remember (@empty ty) as Gamma.
   generalize dependent HeqGamma.
-  has_type_cases (induction Ht) Case; intros HeqGamma; subst.
-  Case "T_Var".
+  induction Ht; intros HeqGamma; subst.
+  - (* T_Var *)
     (* The final rule in the given typing derivation cannot be [T_Var],
        since it can never be the case that [empty |- x : T] (since the
        context is empty). *)
     inversion H.
-  Case "T_Abs".
+  - (* T_Abs *)
     (* If the [T_Abs] rule was the last used, then [t = tabs x T11 t12],
        which is a value. *)
     left...
-  Case "T_App".
+  - (* T_App *)
     (* If the last rule applied was T_App, then [t = t1 t2], and we know 
        from the form of the rule that
          [empty |- t1 : T1 -> T2]
@@ -545,63 +524,63 @@ Proof with eauto.
        or can take a step. *)
     right.
     destruct IHHt1; subst...
-    SCase "t1 is a value".
+    + (* t1 is a value *)
       destruct IHHt2; subst...
-      SSCase "t2 is a value".
+      * (* t2 is a value *)
       (* If both [t1] and [t2] are values, then we know that 
          [t1 = tabs x T11 t12], since abstractions are the only values
          that can have an arrow type.  But 
          [(tabs x T11 t12) t2 ==> [x:=t2]t12] by [ST_AppAbs]. *)
         inversion H; subst; try (solve by inversion).
         exists ([x:=t2]t12)...
-      SSCase "t2 steps".
+      * (* t2 steps *)
         (* If [t1] is a value and [t2 ==> t2'], then [t1 t2 ==> t1 t2'] 
            by [ST_App2]. *)
         destruct H0 as [t2' Hstp]. exists (tapp t1 t2')...
-    SCase "t1 steps".
+    + (* t1 steps *)
       (* Finally, If [t1 ==> t1'], then [t1 t2 ==> t1' t2] by [ST_App1]. *)
       destruct H as [t1' Hstp]. exists (tapp t1' t2)...
-  Case "T_Proj".
+  - (* T_Proj *)
     (* If the last rule in the given derivation is [T_Proj], then 
        [t = tproj t i] and
            [empty |- t : (TRcd Tr)]
        By the IH, [t] either is a value or takes a step. *)
     right. destruct IHHt...
-    SCase "rcd is value".
+    + (* rcd is value *)
       (* If [t] is a value, then we may use lemma
          [lookup_field_in_value] to show [tlookup i t = Some ti] for
          some [ti] which gives us [tproj i t ==> ti] by [ST_ProjRcd]
          *)
       destruct (lookup_field_in_value _ _ _ _ H0 Ht H) as [ti [Hlkup _]].
       exists ti...
-    SCase "rcd_steps".
+    + (* rcd_steps *)
       (* On the other hand, if [t ==> t'], then [tproj t i ==> tproj t' i]
          by [ST_Proj1]. *)
       destruct H0 as [t' Hstp]. exists (tproj t' i)...
-  Case "T_RNil".
+  - (* T_RNil *)
     (* If the last rule in the given derivation is [T_RNil], then 
        [t = trnil], which is a value. *)
     left...
-  Case "T_RCons".
+  - (* T_RCons *)
     (* If the last rule is [T_RCons], then [t = trcons i t tr] and
          [empty |- t : T]
          [empty |- tr : Tr]
        By the IH, each of [t] and [tr] either is a value or can take
        a step. *)
     destruct IHHt1...
-    SCase "head is a value".
+    + (* head is a value *)
       destruct IHHt2; try reflexivity.
-      SSCase "tail is a value".
+      * (* tail is a value *)
       (* If [t] and [tr] are both values, then [trcons i t tr]
          is a value as well. *)
         left...
-      SSCase "tail steps".
+      * (* tail steps *)
         (* If [t] is a value and [tr ==> tr'], then 
            [trcons i t tr ==> trcons i t tr'] by 
            [ST_Rcd_Tail]. *)
         right. destruct H2 as [tr' Hstp].
         exists (trcons i t tr')...
-    SCase "head steps".      
+    + (* head steps *)      
       (* If [t ==> t'], then 
          [trcons i t tr ==> trcons i t' tr] 
          by [ST_Rcd_Head]. *)
@@ -640,16 +619,16 @@ Lemma context_invariance : forall Gamma Gamma' t S,
      Gamma' |- t \in S.
 Proof with eauto.
   intros. generalize dependent Gamma'.
-  has_type_cases (induction H) Case; 
+  induction H; 
     intros Gamma' Heqv...
-  Case "T_Var".
+  - (* T_Var *)
     apply T_Var... rewrite <- Heqv...
-  Case "T_Abs".
+  - (* T_Abs *)
     apply T_Abs... apply IHhas_type. intros y Hafi.
     unfold extend. destruct (eq_id_dec x y)...
-  Case "T_App".
+  - (* T_App *)
     apply T_App with T1...
-  Case "T_RCons".
+  - (* T_RCons *)
     apply T_RCons...  Qed.
 
 Lemma free_in_context : forall x t T Gamma,
@@ -658,8 +637,8 @@ Lemma free_in_context : forall x t T Gamma,
    exists T', Gamma x = Some T'.
 Proof with eauto.
   intros x t T Gamma Hafi Htyp.
-  has_type_cases (induction Htyp) Case; inversion Hafi; subst...
-  Case "T_Abs".
+  induction Htyp; inversion Hafi; subst...
+  - (* T_Abs *)
     destruct IHHtyp as [T' Hctx]... exists T'.
     unfold extend in Hctx. 
     rewrite neq_id in Hctx... 
@@ -683,9 +662,9 @@ Proof with eauto.
      variables interact. In the case of trcons, we must do a little
      extra work to show that substituting into a term doesn't change
      whether it is a record term. *)
-  t_cases (induction t) Case;
+  induction t;
     intros S Gamma Htypt; simpl; inversion Htypt; subst...
-  Case "tvar".
+  - (* tvar *)
     simpl. rename i into y.
     (* If t = y, we know that
          [empty |- v : U] and
@@ -695,7 +674,7 @@ Proof with eauto.
 
        There are two cases to consider: either [x=y] or [x<>y]. *)
     destruct (eq_id_dec x y). 
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then we know that [U = S], and that [[x:=v]y = v].
        So what we really must show is that if [empty |- v : U] then
        [Gamma |- v : U].  We have already proven a more general version
@@ -707,11 +686,11 @@ Proof with eauto.
       intros x Hcontra.
       destruct (free_in_context _ _ S empty Hcontra) as [T' HT']...
       inversion HT'.
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then [Gamma y = Some S] and the substitution has no
        effect.  We can show that [Gamma |- y : S] by [T_Var]. *)
       apply T_Var... unfold extend in H0. rewrite neq_id in H0... 
-  Case "tabs".
+  - (* tabs *)
     rename i into y. rename t into T11.
     (* If [t = tabs y T11 t0], then we know that
          [Gamma,x:U |- tabs y T11 t0 : T11->T12]
@@ -729,7 +708,7 @@ Proof with eauto.
     *)
     apply T_Abs...
     destruct (eq_id_dec x y).
-    SCase "x=y".
+    + (* x=y *)
     (* If [x = y], then the substitution has no effect.  Context
        invariance shows that [Gamma,y:U,y:T11] and [Gamma,y:T11] are
        equivalent.  Since the former context shows that [t0 : T12], so
@@ -738,7 +717,7 @@ Proof with eauto.
       subst.
       intros x Hafi. unfold extend.
       destruct (eq_id_dec y x)...
-    SCase "x<>y".
+    + (* x<>y *)
     (* If [x <> y], then the IH and context invariance allow us to show that
          [Gamma,x:U,y:T11 |- t0 : T12]       =>
          [Gamma,y:T11,x:U |- t0 : T12]       =>
@@ -747,7 +726,7 @@ Proof with eauto.
       intros z Hafi. unfold extend.
       destruct (eq_id_dec y z)... 
       subst. rewrite neq_id...
-  Case "trcons".
+  - (* trcons *)
     apply T_RCons... inversion H7; subst; simpl...
 Qed.
 
@@ -763,15 +742,15 @@ Proof with eauto.
   (* Proof: By induction on the given typing derivation.  Many cases are
      contradictory ([T_Var], [T_Abs]) or follow directly from the IH
      ([T_RCons]).  We show just the interesting ones. *)
-  has_type_cases (induction HT) Case; 
+  induction HT; 
     intros t' HeqGamma HE; subst; inversion HE; subst...
-  Case "T_App".
+  - (* T_App *)
     (* If the last rule used was [T_App], then [t = t1 t2], and three rules
        could have been used to show [t ==> t']: [ST_App1], [ST_App2], and 
        [ST_AppAbs]. In the first two cases, the result follows directly from 
        the IH. *)
     inversion HE; subst...
-    SCase "ST_AppAbs".
+    + (* ST_AppAbs *)
       (* For the third case, suppose 
            [t1 = tabs x T11 t12]
          and
@@ -785,7 +764,7 @@ Proof with eauto.
          by assumption, so we are done. *)
       apply substitution_preserves_typing with T1...
       inversion HT1...
-  Case "T_Proj".
+  - (* T_Proj *)
   (* If the last rule was [T_Proj], then [t = tproj t1 i].  Two rules
      could have caused [t ==> t']: [T_Proj1] and [T_ProjRcd].  The typing
      of [t'] follows from the IH in the former case, so we only
@@ -799,7 +778,7 @@ Proof with eauto.
     destruct (lookup_field_in_value _ _ _ _ H2 HT H)
       as [vi [Hget Htyp]].
     rewrite H4 in Hget. inversion Hget. subst...
-  Case "T_RCons".
+  - (* T_RCons *)
   (* If the last rule was [T_RCons], then [t = trcons i t tr] for
      some [i], [t] and [tr] such that [record_tm tr].  If the step is
      by [ST_Rcd_Head], the result is immediate by the IH.  If the step
@@ -811,5 +790,5 @@ Qed.
 
 End STLCExtendedRecords.
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

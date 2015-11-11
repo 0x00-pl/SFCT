@@ -27,7 +27,7 @@ Definition relation (X: Type) := X->X->Prop.
     different sets.  The context of the discussion should always make
     clear which is meant. *)
 
-(** An example relation on [nat] is [le], the less-that-or-equal-to
+(** An example relation on [nat] is [le], the less-than-or-equal-to
     relation which we usually write like this [n1 <= n2]. *)
 
 Print le.
@@ -81,10 +81,10 @@ Theorem le_not_a_partial_function :
 Proof.
   unfold not. unfold partial_function. intros Hc.
   assert (0 = 1) as Nonsense.
-   Case "Proof of assertion".
-   apply Hc with (x := 0). 
-     apply le_n. 
-     apply le_S. apply le_n. 
+  { (* Proof of assertion *)
+    apply Hc with (x := 0). 
+    - apply le_n.
+    - apply le_S. apply le_n. }
   inversion Nonsense.   Qed.
 
 (** **** Exercise: 2 stars, optional  *)
@@ -123,8 +123,8 @@ Theorem le_trans :
 Proof.
   intros n m o Hnm Hmo.
   induction Hmo.
-  Case "le_n". apply Hnm.
-  Case "le_S". apply le_S. apply IHHmo.  Qed.
+  - (* le_n *) apply Hnm.
+  - (* le_S *) apply le_S. apply IHHmo.  Qed.
 
 Theorem lt_trans:
   transitive lt.
@@ -261,10 +261,10 @@ Theorem le_order :
   order le.
 Proof.
   unfold order. split. 
-    Case "refl". apply le_reflexive.
-    split. 
-      Case "antisym". apply le_antisymmetric. 
-      Case "transitive.". apply le_trans.  Qed.
+    - (* refl *) apply le_reflexive.
+    - split. 
+      + (* antisym *) apply le_antisymmetric. 
+      + (* transitive. *) apply le_trans.  Qed.
 
 (* ########################################################### *)
 (** * Reflexive, Transitive Closure *)
@@ -289,16 +289,16 @@ Theorem next_nat_closure_is_le : forall n m,
   (n <= m) <-> ((clos_refl_trans next_nat) n m).
 Proof.
   intros n m. split.
-    Case "->".
+    - (* -> *)
       intro H. induction H.
-      SCase "le_n". apply rt_refl.
-      SCase "le_S".
+      + (* le_n *) apply rt_refl.
+      + (* le_S *)
         apply rt_trans with m. apply IHle. apply rt_step. apply nn.
-    Case "<-".
+    - (* <- *)
       intro H. induction H.
-      SCase "rt_step". inversion H. apply le_S. apply le_n.
-      SCase "rt_refl". apply le_n.
-      SCase "rt_trans".
+      + (* rt_step *) inversion H. apply le_S. apply le_n.
+      + (* rt_refl *) apply le_n.
+      + (* rt_trans *)
         apply le_trans with y.
         apply IHclos_refl_trans1.
         apply IHclos_refl_trans2. Qed.
@@ -323,19 +323,6 @@ Inductive refl_step_closure {X:Type} (R: relation X) : relation X :=
 (** (Note that, aside from the naming of the constructors, this
     definition is the same as the [multi] step relation used in many
     other chapters.) *)
-
-(** (The following [Tactic Notation] definitions are explained in
-    another chapter.  You can ignore them if you haven't read the
-    explanation yet.) *)
-
-Tactic Notation "rt_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "rt_step" | Case_aux c "rt_refl" 
-  | Case_aux c "rt_trans" ].
-
-Tactic Notation "rsc_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "rsc_refl" | Case_aux c "rsc_step" ].
 
 (** Our new definition of reflexive, transitive closure "bundles"
     the [rt_step] and [rt_trans] rules into the single rule step.
@@ -377,4 +364,4 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)

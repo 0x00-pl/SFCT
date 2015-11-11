@@ -282,12 +282,12 @@ Proof.
      that hoare_while will apply. *)
   eapply hoare_consequence_post.
   apply hoare_while.
-  Case "Loop body preserves invariant".
+  - (* Loop body preserves invariant *)
     (* Need to massage precondition before [hoare_asgn] applies *)
     eapply hoare_consequence_pre. apply hoare_asgn.
     (* Proving trivial implication (2) ->> (3) *)
     intros st [HT Hbp]. unfold assn_sub. apply I.
-  Case "Invariant and negated guard imply postcondition".
+  - (* Invariant and negated guard imply postcondition *)
     intros st [Inv GuardFalse].
     unfold bassn in GuardFalse. simpl in GuardFalse.
     (* SearchAbout helps to find the right lemmas *)
@@ -1031,12 +1031,6 @@ Inductive dcom : Type :=
   | DCPre : Assertion -> dcom -> dcom
   | DCPost : dcom -> Assertion -> dcom.
 
-Tactic Notation "dcom_cases" tactic(first) ident(c) :=
-  first;
-  [ Case_aux c "Skip" | Case_aux c "Seq" | Case_aux c "Asgn"
-  | Case_aux c "If" | Case_aux c "While"
-  | Case_aux c "Pre" | Case_aux c "Post" ].
-
 Notation "'SKIP' {{ P }}"
       := (DCSkip P)
       (at level 10) : dcom_scope.
@@ -1223,21 +1217,21 @@ Fixpoint verification_conditions (P : Assertion) (d:dcom) : Prop :=
 Theorem verification_correct : forall d P,
   verification_conditions P d -> {{P}} (extract d) {{post d}}.
 Proof.
-  dcom_cases (induction d) Case; intros P H; simpl in *.
-  Case "Skip".
+  induction d; intros P H; simpl in *.
+  - (* Skip *)
     eapply hoare_consequence_pre.
       apply hoare_skip.
       assumption.
-  Case "Seq".
+  - (* Seq *)
     inversion H as [H1 H2]. clear H.
     eapply hoare_seq.
       apply IHd2. apply H2.
       apply IHd1. apply H1.
-  Case "Asgn".
+  - (* Asgn *)
     eapply hoare_consequence_pre.
       apply hoare_asgn.
       assumption.
-  Case "If".
+  - (* If *)
     inversion H as [HPre1 [HPre2 [[Hd11 Hd12]
                                   [[Hd21 Hd22] [HThen HElse]]]]].
     clear H.
@@ -1248,17 +1242,17 @@ Proof.
       eapply hoare_consequence_post; eauto.
       eapply hoare_consequence_pre; eauto.
       eapply hoare_consequence_post; eauto.
-  Case "While".
+  - (* While *)
     inversion H as [Hpre [[Hbody1 Hbody2] [[Hpost1 Hpost2]  Hd]]];
     subst; clear H.
     eapply hoare_consequence_pre; eauto.
     eapply hoare_consequence_post; eauto.
     apply hoare_while.
     eapply hoare_consequence_pre; eauto.
-  Case "Pre".
+  - (* Pre *)
     inversion H as [HP Hd]; clear H.
     eapply hoare_consequence_pre. apply IHd. apply Hd. assumption.
-  Case "Post".
+  - (* Post *)
     inversion H as [Hd HQ]; clear H.
     eapply hoare_consequence_post. apply IHd. apply Hd. assumption.
 Qed.
@@ -1405,5 +1399,5 @@ Fixpoint real_fact (n:nat) : nat :=
 (** [] *)
 
 
-(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
+(** $Date$ *)
 

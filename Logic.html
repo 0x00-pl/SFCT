@@ -29,7 +29,7 @@
 <div class="code code-tight">
 
 <br/>
-<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <span class="id" type="var">MoreCoq</span>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <span class="id" type="var">BasicTactics</span>.<br/>
 
 <br/>
 </div>
@@ -258,7 +258,7 @@ function:
 
 </li>
 </ul>
-    In this, and subsequence chapters, we'll see more about how these
+    In this and subsequent chapters, we'll see more about how these
     proof terms work in more detail.
 
 </div>
@@ -360,8 +360,8 @@ Notice that it takes 4 inputs &mdash; namely the propositions <span class="inlin
 &nbsp;&nbsp;(0 = 0) <span style="font-family: arial;">&and;</span> (4 = <span class="id" type="var">mult</span> 2 2).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">conj</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -377,8 +377,8 @@ Just for convenience, we can use the tactic <span class="inlinecode"><span class
 &nbsp;&nbsp;(0 = 0) <span style="font-family: arial;">&and;</span> (4 = <span class="id" type="var">mult</span> 2 2).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -427,8 +427,8 @@ Just for convenience, we can use the tactic <span class="inlinecode"><span class
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">HP</span> <span class="id" type="var">HQ</span>].<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -491,8 +491,8 @@ Just for convenience, we can use the tactic <span class="inlinecode"><span class
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">HAB</span> <span class="id" type="var">HBA</span>].<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&rarr;</span>". <span class="id" type="tactic">apply</span> <span class="id" type="var">HBA</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "<span style="font-family: arial;">&larr;</span>". <span class="id" type="tactic">apply</span> <span class="id" type="var">HAB</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;-&gt;&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">HBA</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;&lt;-&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">HAB</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -623,8 +623,8 @@ It is like <span class="inlinecode"><span class="id" type="var">or_introl</span>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">HP</span> | <span class="id" type="var">HQ</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="tactic">apply</span> <span class="id" type="var">or_intror</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="tactic">apply</span> <span class="id" type="var">or_introl</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">or_intror</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">or_introl</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -641,20 +641,20 @@ From here on, we'll use the shorthand tactics <span class="inlinecode"><span cla
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">HP</span> | <span class="id" type="var">HQ</span>].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">or_distributes_over_and_1</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">R</span> : <span class="id" type="keyword">Prop</span>,<br/>
 &nbsp;&nbsp;<span class="id" type="var">P</span> <span style="font-family: arial;">&or;</span> (<span class="id" type="var">Q</span> <span style="font-family: arial;">&and;</span> <span class="id" type="var">R</span>) <span style="font-family: arial;">&rarr;</span> (<span class="id" type="var">P</span> <span style="font-family: arial;">&or;</span> <span class="id" type="var">Q</span>) <span style="font-family: arial;">&and;</span> (<span class="id" type="var">P</span> <span style="font-family: arial;">&or;</span> <span class="id" type="var">R</span>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">P</span> <span class="id" type="var">Q</span> <span class="id" type="var">R</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">H</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">HP</span> | [<span class="id" type="var">HQ</span> <span class="id" type="var">HR</span>]].<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "left". <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "left". <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "right". <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "right". <span class="id" type="tactic">split</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "left". <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "right". <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HR</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="var">left</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HP</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;left&nbsp;*)</span> <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HQ</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;right&nbsp;*)</span> <span class="id" type="var">right</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">HR</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 </div>
@@ -715,10 +715,10 @@ From here on, we'll use the shorthand tactics <span class="inlinecode"><span cla
 &nbsp;&nbsp;<span class="comment">(*&nbsp;WORKED&nbsp;IN&nbsp;CLASS&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">b</span> <span class="id" type="var">c</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">b</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = true". <span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "c = true". <span class="id" type="tactic">apply</span> <span class="id" type="var">conj</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">SCase</span> "c = false". <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = false". <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>. <span class="id" type="keyword">Qed</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;true&nbsp;*)</span> <span class="id" type="tactic">destruct</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;c&nbsp;=&nbsp;true&nbsp;*)</span> <span class="id" type="tactic">apply</span> <span class="id" type="var">conj</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="comment">(*&nbsp;c&nbsp;=&nbsp;false&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;false&nbsp;*)</span> <span class="id" type="tactic">inversion</span> <span class="id" type="var">H</span>. <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Theorem</span> <span class="id" type="var">andb_true_intro</span> : <span style="font-family: arial;">&forall;</span><span class="id" type="var">b</span> <span class="id" type="var">c</span>,<br/>
@@ -877,7 +877,7 @@ The Latin <i>ex falso quodlibet</i> means, literally, "from
 
 <a name="lab216"></a><h4 class="section">Exercise: 2 stars, advanced (True)</h4>
  Define <span class="inlinecode"><span class="id" type="var">True</span></span> as another inductively defined proposition.  (The
-    intution is that <span class="inlinecode"><span class="id" type="var">True</span></span> should be a proposition for which it is
+    intuition is that <span class="inlinecode"><span class="id" type="var">True</span></span> should be a proposition for which it is
     trivial to give evidence.) 
 </div>
 <div class="code code-tight">
@@ -1049,8 +1049,6 @@ It takes a little practice to get used to working with
 &nbsp;&nbsp;<span class="comment">(*&nbsp;But&nbsp;now&nbsp;what?&nbsp;There&nbsp;is&nbsp;no&nbsp;way&nbsp;to&nbsp;"invent"&nbsp;evidence&nbsp;for&nbsp;<span class="inlinecode">¬<span class="id" type="var">P</span></span>&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;evidence&nbsp;for&nbsp;<span class="inlinecode"><span class="id" type="var">P</span></span>.&nbsp;*)</span><br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Abort</span>.<br/>
-
-<br/>
 </div>
 
 <div class="doc">
@@ -1134,8 +1132,8 @@ Since inequality involves a negation, it again requires
 &nbsp;&nbsp;<span class="id" type="var">b</span> ≠ <span class="id" type="var">false</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">b</span> = <span class="id" type="var">true</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">b</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">b</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = true". <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="var">Case</span> "b = false".<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;true&nbsp;*)</span> <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="comment">(*&nbsp;b&nbsp;=&nbsp;false&nbsp;*)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">not</span> <span class="id" type="keyword">in</span> <span class="id" type="var">H</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">ex_falso_quodlibet</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">reflexivity</span>. <span class="id" type="keyword">Qed</span>.<br/>
@@ -1144,27 +1142,7 @@ Since inequality involves a negation, it again requires
 </div>
 
 <div class="doc">
-<a name="lab227"></a><h3 class="section"> </h3>
-
-<div class="paragraph"> </div>
-
-<a name="lab228"></a><h3 class="section"> </h3>
-
-<div class="paragraph"> </div>
-
-<a name="lab229"></a><h3 class="section"> </h3>
-
-<div class="paragraph"> </div>
-
-<a name="lab230"></a><h3 class="section"> </h3>
-
-<div class="paragraph"> </div>
-
-<a name="lab231"></a><h3 class="section"> </h3>
-
-<div class="paragraph"> </div>
-
-<a name="lab232"></a><h4 class="section">Exercise: 2 stars (false_beq_nat)</h4>
+<a name="lab227"></a><h4 class="section">Exercise: 2 stars (false_beq_nat)</h4>
 
 </div>
 <div class="code code-space">
@@ -1179,7 +1157,7 @@ Since inequality involves a negation, it again requires
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab233"></a><h4 class="section">Exercise: 2 stars, optional (beq_nat_false)</h4>
+<a name="lab228"></a><h4 class="section">Exercise: 2 stars, optional (beq_nat_false)</h4>
 
 </div>
 <div class="code code-space">
