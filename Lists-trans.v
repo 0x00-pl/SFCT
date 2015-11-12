@@ -567,59 +567,50 @@ Proof.
         S (length (rev l)) = S (length l')。
       而这就是归纳假设。 [] *)
 
-(** Obviously, the style of these proofs is rather longwinded
-    and pedantic.  After the first few, we might find it easier to
-    follow proofs that give fewer details (since we can easily work
-    them out in our own minds or on scratch paper if necessary) and
-    just highlight the non-obvious steps.  In this more compressed
-    style, the above proof might look more like this: *)
+(** 显然，这些证明的样式实在是冗长而迂腐。经过一开始那些以后，
+    我们可能觉得那些细节更少的证明并且仅仅突出 那些不显然的步
+    骤更容易理解（由于我们能够简单的在我们脑子中得到他们或者
+    必要的话可以在纸上打草稿）。下面我们以一种更加紧凑的样式
+    呈现之前的证明： *)
 
-(** _Theorem_:
-     For all lists [l], [length (rev l) = length l].
+(** _定理_:
+     对一切列表 [l], [length (rev l) = length l].
 
-    _Proof_: First, observe that
+    _证明_: 首先，注意到，
        length (snoc l n) = S (length l)
-     for any [l].  This follows by a straightforward induction on [l].
-     The main property now follows by another straightforward
-     induction on [l], using the observation together with the
-     induction hypothesis in the case where [l = n'::l']. [] *)
+    对一切[l]成立。 通过对[l]进行归纳就可以直接得到这个结论。
+    当[l = n'::l']时，证明性质只需要再一次使用归纳法，然后
+    同时使用归纳假设和之前的观察得到的性质。[] *)
 
-(** Which style is preferable in a given situation depends on
-    the sophistication of the expected audience and on how similar the
-    proof at hand is to ones that the audience will already be
-    familiar with.  The more pedantic style is a good default for
-    present purposes. *)
+(** 在特定情况下，我们更倾向于哪种样式取决于读者对于这个问题
+    了解程度以及当前证明和读者已经知道的那些有多相近。更加冗长
+    的版本是一个不错的呈现目的的默认方式 *)
 
 (* ###################################################### *)
 (** ** [SearchAbout] *)
 
-(** We've seen that proofs can make use of other theorems we've
-    already proved, using [rewrite], and later we will see other ways
-    of reusing previous theorems.  But in order to refer to a theorem,
-    we need to know its name, and remembering the names of all the
-    theorems we might ever want to use can become quite difficult!  It
-    is often hard even to remember what theorems have been proven,
-    much less what they are named.
-
-    Coq's [SearchAbout] command is quite helpful with this.  Typing
-    [SearchAbout foo] will cause Coq to display a list of all theorems
-    involving [foo].  For example, try uncommenting the following to
-    see a list of theorems that we have proved about [rev]: *)
+(** 我们已经见到了很多证明需要使用之前已经证明的结论，然后使用[rewrite]来
+    改写当前目标，接下来我们会看到其他用来重用之前证明的定理的方式。但是
+    想要指定一个定理，我们需要直到他的名字，记住所有定理的名字室很困难的！
+    记住哪些定理已经被证明过了甚至都是非常困难的，更不要说记住他们的名字了。
+    
+    Coq的[SearchAbout]命令在一道这种情况的时候非常有用。用[SearchAbout foo]
+    会让Coq显示所有涉及到[foo]的定理的列表。举个例子，去掉下面的注释你会看到
+    一串我们已经证明过的关于[rev]的定理 *)
 
 (*  SearchAbout rev. *)
 
-(** Keep [SearchAbout] in mind as you do the following exercises and
-    throughout the rest of the course; it can save you a lot of time! *)
+(** 在你做下面的联系和之后的课程的过程中你要记住[SearchAbout]；他可以节约你
+    非常多的时间！ *)
 
-(** Also, if you are using ProofGeneral, you can run [SearchAbout]
-    with [C-c C-a C-a]. Pasting its response into your buffer can be
-    accomplished with [C-c C-;]. *)
+(** 并且，如果你在使用ProofGeneral，你可以用[C-c C-a C-a]来运行[SearchAbout]。
+    通过[C-c C-;]可以在你的缓冲区里向下翻阅它返回的结果。 *)
 
 (* ###################################################### *)
-(** ** List Exercises, Part 1 *)
+(** ** 列表练习, 第一部分 *)
 
-(** **** Exercise: 3 stars (list_exercises)  *)
-(** More practice with lists. *)
+(** **** 练习: 三星 (list_exercises)  *)
+(** 更多地关于列表的习题 *)
 
 Theorem app_nil_end : forall l : natlist, 
   l ++ [] = l.   
@@ -632,9 +623,8 @@ Theorem rev_involutive : forall l : natlist,
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** There is a short solution to the next exercise.  If you find
-    yourself getting tangled up, step back and try to look for a
-    simpler way. *)
+(** 下一个联系有一个非常短的解决方法。如果你发现自己弄得一团糟，
+    你应该返回去找找更简单的方法。 *)
 
 Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
   l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
@@ -652,7 +642,7 @@ Theorem distr_rev : forall l1 l2 : natlist,
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** An exercise about your implementation of [nonzeros]: *)
+(** 关于你对[nonzeros]实现的习题 *)
 
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
@@ -660,10 +650,9 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars (beq_natlist)  *)
-(** Fill in the definition of [beq_natlist], which compares
-    lists of numbers for equality.  Prove that [beq_natlist l l]
-    yields [true] for every list [l]. *)
+(** **** 联系: 两星 (beq_natlist)  *)
+(** 填写[beq_natlist]的定义，它比较数列的相等性。证明对一切列表[l]，
+    [beq_natlist l l] 返回 [true]。 *)
 
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
   (* FILL IN HERE *) admit.
@@ -682,13 +671,13 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** ** List Exercises, Part 2 *)
+(** ** 列表练习, 第二部分 *)
 
-(** **** Exercise: 2 stars (list_design)  *)
-(** Design exercise: 
-     - Write down a non-trivial theorem [cons_snoc_app]
-       involving [cons] ([::]), [snoc], and [app] ([++]).  
-     - Prove it. *) 
+(** **** 练习: 两星 (list_design)  *)
+(** 设计练习：
+    - 写下一个不平凡的，涉及到[cons]([::])，[snoc]，[app]([++])
+      的定理[cons_snoc_app]。
+    - 证明它 *) 
 
 (* FILL IN HERE *)
 (** [] *)
