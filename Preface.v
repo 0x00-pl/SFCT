@@ -6,12 +6,12 @@
 (** 这本电子书是一个关于软件基础 ，可靠软件背后的数学的课程.
     主题包含基本逻辑概念，用计算机辅助定理证明，Coq证明助理，函数式编程。
     操作语义，霍尔逻辑，还有静态类型系统。
-    这个体验的预期受众是从高级本科生到博士与及研究生的读者、
+    这个课程的预期受众是从高级本科生到博士与及研究生的读者、
     尽管一定的数学熟练度会有帮助，
-    本书没有对读者做任何的逻辑学或程序语言的背景。
+    本书没有做任何“读者有逻辑学或编程语言的背景”的假设。
 
-    这个教程的最大创新是，本教程是百分之百形式化，并且机械严重的：
-    所有的文字都是字面意义上的Coq脚本。
+    这个教程的最大创新是，本教程是百分之百形式化，并且机械验证的：
+    所有的文字都是字面意义上的，Coq脚本。
 
     它是用于于一个Coq交互式会话一起阅读的。
     本书的所有细节都完全用Coq形式化了，习题也是被设计于来Coq做出。
@@ -46,114 +46,73 @@
     （4）形式化的用于论证程序属性（一个循环对所有输入都会终止。
          或者一个排序函数或者编译器满足特定规格）的手段；与及
 
-    （5）用类型系统建立一个对于某一个编程语言的所有程序的瞒住特效
+    （5）用类型系统建立一个对于某一个编程语言的所有程序都满足的特性
         （所有类型正确的Java程序不能在运行时被破坏）。
 
     这五个主题任一个都可以轻易填满一整个课程；
     把它们五个塞在一个课程中很自然地表面很多会被遗留在外。
-    但是我们洗完读者会认为5个主题互补。与及同时教授五个内容创建一个
-    可以轻松进入任一主题的根基。一些更深的阅读的建议在 [Postscript] 一章*)
+    但是我们希望读者会认为5个主题互补，与及同时教授五个内容会创建一个使读者
+    可以轻松进入任一主题的根基。一些更深的阅读的建议会在 [Postscript] 一章出现*)
 
-(** ** Logic *)
+(** ** 逻辑学 *)
 
-(** Logic is the field of study whose subject matter is _proofs_ --
-    unassailable arguments for the truth of particular propositions.
-    Volumes have been written about the central role of logic in
-    computer science.  Manna and Waldinger called it "the calculus of
-    computer science," while Halpern et al.'s paper _On the Unusual
-    Effectiveness of Logic in Computer Science_ catalogs scores of
-    ways in which logic offers critical tools and insights.  Indeed,
-    they observe that "As a matter of fact, logic has turned out to be
-    significiantly more effective in computer science than it has been
-    in mathematics.  This is quite remarkable, especially since much
-    of the impetus for the development of logic during the past one
-    hundred years came from mathematics."
+(** 逻辑学是研究证明--不可被质疑的对真理或者某一特定命题的论证的学科。
+    我们对逻辑学在计算机科学中所占的中心地位写了一卷又一卷的书。
+    Manna与及Waldinger称之“计算机科学的微积分”，与此同时，Halpern的论文
+    _On the Unusual Effectiveness of Logic in Computer Science_ 列出各种不同
+    逻辑学对计算机科学提供关键工具，洞察的方法。的确，他们观察到
+    “事实上，逻辑学在计算机科学中比在数学中远远的更有效。
+    这很值得提起，特别是因为过去100年间，逻辑学发展的动力大部分来自数学”
 
-    In particular, the fundamental notion of inductive proofs is
-    ubiquitous in all of computer science.  You have surely seen them
-    before, in contexts from discrete math to analysis of algorithms,
-    but in this course we will examine them much more deeply than you
-    have probably done so far. *)
+    特定的说，归纳证明的基础几号在计算机科学中处处可见。
+    你肯定以前见过它们，比如说在离散数学或者算法分析中，但是在我们的这个课程
+    我们很会对之在你前所未有的深度下进行检测。*)
 
-(** ** Proof Assistants *)
+(** ** 证明助理 *)
 
-(** The flow of ideas between logic and computer science has not been
-    in just one direction: CS has also made important contributions to
-    logic.  One of these has been the development of software tools
-    for helping construct proofs of logical propositions.  These tools
-    fall into two broad categories:
+(** 逻辑学与计算机科学的交流并不是单方面的：计算机科学也对逻辑学造了重要的奉献。
+    其中一个是发展可以作为帮助构造命题/证明的工具软件。
+    这些工具分为两个范畴：
 
-       - _Automated theorem provers_ provide "push-button" operation:
-         you give them a proposition and they return either _true_,
-         _false_, or _ran out of time_.  Although their capabilities
-         are limited to fairly specific sorts of reasoning, they have
-         matured tremendously in recent years and are used now in a
-         huge variety of settings.  Examples of such tools include SAT
-         solvers, SMT solvers, and model checkers.
+       - 提供一键式操作的自动化定理证明器：你给它们一个命题，它们返回真，假，或者超时。
+         尽管他们的能力被限制到特定的推理中，他们在最近几年大幅成熟，
+         并且现在在各种各样的场合都有被用上。自动化定理证明器的例子包括
+         SAT，SMT，还有Model Checker。
 
-       - _Proof assistants_ are hybrid tools that automate the more
-         routine aspects of building proofs while depending on human
-         guidance for more difficult aspects.  Widely used proof
-         assistants include Isabelle, Agda, Twelf, ACL2, PVS, and Coq,
-         among many others.
+       - 证明助理是一种会对于构建证明中比较常规的部分自动化，
+         并且在更困难的地方依赖于人类的混合式工具。
+         常用的证明助理包括Isabelle， Agda， Twelf， ACL2， PVS，与及Coq,还有很多其他的。
 
-    This course is based around Coq, a proof assistant that has been
-    under development since 1983 at a number of French research labs
-    and universities.  Coq provides a rich environment for interactive
-    development of machine-checked formal reasoning.  The kernel of
-    the Coq system is a simple proof-checker which guarantees that
-    only correct deduction steps are performed.  On top of this
-    kernel, the Coq environment provides high-level facilities for
-    proof development, including powerful tactics for constructing
-    complex proofs semi-automatically, and a large library of common
-    definitions and lemmas.
+    这节课基于Coq，一个在1983年起就在一定数量的研究所与及大学中发展的证明助理。
+    Coq提供了一个丰富的用于机械验证形式化论证的环境。Coq的内核是一个很简单的，
+    保证只有正确的推论发生的证明检查器。在此内核之上，Coq环境提供了高层的证明开发设施，
+    包括强大的，用于半自动化构造证明的策略，与及一个庞大的包含了各种定义，引力的库。
 
-    Coq has been a critical enabler for a huge variety of work across
-    computer science and mathematics:
+    Coq容许了各种各样的在计算机科学与及数学上的研究的进行。
 
-    - As a _platform for modeling programming languages_, it has become
-      a standard tool for researchers who need to describe and reason
-      about complex language definitions.  It has been used, for
-      example, to check the security of the JavaCard platform,
-      obtaining the highest level of common criteria certification,
-      and for formal specifications of the x86 and LLVM instruction
-      sets.
+    - 作为一个对编程语言建模的平台，Coq成为了
+      需要对复杂语言定义进行描述，论证的研究员的一个标准工具。
+      比方说，Coq被用于检查JavaCard平台的安全性，得到了最高阶通用准则验证。
+      再比方说，Coq被用在x86与及LLVM指令集的形式化规范中。
 
-    - As an _environment for developing formally certified software_,
-      Coq has been used to build CompCert, a fully-verified optimizing
-      compiler for C, for proving the correctness of subtle algorithms
-      involving floating point numbers, and as the basis for
-      Certicrypt, an environment for reasoning about the security of
-      cryptographic algorithms.
+    - 作为一个开发被形式化验证的软件，Coq被用于建造Compcert，
+      一个被完全验证并带有优化，并被用于证明精妙的浮点数相关的算法的正确性的C编译器。
+      同一时间，Coq也是Certicrypt，一个用于论证密码学算法的安全性的环境的基础。
 
-    - As a _realistic environment for programming with dependent
-      types_, it has inspired numerous innovations.  For example, the
-      Ynot project at Harvard embeds "relational Hoare reasoning" (an
-      extension of the _Hoare Logic_ we will see later in this course)
-      in Coq.
+    - 作为一个现实的依赖类型编程的环境，Coq激发了数不清的创新。 
+      举例说，Harvard的Ynot项目在Coq中嵌入了“关系式霍尔推理”（一个霍尔逻辑的扩展）
 
-    - As a _proof assistant for higher-order logic_, it has been used
-      to validate a number of important results in mathematics.  For
-      example, its ability to include complex computations inside
-      proofs made it possible to develop the first formally verified
-      proof of the 4-color theorem.  This proof had previously been
-      controversial among mathematicians because part of it included
-      checking a large number of configurations using a program. In
-      the Coq formalization, everything is checked, including the
-      correctness of the computational part.  More recently, an even
-      more massive effort led to a Coq formalization of the
-      Feit-Thompson Theorem -- the first major step in the
-      classification of finite simple groups.
+    - 作为一个高阶逻辑的证明助理，Coq被用于证实一定数量的数学里的重要结果。
+      比方说，Coq的包含复杂计算进证明的能力使得Coq可以开发出第一个四色定理的式化证明。
+      这个证明以前在数学家之间有争议性，因为它包含了大量的分情况检查。
+      在Coq形式化中，包括计算方面的正确性，所有东西都被检查了。
+      近年来，Feit-Thompson定理，分辨有限单群的第一个大步被在更大的努力下，
+      在Coq内成功形式化了。
 
-   By the way, in case you're wondering about the name, here's what
-   the official Coq web site says: "Some French computer scientists
-   have a tradition of naming their software as animal species: Caml,
-   Elan, Foc or Phox are examples of this tacit convention. In French,
-   'coq' means rooster, and it sounds like the initials of the
-   Calculus of Constructions (CoC) on which it is based."  The rooster
-   is also the national symbol of France, and "Coq" are the first
-   three letters of the name of Thierry Coquand, one of Coq's early
-   developers. *)
+   如果你对名字感到好奇，Coq官网声称：“一些法国计算机科学家有用动物命名他们的软件的传统：
+   Caml, Elan, Foc, Phox都是这个隐秘的传统的例子。在法国，“Coq”是公鸡，也
+   听起来像Calculus of Construction，Coq的基础的首字符。”公鸡同时是法国的国家象征，
+   “Coq”也是Thierry Coquand，Coq的早期开发人员的名字的头三个字母。 *)
 
 (** ** Functional Programming *)
 
