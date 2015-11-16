@@ -3,7 +3,6 @@
 Require Export Induction.
 
 Module NatList. 
-
 (* ###################################################### *)
 (** * 数对 *)
 
@@ -480,7 +479,7 @@ Proof. reflexivity.  Qed.
 (** 现在我们用我们新定义的[snoc]按得[rec]来证明一些列表的定理。
     比我们现在已经见到过的归纳证明相比，我们来证明一个更具挑战性
     的定理，就是反转一个列表并不会改变他的长度。当我们初次尝试时
-    我们就发现卡在后继这个情形q *)
+    我们就发现卡在后继这个情形。 *)
 
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
@@ -489,7 +488,7 @@ Proof.
   Case "l = []".
     reflexivity.
   Case "l = n :: l'".
-    (* 这是一个比较棘手的情况。我们从普通的花间开始。 *)
+    (* 这是一个比较棘手的情况。我们从普通的化简开始。 *)
     simpl. 
     (* 现在我们好像卡在什么地方了：目标是要证明涉及[snoc]的等式，
        但是我们在上下文和全局环境下并没有任何有关[snoc]的等式！
@@ -591,10 +590,10 @@ Proof.
 
 (** 我们已经见到了很多证明需要使用之前已经证明的结论，然后使用[rewrite]来
     改写当前目标，接下来我们会看到其他用来重用之前证明的定理的方式。但是
-    想要指定一个定理，我们需要直到他的名字，记住所有定理的名字室很困难的！
-    记住哪些定理已经被证明过了甚至都是非常困难的，更不要说记住他们的名字了。
+    想要指定一个定理，我们需要直到其名字，记住所有定理的名字是很困难的！
+    记住哪些定理已经被证明过了甚至都是非常困难的，更不要说记住它们的名字了。
     
-    Coq的[SearchAbout]命令在一道这种情况的时候非常有用。用[SearchAbout foo]
+    Coq的[SearchAbout]命令在遇到这种情况的时候非常有用。用[SearchAbout foo]
     会让Coq显示所有涉及到[foo]的定理的列表。举个例子，去掉下面的注释你会看到
     一串我们已经证明过的关于[rev]的定理 *)
 
@@ -610,7 +609,7 @@ Proof.
 (** ** 列表练习, 第一部分 *)
 
 (** **** 练习: 三星 (list_exercises)  *)
-(** 更多地关于列表的习题 *)
+(** 更多的关于列表的习题 *)
 
 Theorem app_nil_end : forall l : natlist, 
   l ++ [] = l.   
@@ -682,16 +681,15 @@ Proof.
 (* FILL IN HERE *)
 (** [] *)
 
-(** **** Exercise: 3 stars, advanced (bag_proofs)  *)
-(** Here are a couple of little theorems to prove about your
-    definitions about bags earlier in the file. *)
+(** **** 联系: 三星, 进阶 (bag_proofs)  *)
+(** 下面是关于你之前对于背包的一些定义的定理。 *)
 
 Theorem count_member_nonzero : forall (s : bag),
   ble_nat 1 (count 1 (1 :: s)) = true.
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** The following lemma about [ble_nat] might help you in the next proof. *)
+(** 下面这条关于[ble_nat]的引理在你完成下一个时可能会有帮助。 *)
 
 Theorem ble_n_Sn : forall n,
   ble_nat n (S n) = true.
@@ -708,19 +706,16 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 3 stars, optional (bag_count_sum)  *)  
-(** Write down an interesting theorem [bag_count_sum] about bags 
-    involving the functions [count] and [sum], and prove it.*)
+(** **** 练习: 三星, 可选 (bag_count_sum)  *)  
+(** 写下一个涉及到[count]和[sum]的，关于[bag_count_sum]的定理，并证明。*)
 
 (* FILL IN HERE *)
 (** [] *)
 
-(** **** Exercise: 4 stars, advanced (rev_injective)  *)
-(** Prove that the [rev] function is injective, that is,
-
-    forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
-
-There is a hard way and an easy way to solve this exercise.
+(** **** 练习: 四星, 进阶 (rev_injective)  *)
+(** 证明[rev]是一一的，也就是说，
+      forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
+    有一种简单还有一种困难的方法来解决这个问题
 *)
 
 (* FILL IN HERE *)
@@ -728,14 +723,13 @@ There is a hard way and an easy way to solve this exercise.
 
 
 (* ###################################################### *)
-(** * Options *)
+(** * 可能的失败 *)
 
 
-(** One use of [natoption] is as a way of returning "error
-    codes" from functions.  For example, suppose we want to write a
-    function that returns the [n]th element of some list.  If we give
-    it type [nat -> natlist -> nat], then we'll have to return some
-    number when the list is too short! *)
+(** [natoption]的一种用法是用来从函数中返回"错误码"。举个例子，
+    假设我们想要写一个返回某个列表第[n]个元素的函数。如果我们让
+    它的类型是[nat -> natlist -> nat]，那么当列表过短的时候我们
+    要返回某个数。 *)
 
 Fixpoint index_bad (n:nat) (l:natlist) : nat :=
   match l with
@@ -747,10 +741,9 @@ Fixpoint index_bad (n:nat) (l:natlist) : nat :=
   end.
 
 (** *** *)
-(** On the other hand, if we give it type [nat -> natlist ->
-    natoption], then we can return [None] when the list is too short
-    and [Some a] when the list has enough members and [a] appears at
-    position [n]. *)
+(** 另一方面，如果我们让它的类型成为[nat -> natlist -> natoption]，
+    那么当列表不够长室，我们就能返回[None]，当列表有足够的元素时返回[Some a]，
+    其中[a]出现在在第[n]位 *)
 
 Inductive natoption : Type :=
   | Some : nat -> natoption
@@ -773,9 +766,7 @@ Proof. reflexivity.  Qed.
 Example test_index3 :    index 10 [4;5;6;7] = None.
 Proof. reflexivity.  Qed.
 
-(** This example is also an opportunity to introduce one more
-    small feature of Coq's programming language: conditional
-    expressions... *)
+(** 这个例子同样是一个机会来引入Coq编程语言的一个小特性：条件表达式…… *)
 
 (** *** *)
 
@@ -785,16 +776,12 @@ Fixpoint index' (n:nat) (l:natlist) : natoption :=
   | a :: l' => if beq_nat n O then Some a else index' (pred n) l'
   end.
 
-(** Coq's conditionals are exactly like those found in any other
-    language, with one small generalization.  Since the boolean type
-    is not built in, Coq actually allows conditional expressions over
-    _any_ inductively defined type with exactly two constructors.  The
-    guard is considered true if it evaluates to the first constructor
-    in the [Inductive] definition and false if it evaluates to the
-    second. *)
+(** Coq的条件语句就像其他语言中的那些，但是有一点小小的推广。由于布尔类型
+    不是内建的，Coq事实上允许在任意有两个构造子的归纳定义的类型上使用条件表达式。
+    当表达式求值到归纳定义中的第一个构造子时，它被认为是真的，当其被求值到第二个
+    构造子时，它被认为是假的。 *)
 
-(** The function below pulls the [nat] out of a [natoption], returning
-    a supplied default in the [None] case. *)
+(** 下面的函数从[natoption]中取出一个[nat]，在[None]的情况下返回提供的默认值。 *)
 
 Definition option_elim (d : nat) (o : natoption) : nat :=
   match o with
@@ -802,9 +789,8 @@ Definition option_elim (d : nat) (o : natoption) : nat :=
   | None => d
   end.
 
-(** **** Exercise: 2 stars (hd_opt)  *)
-(** Using the same idea, fix the [hd] function from earlier so we don't
-   have to pass a default element for the [nil] case.  *)
+(** **** 练习：两星 (hd_opt)  *)
+(** 使用相同的想法，修正之前的[hd]函数所以我们不需要为[nil]提供一个默认的元素。  *)
 
 Definition hd_opt (l : natlist) : natoption :=
   (* FILL IN HERE *) admit.
@@ -829,13 +815,11 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** * Dictionaries *)
+(** * 字典 *)
 
-(** As a final illustration of how fundamental data structures
-    can be defined in Coq, here is the declaration of a simple
-    [dictionary] data type, using numbers for both the keys and the
-    values stored under these keys.  (That is, a dictionary represents
-    a finite map from numbers to numbers.) *)
+(** 作为最后一个演示在Coq中如何定义基础的数据结构的例子，这里是
+    一个简单的[dictionary]的声明，使用数作为关键字和关键字对应的值
+    （也就是说，一个字典代表了一个有限的从自然数到自然数的映射。） *)
 
 Module Dictionary.
 
@@ -843,20 +827,16 @@ Inductive dictionary : Type :=
   | empty  : dictionary 
   | record : nat -> nat -> dictionary -> dictionary. 
 
-(** This declaration can be read: "There are two ways to construct a
-    [dictionary]: either using the constructor [empty] to represent an
-    empty dictionary, or by applying the constructor [record] to
-    a key, a value, and an existing [dictionary] to construct a
-    [dictionary] with an additional key to value mapping." *)
+(** 这个声明可以被读作："有两种方式来构造[dictionary]：要么用[empty]
+    来构造一个空的字典，要么把[record]应用到键，值和一个已经存在的[dictionary]
+    来构造一个附加了键值的[dictionary]" *)
 
 Definition insert (key value : nat) (d : dictionary) : dictionary :=
   (record key value d).
 
-(** Here is a function [find] that searches a [dictionary] for a
-    given key.  It evaluates evaluates to [None] if the key was not
-    found and [Some val] if the key was mapped to [val] in the
-    dictionary. If the same key is mapped to multiple values, [find]
-    will return the first one it finds. *)
+(** 这里是一个[find]函数，它在一个[dictionary]查找给定的键。如果该键
+    无法被找到，他就返回[None]，否则返回[Some val]其中[val]是字典中
+    该键所对应的。如果同一个键被映到多个值，[find]就会返回它第一个找到的。 *)
 
 Fixpoint find (key : nat) (d : dictionary) : natoption := 
   match d with 
@@ -868,8 +848,8 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 
 
 
-(** **** Exercise: 1 star (dictionary_invariant1)  *)
-(** Complete the following proof. *)
+(** **** 练习: 一星 (dictionary_invariant1)  *)
+(** 完成下列证明 *)
 
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
   (find k (insert k v d)) = Some v.
@@ -877,8 +857,8 @@ Proof.
  (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 1 star (dictionary_invariant2)  *)
-(** Complete the following proof. *)
+(** **** 练习: 一星 (dictionary_invariant2)  *)
+(** 完成下列证明 *)
 
 Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
   beq_nat m n = false -> find m d = find m (insert n o d).
