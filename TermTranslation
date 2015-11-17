@@ -50,3 +50,7 @@ commute 可交换的
 normalization 正规化
 Automated Theorem Prover 自动化定理证明器
 Inductive Proof 归纳证明
+Concurrence 并发
+Parrallize 并行
+State 状态
+Mutable 可变

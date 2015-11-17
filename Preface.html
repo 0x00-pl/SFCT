@@ -222,77 +222,54 @@
    “Coq”也是Thierry Coquand，Coq的早期开发人员的名字的头三个字母。 
 <div class="paragraph"> </div>
 
-<a name="lab6"></a><h2 class="section">Functional Programming</h2>
+<a name="lab6"></a><h2 class="section">函数式编程</h2>
 
 <div class="paragraph"> </div>
 
- The term <i>functional programming</i> refers both to a collection of
-    programming idioms that can be used in almost any programming
-    language and to a family of programming languages designed to
-    emphasize these idioms, including Haskell, OCaml, Standard ML,
-    F#, Scala, Scheme, Racket, Common Lisp, Clojure, Erlang, and Coq.
+ 函数式编程既代表一系列的，几乎可以在任何编程语言里面用的惯用法，也代表
+    被设计于强调这些术语的编程语言，包括Haskell，OCaml，StandardML，F#，
+    Scala，Scheme，Racket，Common Lisp，Erlang，还有Coq。
 
 <div class="paragraph"> </div>
 
-    Functional programming has been developed over many decades &mdash;
-    indeed, its roots go back to Church's lambda-calculus, which was
-    invented in the 1930s before the era of the computer began!  But
-    since the early '90s it has enjoyed a surge of interest among
-    industrial engineers and language designers, playing a key role in
-    high-value systems at companies like Jane St. Capital, Microsoft,
-    Facebook, and Ericsson.
+    函数式编程已经有数十年历史了&mdash;实际上，它甚至可以追溯到Church的λ演算，
+    这可是发明与1930年代，内时候计算机时代还没开始呢！
+    自从90年代初以来函数式编程享受了业界的软件工程师与及语言设计者的兴趣的激增，
+    并且在如Jane St. Capital，Microsoft，Facebook，与及Ericsson等公司的高价值的
+    系统有关键地位。
 
 <div class="paragraph"> </div>
 
-    The most basic tenet of functional programming is that, as much as
-    possible, computation should be <i>pure</i>, in the sense that the only
-    effect of execution should be to produce a result: the computation
-    should be free from <i>side effects</i> such as I/O, assignments to
-    mutable variables, redirecting pointers, etc.  For example,
-    whereas an <i>imperative</i> sorting function might take a list of
-    numbers and rearrange its pointers to put the list in order, a
-    pure sorting function would take the original list and return a
-    <i>new</i> list containing the same numbers in sorted order.
+    函数式编程的最基础宗旨是，尽可能的，计算应该是纯的，也就是说，
+    执行一段代码的效果只有生成结果：计算应该与输入输出，赋值，可变变量，指针重定向等脱离。
+    比如说，一个指令式的排序函数接受一个数字列表，重组指针，使得列表被排序，
+    一个纯的排序函数会取一个列表，返回一个含有同样数字，但是被排序的新列表。
 
 <div class="paragraph"> </div>
 
-    One significant benefit of this style of programming is that it
-    makes programs easier to understand and reason about.  If every
-    operation on a data structure yields a new data structure, leaving
-    the old one intact, then there is no need to worry about how that
-    structure is being shared and whether a change by one part of the
-    program might break an invariant that another part of the program
-    relies on.  These considerations are particularly critical in
-    concurrent programs, where every piece of mutable state that is
-    shared between threads is a potential source of pernicious bugs.
-    Indeed, a large part of the recent interest in functional
-    programming in industry is due to its simple behavior in the
-    presence of concurrency.
+    用这样的风格编程的最明显的好处是这样做使得程序更容易被明白/进行论证。
+    如果在一个数据结构上的所有操作返回新数据结构，并且旧的结构没有被改动，
+    我们就不需要担心旧的数据结构会不会在其他地方用到，
+    改程序的一部分会不会破坏程序的另一部分的属性。
+    在并发式程序中，每一块可改状态都是漏洞的潜在来源，所以这些考虑变得更关键。
+    事实上，业界最近对函数式编程的兴趣一大部分来源于在并发下，它的简洁的行为。
 
 <div class="paragraph"> </div>
 
-    Another reason for the current excitement about functional
-    programming is related to the first: functional programs are often
-    much easier to parallelize than their imperative counterparts.  If
-    running a computation has no effect other than producing a result,
-    then it does not matter <i>where</i> it is run.  Similarly, if a data
-    structure is never modified destructively, then it can be copied
-    freely, across cores or across the network.  Indeed, the MapReduce
-    idiom that lies at the heart of massively distributed query
-    processors like Hadoop and is used by Google to index the entire
-    web is a classic example of functional programming.
+    最近人们对函数式编程的兴奋还有另一个，跟第一个原因有关的原因：
+    函数式程序经常比指令式程序更容易并行化。
+    如果一个计算没有除了生成结果意外的作用，他什么时候被执行就毫不重要。
+    类似的，如果一个数据结构从来没有被修改，它可以被随意复制到任何地方。
+    的确，位于超大量分布式计算处理器（如Hadoop）的中心，
+    并且被Google用于索引整个互联网的MapReduce惯用法就是函数式编程的经典例子。
 
 <div class="paragraph"> </div>
 
-    For purposes of this course, functional programming has yet
-    another significant attraction: it serves as a bridge between
-    logic and computer science.  Indeed, Coq itself can be viewed as a
-    combination of a small but extremely expressive functional
-    programming language plus with a set of tools for stating and
-    proving logical assertions.  Moreover, when we come to look more
-    closely, we find that these two sides of Coq are actually aspects
-    of the very same underlying machinery &mdash; i.e., <i>proofs are
-    programs</i>.  
+    对于这个课程来说，函数式编程有另一个重要的地方：
+    它充当了逻辑与及计算机科学的桥梁。
+    事实上，Coq自身可以被看成微小但是有极大表达能力的函数式编程语言与及
+    一系列用于声明/证明定理的工具的集合体。更多的，当我们做更深的检测的时候，
+    我们会发现Coq的这两边其实是同一机智的两面（比如，程序则证明）
 <div class="paragraph"> </div>
 
 <a name="lab7"></a><h2 class="section">Program Verification</h2>
