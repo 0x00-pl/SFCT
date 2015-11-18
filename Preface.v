@@ -199,103 +199,80 @@
     本质上就是Coq自身的内核的一个简化的模型！*)
 
 (* ###################################################################### *)
-(** * Practicalities *)
+(** * 现实细节 *)
 
 (* ###################################################################### *)
-(** ** Chapter Dependencies *)
+(** ** 章节依赖性 *)
 
-(** A diagram of the dependencies between chapters and some suggested
-    paths through the material can be found in the file [deps.html]. *)
-
-(* ###################################################################### *)
-(** ** System Requirements *)
-
-(** Coq runs on Windows, Linux, and OS X.  You will need:
-
-       - A current installation of Coq, available from the Coq home
-         page.  Everything should work with version 8.4.
-
-       - An IDE for interacting with Coq.  Currently, there are two
-         choices:
-
-           - Proof General is an Emacs-based IDE.  It tends to be
-             preferred by users who are already comfortable with
-             Emacs.  It requires a separate installation (google
-             "Proof General").
-
-           - CoqIDE is a simpler stand-alone IDE.  It is distributed
-             with Coq, but on some platforms compiling it involves
-             installing additional packages for GUI libraries and
-             such. *)
+(** 一个章节之间的依赖性与及一些建议路径的图可以在文件[deps.html]中找到。 *)
 
 (* ###################################################################### *)
-(** ** Exercises *)
+(** ** 系统需求 *)
 
-(** Each chapter includes numerous exercises.  Each is marked with a
-    "star rating," which can be interpreted as follows:
+(** Coq可以在Windows， Linux， OS X上执行。 你将需要：
 
-       - One star: easy exercises that underscore points in the text
-         and that, for most readers, should take only a minute or two.
-         Get in the habit of working these as you reach them.
+       - 一个最近的Coq，可以从Coq网页取得。所有内容都能在8.4下运行。
 
-       - Two stars: straightforward exercises (five or ten minutes).
+       - 一个跟Coq交互的交互式集成开发环境（IDE）。目前为止，有两个选项：
 
-       - Three stars: exercises requiring a bit of thought (ten
-         minutes to half an hour).
+           - Proof General是一个基于Emacs的IDE。对emacs已经舒适的用户更喜欢这个。
+             它需要另外安装（google "Proof General"）。
 
-       - Four and five stars: more difficult exercises (half an hour
-         and up).
-
-    Also, some exercises are marked "advanced", and some are marked
-    "optional."  Doing just the non-optional, non-advanced exercises
-    should provide good coverage of the core material.  Optional
-    exercises provide a bit of extra practice with key concepts and
-    introduce secondary themes that may be of interest to some
-    readers.  Advanced exercises are for readers who want an extra
-    challenge (and, in return, a deeper contact with the material).
-
-    _Please do not post solutions to the exercises in public places_:
-    Software Foundations is widely used both for self-study and for
-    university courses.  Having solutions easily available makes it
-    much less useful for courses, which typically have graded homework
-    assignments.  The authors especially request that readers not post
-    solutions to the exercises anyplace where they can be found by
-    search engines.
-*)
+           - CoqIDE是一个更简洁的独立IDE。它跟Coq一起发布，
+             但是在一些平台上编译之需要额外安装为了用户界面之类的东西的软件包 *)
 
 (* ###################################################################### *)
-(** ** Downloading the Coq Files *)
+(** ** 练习 *)
 
-(** A tar file containing the full sources for the "release version"
-    of these notes (as a collection of Coq scripts and HTML files) is
-    available here:
+(** 每一章都包含大量的习题。每一个习题都有用一个“星级评分”标记。
+    星级评分的意义是：
+
+       - 一星：很简单的，强调课程的重点的习题。对于大部分读者，1-2分钟应该足够了。
+         养成看到一个就做一个的习惯。
+
+       - 二星：直截了当的习题（5或10分钟）。
+
+       - 三星：需要一点点思考的习题（10分钟到半小时）。
+
+       - 四或五星：更困难的习题（半小时或以上）。
+
+    有些习题被标注为“高阶”，有些习题被标注为“可选”。
+    做非高阶，非可选的习题已经够提供一个不错的对核心概念的覆盖率。
+    可选习题提供一点点更多的关键概念与及可能引起一些读者兴趣的附加主题的额外练习。
+    高阶练习是给想要更多挑战（以及一个更深的对概念的理解）的读者。
+
+    请不要把习题的答案放在公众地方：Software Foundation，
+    作为自学教程与及大学课程，被广泛使用。如果习题答案很容易取得，
+    这让这本书对一般有会打分的作业的大学课程变得远远没那么有用。
+    作者特定的要求读者切勿把习题答案放在任何可以被搜索引擎找到的地方。*)
+
+(* ###################################################################### *)
+(** ** 下载Coq文件 *)
+
+(** 一个包含所有“发布版本”的笔记的源代码的tar文件
+    （作为一系列的Coq脚本与及HTML文件）可在此获得：
 <<
         http://www.cis.upenn.edu/~bcpierce/sf   
 >>
-    If you are using the notes as part of a class, you may be given
-    access to a locally extended version of the files, which you
-    should use instead of the release version.
-*)
+    如果你在一个课程里面用这些笔记，你可能有本地扩展的版本的这些文件。
+    如果如此，你应该用它们，而不是用发布版本。*)
 
 (* ###################################################################### *)
-(** * Note for Instructors *)
+(** * 对授课员的标准 *)
 
-(** If you intend to use these materials in your own course, you will
-    undoubtedly find things you'd like to change, improve, or add.
-    Your contributions are welcome!
+(** 如果你有意用这些课件授课，你一定会找到你希望改进，增加的东西。
+    我们欢迎你的奉献！
 
-    Please send an email to Benjamin Pierce describing yourself and
-    how you would like to use the materials, and including the result
-    of doing "htpasswd -s -n NAME", where NAME is your preferred user
-    name.  We'll set you up with read/write access to our subversion
-    repository and developers' mailing list; in the repository you'll
-    find a [README] with further instructions. *)
+    请您发一封电子邮件给Benjamin Pierce，说明你自己，你希望如何用这些课件，
+    还有你执行“htpasswd -s -n NAME”的结果（NAME是你喜欢的用户名）。
+    我们会给你我们的subversion 仓库与及开发者邮件列表：
+    在仓库中你会找到一个包含更多指引[README]。*)
 
 (* ###################################################################### *)
-(** * Translations *)
+(** * 翻译 *)
 
-(** Thanks to the efforts of a team of volunteer translators, _Software 
-    Foundations_ can now be enjoyed in Japanese at [http://proofcafe.org/sf]
+(** 因为一个志愿者翻译团队，Software Foundation可以在[http://proofcafe.org/sf]日文中被阅读。
+    感谢他们的工作！
 *)
 
 (** $Date$ *)
