@@ -154,84 +154,49 @@
     一系列用于声明/证明定理的工具的集合体。更多的，当我们做更深的检测的时候，
     我们会发现Coq的这两边其实是同一机智的两面（比如，程序则证明）*)
 
-(** ** Program Verification *)
+(** ** 程序验证 *)
 
-(** The first third of the book is devoted to developing the
-    conceptual framework of logic and functional programming and
-    gaining enough fluency with Coq to use it for modeling and
-    reasoning about nontrivial artifacts.  From this point on, we
-    increasingly turn our attention to two broad topics of critical
-    importance to the enterprise of building reliable software (and
-    hardware): techniques for proving specific properties of
-    particular _programs_ and for proving general properties of whole
-    programming _languages_.
+(** 本书的前三分之一被用于发展逻辑学与及函数式编程的概念框架，
+    与及提升用Coq对非平凡构造的建模，论证的熟练度。
+    从此之后，我们会续渐地把重心偏移到两个对构建可靠软件（以及硬件）
+    有核心重要性的话题上：用于证明特定程序的属性的与及
+    用于证明对于一整个编程语言都满足的属性的技巧。
 
-    For both of these, the first thing we need is a way of
-    representing programs as mathematical objects, so we can talk
-    about them precisely, and ways of describing their behavior in
-    terms of mathematical functions or relations.  Our tools for these
-    tasks are _abstract syntax_ and _operational semantics_, a method
-    of specifying the behavior of programs by writing abstract
-    interpreters.  At the beginning, we work with operational
-    semantics in the so-called "big-step" style, which leads to
-    somewhat simpler and more readable definitions, in those cases
-    where it is applicable.  Later on, we switch to a more detailed
-    "small-step" style, which helps make some useful distinctions
-    between different sorts of "nonterminating" program behaviors and
-    which is applicable to a broader range of language features,
-    including concurrency.
+    对于这两个话题，我们要做的第一件事是找出一个用数学对象表示程序的方法，
+    与及用函数/关系表示它们的行为，因为我们需要对它们进行精确的描述。
+    我们这方面的工具是抽象语法（Abstract Syntax）与及操作语义，
+    一个通过写抽象解释器规定程序行为的方法。
+    在一开始，我们尽量用“大步（big-step）”的，更简单可读的操作语义，
+    之后，我们会转换到一个更细节化的“小步（small-step）”的，
+    可以在不终止的程序与及包含更多语言特性（比如并行化）下更有效的风格。
 
-    The first programming language we consider in detail is _Imp_, a
-    tiny toy language capturing the core features of conventional
-    imperative programming: variables, assignment, conditionals, and
-    loops. We study two different ways of reasoning about the
-    properties of Imp programs.
+    我们第一个考虑的编程语言是Imp，一个微小但包含了变量，赋值，条件，循环的编程语言。
+    我们会学习两张不同的对Imp程序论证的方法。
 
-    First, we consider what it means to say that two Imp programs are
-    _equivalent_ in the sense that they give the same behaviors for
-    all initial memories.  This notion of equivalence then becomes a
-    criterion for judging the correctness of _metaprograms_ --
-    programs that manipulate other programs, such as compilers and
-    optimizers.  We build a simple optimizer for Imp and prove that it
-    is correct.
+    第一，我们考虑我们该如何空额手两个Imp程序是等价的-对所有的内存状态，有同样的行为。
+    这个等价的观念因此成为了对元程序（操控程序的程序，比如编译器，优化器）的正确性的标准。
+    我们也会构建一个简单的优化器，并证明其正确性。
 
-    Second, we develop a methodology for proving that Imp programs
-    satisfy formal specifications of their behavior.  We introduce the
-    notion of _Hoare triples_ -- Imp programs annotated with pre- and
-    post-conditions describing what should be true about the memory in
-    which they are started and what they promise to make true about
-    the memory in which they terminate -- and the reasoning principles
-    of _Hoare Logic_, a "domain-specific logic" specialized for
-    convenient compositional reasoning about imperative programs, with
-    concepts like "loop invariant" built in.
+    第二，我们开发一个用于证明Imp程序满足他们行为的形式化规范的方法学。
+    我们引入霍尔三元组-Imp程序，跟描述程序开始之前/结束之后所满足的条件-
+    前条件，后条件的概念。与及霍尔逻辑，一个专用于方便地对命令式语言进行论证，
+    内建了循环不变项（loop-invariant）等概念的“领域特定逻辑”的论证基础。
 
-    This part of the course is intended to give readers a taste of the
-    key ideas and mathematical tools used for a wide variety of
-    real-world software and hardware verification tasks.
-*)
+    这课程的这一部分是打算给读者尝试
+    在一系列现实的软件与及硬件的证明工作里面用到的关键概念与及数学工具。*)
 
-(** ** Type Systems *)
+(** ** 类型系统 *)
 
-(** Our final major topic, covering the last third of the course, is
-    _type systems_, a powerful set of tools for establishing
-    properties of _all_ programs in a given language.
+(** 我们的最后一个主要话题，类型系统，一组用于构建对于一个编程语言里面所有程序的属性的工具，
+    包含了课程的最后三分之一部分。
 
-    Type systems are the best established and most popular example of
-    a highly successful class of formal verification techniques known
-    as _lightweight formal methods_.  These are reasoning techniques
-    of modest power -- modest enough that automatic checkers can be
-    built into compilers, linkers, or program analyzers and thus be
-    applied even by programmers unfamiliar with the underlying
-    theories.  (Other examples of lightweight formal methods include
-    hardware and software model checkers, contract checkers, and
-    run-time property monitoring techniques for detecting when some
-    component of a system is not behaving according to specification).
+    类型系统是最久经考验，也是最流行的轻量级形式化验证手段的例子。
+    他们的论证能力很一般-以至于自动检查器可以在编译器，连接器，分析器里面建造，
+    然后被不明白类型系统理论的程序员应用。（其他的轻量级形式化方法的例子包括
+    硬件及软件的模型检查器，契约检查器，与及运行时属性检查器）。
 
-    This topic brings us full circle: the language whose properties we
-    study in this part, called the _simply typed lambda-calculus_, is
-    essentially a simplified model of the core of Coq itself!
-
-*)
+    这个话题使得这个课程圆满：我们在这一部分研究的语言，simply typed lambda calculus，
+    本质上就是Coq自身的内核的一个简化的模型！*)
 
 (* ###################################################################### *)
 (** * Practicalities *)
