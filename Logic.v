@@ -1,183 +1,132 @@
-(** * Logic: Logic in Coq *)
+(** * Logic：Coq中的逻辑系统 *)
 
 Require Export BasicTactics.
 
-
-(** Coq's built-in logic is very small: the only primitives are
-    [Inductive] definitions, universal quantification ([forall]), and
-    implication ([->]), while all the other familiar logical
-    connectives -- conjunction, disjunction, negation, existential
-    quantification, even equality -- can be encoded using just these.
-
-    This chapter explains the encodings and shows how the tactics
-    we've seen can be used to carry out standard forms of logical
-    reasoning involving these connectives.
-
-*)
+(** Coq内置的逻辑系统十分地小：仅有的基本操作只有[Inductive]定义，全称量化
+    （[forall]）以及蕴含（[->]）三种，而所有其他常见的逻辑连接符——合取、析
+    取、否定、存在量化，甚至相等，都能够用这三个基本操作表示。这一章将解释这
+    种表示方法并展示如何使用之前我们接触到的证明策略来得出对含有这些连接词的命
+    题的逻辑推理的范式。*)
 
 (* ########################################################### *)
-(** * Propositions *)
+(** * 命题 *)
 
-(** In previous chapters, we have seen many examples of factual
-    claims (_propositions_) and ways of presenting evidence of their
-    truth (_proofs_).  In particular, we have worked extensively with
-    _equality propositions_ of the form [e1 = e2], with
-    implications ([P -> Q]), and with quantified propositions 
-    ([forall x, P]).  
-*)
+(** 在之前的章节中我们已经看到许多对于某些事实的陈述（_命题_）以及给出证实它们的真实
+    性的证据的方法（_证明_）。比方说，目前为止我们已经进行了许多命题的证明；比如说形
+    如[e1 = e2]的_相等性命题_，蕴含式（[P -> Q]），以及量化命题（[forall x, P 
+    x]）的证明。*)
 
+(** 在Coq中，所有存在被证明的可能的事物的类型是[Prop]。 *)
 
-(** In Coq, the type of things that can (potentially) 
-    be proven is [Prop]. *)
-
-(** Here is an example of a provable proposition: *)
+(** 下面是一个可以被证明的命题： *)
 
 Check (3 = 3).
 (* ===> Prop *)
 
-(** Here is an example of an unprovable proposition: *)
+(** 下面是一个无法被证明的命题： *)
 
 Check (forall (n:nat), n = 2).
 (* ===> Prop *)
 
-(** Recall that [Check] asks Coq to tell us the type of the indicated 
-  expression. *)
+(** 回想一下，[Check]能够让Coq显示某个表达式的类型。 *)
 
 (* ########################################################### *)
-(** * Proofs and Evidence *)
+(** * 证明与证据 *)
 
-(** In Coq, propositions have the same status as other types, such as
-    [nat].  Just as the natural numbers [0], [1], [2], etc. inhabit
-    the type [nat], a Coq proposition [P] is inhabited by its
-    _proofs_.  We will refer to such inhabitants as _proof term_ or
-    _proof object_ or _evidence_ for the truth of [P]. 
-
-    In Coq, when we state and then prove a lemma such as:
-
-Lemma silly : 0 * 3 = 0.  
-Proof. reflexivity. Qed.
-
-    the tactics we use within the [Proof]...[Qed] keywords tell Coq
-    how to construct a proof term that inhabits the proposition.  In
-    this case, the proposition [0 * 3 = 0] is justified by a
-    combination of the _definition_ of [mult], which says that [0 * 3]
-    _simplifies_ to just [0], and the _reflexive_ principle of
-    equality, which says that [0 = 0].
-
-
-*)
+(** 在Coq中，命题与[nat]之类的类型有着同样的地位。就像自然数[0]，[1]，[2]是[nat]
+    的元素一样，一个Coq命题[P]有它的_证明_作为它的元素。我们称这些元素为命题[P]的真
+    实性的_证明项_（proof term）/_证明对象_（proof object）/_证据_（evidence）。
+    在Coq中，当我们声明并且证明像这样的引理的时候：
+        Lemma silly : 0 * 3 = 0.  
+        Proof. reflexivity. Qed.
+    我们在[Proof]和[Qed]关键字中使用的证明策略会告诉Coq如何构造出一个作为这个命题的
+    元素的证明项。在这个示范中，命题[0 * 3 = 0]被由[mult]的定义（它声明了[0 * 3]
+    能够被简化至[3]）和相等的_自反性_（它声明了[0 = 0]）构成的组合证明。 *)
 
 (** *** *)
 
 Lemma silly : 0 * 3 = 0.
 Proof. reflexivity. Qed.
 
-(** We can see which proof term Coq constructs for a given Lemma by
-using the [Print] directive: *)
+(** 我们可以用[Print]指令来查看Coq给某一命题构造的证明项： *)
 
 Print silly.
 (* ===> silly = eq_refl : 0 * 3 = 0 *)
 
-(** Here, the [eq_refl] proof term witnesses the equality. (More on
-equality later!)*)
+(** 在这里，证明项[eq_refl]证实了它的相等性。（我们会在将来遇到更多的关于相等性的内容。*)
 
-(** ** Implications _are_ functions *)
+(** ** 蕴含_是_函数 *)
 
-(** Just as we can implement natural number multiplication as a
-function:
-
-[
-mult : nat -> nat -> nat 
-]
-
-The _proof term_ for an implication [P -> Q] is a _function_ that
-takes evidence for [P] as input and produces evidence for [Q] as its
-output.
+(** 就像我们能够以函数的形式实现自然数乘法一样：
+        [
+        mult : nat -> nat -> nat 
+        ]
+    一个蕴含式[P -> Q]的证明项是一个_函数_：这个函数以命题[P]的证据作为输入，并且生成一
+    个[Q]的证据作为其输出。
 *)     
 
 Lemma silly_implication : (1 + 1) = 2  ->  0 * 3 = 0.
 Proof. intros H. reflexivity. Qed.
 
-(** We can see that the proof term for the above lemma is indeed a
-function: *)
+(** 我们能够看到上面的引理的证明项确实是一个函数： *)
 
 Print silly_implication.
 (* ===> silly_implication = fun _ : 1 + 1 = 2 => eq_refl
      : 1 + 1 = 2 -> 0 * 3 = 0 *)
 
-(** ** Defining propositions *)
+(** ** 定义命题 *)
 
-(** Just as we can create user-defined inductive types (like the
-    lists, binary representations of natural numbers, etc., that we
-    seen before), we can also create _user-defined_ propositions.
+(** 就像我们能够创建自定义的归纳性类型（比如说列表和二进制表示的自然数这些
+    我们之前曾接触过的类型）一样，我们也能够创建_自定义的_命题。
 
-    Question: How do you define the meaning of a proposition?  
+    问题：你如何定义某个命题的意义？ 
 *)
 
 (** *** *)
 
-(** The meaning of a proposition is given by _rules_ and _definitions_
-    that say how to construct _evidence_ for the truth of the
-    proposition from other evidence.
+(** 命题的意义由说明了如何从其他证据构造出证实命题为真的_证据_的_规则_和_定义_给出。
 
-    - Typically, rules are defined _inductively_, just like any other
-      datatype.
+    - 一般而言，就像其他数据类型一样，规则是被归纳性地定义的。
 
-    - Sometimes a proposition is declared to be true without
-      substantiating evidence.  Such propositions are called _axioms_.
+    - 有时一个命题会在没有支持证据的情况下被宣称为真。这些命题被称作_公理_。
 
-    In this and subsequent chapters, we'll see more about how these
-    proof terms work in more detail.
+    在这一章以及接下来的章节中，我们将会看到更多的有关这些证明项如何产生效果的细节。
 *)
 
 (* ########################################################### *)
-(** * Conjunction (Logical "and") *)
+(** * 合取（逻辑与） *)
 
-(** The logical conjunction of propositions [P] and [Q] can be
-    represented using an [Inductive] definition with one
-    constructor. *)
+(** 命题[P]和[Q]的逻辑合取能够用包含一个构造子的[Inductive]定义表示。 *)
 
 Inductive and (P Q : Prop) : Prop :=
   conj : P -> Q -> (and P Q). 
 
-(** The intuition behind this definition is simple: to
-    construct evidence for [and P Q], we must provide evidence
-    for [P] and evidence for [Q].  More precisely:
+(** 在这个定义背后的直觉十分直接：为了构造[and P Q]的证据，我们需要提供
+    P的证据和Q的证据。更为精确的说：
+    - 如果[p]是[P]的证据且[q]是[Q]的证据，那么[conj p q]可以被作为[and P Q]的证据；
+    - 而且这也是_唯一_给出[and P Q]的证据的方法。也即是说，如果谁给出了一个[and P Q]
+      的证据，那么我们就能够得知这个证据一定是以[conj p q]这一形式出现的，其中[p]是
+      [P]的证据，[q]是[Q]的证据。
 
-    - [conj p q] can be taken as evidence for [and P Q] if [p]
-      is evidence for [P] and [q] is evidence for [Q]; and
-
-    - this is the _only_ way to give evidence for [and P Q] --
-      that is, if someone gives us evidence for [and P Q], we
-      know it must have the form [conj p q], where [p] is
-      evidence for [P] and [q] is evidence for [Q]. 
-
-   Since we'll be using conjunction a lot, let's introduce a more
-   familiar-looking infix notation for it. *)
+    因为我们会经常使用合取，所以让我们来给它设定一个熟悉的中缀表示符： *)
 
 Notation "P /\ Q" := (and P Q) : type_scope.
 
-(** (The [type_scope] annotation tells Coq that this notation
-    will be appearing in propositions, not values.) *)
+(** （[type_scope]这一标记告诉Coq系统这个符号将会出现在命题中而不是在值中。） *)
 
-(** Consider the "type" of the constructor [conj]: *)
+(** 判断构造子[conj]的"类型"： *)
 
 Check conj.
 (* ===>  forall P Q : Prop, P -> Q -> P /\ Q *)
 
-(** Notice that it takes 4 inputs -- namely the propositions [P]
-    and [Q] and evidence for [P] and [Q] -- and returns as output the
-    evidence of [P /\ Q]. *)
+(** 注意，conj需要四个输入——即命题P，命题Q，以及P和Q的证据——然后返回一个P/\Q的证据。 *)
 
-(** ** "Introducing" conjunctions *)
-(** Besides the elegance of building everything up from a tiny
-    foundation, what's nice about defining conjunction this way is
-    that we can prove statements involving conjunction using the
-    tactics that we already know.  For example, if the goal statement
-    is a conjuction, we can prove it by applying the single
-    constructor [conj], which (as can be seen from the type of [conj])
-    solves the current goal and leaves the two parts of the
-    conjunction as subgoals to be proved separately. *)
+(** ** "引入"合取 *)
+(** 除了从一个极小的基础建立起一切的简洁之外，这样定义合取还有另外一个好
+    处：我们能够使用我们已经知道的证明策略来证明含有合取的陈述。比方说，如
+    果目标是一个合取式，我们能够应用[conj]这个单独的构造子，而（这可以从
+    [conj]的类型得知）这将证明当前的目标，并且将构成合取的两个部分留下作为两
+    个需要分别证明的子目标。 *)
 
 Theorem and_example : 
   (0 = 0) /\ (4 = mult 2 2).
@@ -186,8 +135,7 @@ Proof.
   - (* left *) reflexivity.
   - (* right *) reflexivity.  Qed.
 
-(** Just for convenience, we can use the tactic [split] as a shorthand for
-    [apply conj]. *)
+(** 出于方便，我们可以用[split]作为[apply conj]的缩写形式。 *)
 
 Theorem and_example' : 
   (0 = 0) /\ (4 = mult 2 2).
@@ -196,11 +144,9 @@ Proof.
     - (* left *) reflexivity.
     - (* right *) reflexivity.  Qed.
 
-(** ** "Eliminating" conjunctions *)
-(** Conversely, the [destruct] tactic can be used to take a
-    conjunction hypothesis in the context, calculate what evidence
-    must have been used to build it, and add variables representing
-    this evidence to the proof context. *)
+(** ** "消去"合取 *)
+(** 相反地，[destruct]这一策略可以分析并计算出构造出上下文中的某个合取式所
+    必须的证据，并且将这些证据以变量的形式添加到当前证明的上下文中。 *)
 
 Theorem proj1 : forall P Q : Prop, 
   P /\ Q -> P.
@@ -228,9 +174,8 @@ Proof.
   
 
 (** **** Exercise: 2 stars (and_assoc)  *)
-(** In the following proof, notice how the _nested pattern_ in the
-    [destruct] breaks the hypothesis [H : P /\ (Q /\ R)] down into
-    [HP: P], [HQ : Q], and [HR : R].  Finish the proof from there: *)
+(** 注意在下面的这个证明中[destruct]使用的_嵌套模式_是如何将前提[H : P /\ (Q /\ R)]
+    解构成[HP: P]，[HQ : Q]以及[HR : R]的。从这里开始完成这个证明： *)
 
 Theorem and_assoc : forall P Q R : Prop, 
   P /\ (Q /\ R) -> (P /\ Q) /\ R.
@@ -245,8 +190,7 @@ Proof.
 (* ###################################################### *)
 (** * Iff *)
 
-(** The handy "if and only if" connective is just the conjunction of
-    two implications. *)
+(** 简便的"当且仅当"连接符只是两个蕴含式的合取： *)
 
 Definition iff (P Q : Prop) := (P -> Q) /\ (Q -> P).
 
@@ -271,8 +215,7 @@ Proof.
     - (* <- *) apply HAB.  Qed.
 
 (** **** Exercise: 1 star, optional (iff_properties)  *)
-(** Using the above proof that [<->] is symmetric ([iff_sym]) as
-    a guide, prove that it is also reflexive and transitive. *)
+(** 以上面的[<->]的对称性的证明（[iff_sym]）作为参考，证明它的自反性和传递性。 *)
 
 Theorem iff_refl : forall P : Prop, 
   P <-> P.
@@ -284,25 +227,22 @@ Theorem iff_trans : forall P Q R : Prop,
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** Hint: If you have an iff hypothesis in the context, you can use
-    [inversion] to break it into two separate implications.  (Think
-    about why this works.) *)
+(** 提示：如果在上下文中存在一个“当且仅当”形式的前提，你可以使用[inversion]
+    将其分解为两个单独的蕴含式。（思考一下为什么可以这么做） *)
 (** [] *)
 
 
 
-(** Some of Coq's tactics treat [iff] statements specially, thus
-    avoiding the need for some low-level manipulation when reasoning
-    with them.  In particular, [rewrite] can be used with [iff]
-    statements, not just equalities. *)
+(** Coq的某些策略会以特别的方式处理[iff]式并因此在使用这些命题
+    进行推理时得以避开进行某些底层操控的需要。举例而言，[rewrite]除了
+    可以配合等式使用之外，还可以配合[iff]式使用。*)
 
 (* ############################################################ *)
-(** * Disjunction (Logical "or") *)
+(** * 析取（逻辑或）*)
 
-(** ** Implementing disjunction *)
+(** ** 实现析取 *)
 
-(** Disjunction ("logical or") can also be defined as an
-    inductive proposition. *)
+(** 析取（逻辑或）也可以被定义为一个归纳性命题。*)
 
 Inductive or (P Q : Prop) : Prop :=
   | or_introl : P -> or P Q
@@ -310,33 +250,27 @@ Inductive or (P Q : Prop) : Prop :=
 
 Notation "P \/ Q" := (or P Q) : type_scope.
 
-(** Consider the "type" of the constructor [or_introl]: *)
+(** 判断构造子[or_introl]的"类型"：*)
 
 Check or_introl.
 (* ===>  forall P Q : Prop, P -> P \/ Q *)
 
-(** It takes 3 inputs, namely the propositions [P], [Q] and
-    evidence of [P], and returns, as output, the evidence of [P \/ Q].
-    Next, look at the type of [or_intror]: *)
+(** 它有三个输入参数，也就是命题[P]，命题[Q]以及命题[P]的证据，然后输出命题[P \/ Q]
+    的证据作为返回值。
+    接下来看看[or_intror]的类型： *)
 
 Check or_intror.
 (* ===>  forall P Q : Prop, Q -> P \/ Q *)
 
-(** It is like [or_introl] but it requires evidence of [Q]
-    instead of evidence of [P]. *)
+(** 就像[or_introl]一样，只不过它要求的不是[P]的证据而是[Q]的证据。 *)
 
-(** Intuitively, there are two ways of giving evidence for [P \/ Q]:
-
-    - give evidence for [P] (and say that it is [P] you are giving
-      evidence for -- this is the function of the [or_introl]
-      constructor), or
-
-    - give evidence for [Q], tagged with the [or_intror]
-      constructor. *)
+(** 直觉上，有两种给出命题[P \/ Q]的证据的方式：
+    - 给出[P]的证据（并且声明你是在给[P]提供证据——这正是[or_introl]构造子的功能）；
+    - 或者给出[Q]的证据，并用构造子[or_intror]标记。*)
 
 (** *** *)
-(** Since [P \/ Q] has two constructors, doing [destruct] on a
-    hypothesis of type [P \/ Q] yields two subgoals. *)
+(** 因为[P \/ Q]有两个构造子，对一个类型为[P \/ Q]的前提进行[destruct]将会生成
+    两个子目标。 *)
 
 Theorem or_commut : forall P Q : Prop,
   P \/ Q  -> Q \/ P.
@@ -346,8 +280,8 @@ Proof.
     - (* left *) apply or_intror. apply HP.
     - (* right *) apply or_introl. apply HQ.  Qed.
 
-(** From here on, we'll use the shorthand tactics [left] and [right]
-    in place of [apply or_introl] and [apply or_intror]. *)
+(** 从现在开始开始我们将会用两个作为缩写的策略：[left]和[right]来分别代替
+    [apply or_introl]和[apply or_intror]。 *)
 
 Theorem or_commut' : forall P Q : Prop,
   P \/ Q  -> Q \/ P.
@@ -387,16 +321,13 @@ Proof.
 (** [] *)
 
 (* ################################################### *)
-(** ** Relating [/\] and [\/] with [andb] and [orb] *)
+(** ** 将[/\]和[\/]与[andb]和[orb]联系起来 *)
 
-(** We've already seen several places where analogous structures
-    can be found in Coq's computational ([Type]) and logical ([Prop])
-    worlds.  Here is one more: the boolean operators [andb] and [orb]
-    are clearly analogs of the logical connectives [/\] and [\/].
-    This analogy can be made more precise by the following theorems,
-    which show how to translate knowledge about [andb] and [orb]'s
-    behaviors on certain inputs into propositional facts about those
-    inputs. *)
+(** 我们已经在Coq的计算（[Type]）和逻辑（[Prop]）领域中看到了几个使用了模拟结
+    构的地方。这里是另外一个：布尔运算操作符[andb]和[orb]，很明显地，是对逻辑
+    连接符[/\]和[\/]的模拟。通过以下这些说明了如何将与[andb]和[orb]在某些输
+    入上的行为相关的知识转化成与这些输入相关的命题性的事实的定理，这种模拟能够变
+    得更加精确。*)
 
 Theorem andb_prop : forall b c,
   andb b c = true -> b = true /\ c = true.
@@ -439,20 +370,17 @@ Proof.
 
 
 (* ################################################### *)
-(** * Falsehood *)
+(** * 矛盾式 *)
 
-(** Logical falsehood can be represented in Coq as an inductively
-    defined proposition with no constructors. *)
+(** 在Coq中矛盾式可以用一个没有构造子的归纳定义的命题表示。*)
 
 Inductive False : Prop := . 
 
-(** Intuition: [False] is a proposition for which there is no way
-    to give evidence. *)
+(** 在直观上[False]是一个无法给出证据的命题。*)
 
 
-(** Since [False] has no constructors, inverting an assumption
-    of type [False] always yields zero subgoals, allowing us to
-    immediately prove any goal. *)
+(** 因为[False]没有构造子，对一个类型为[False]的假设进行反演将不会生成任何子目
+    标，由此我们得以立即证明任何目标。*)
 
 Theorem False_implies_nonsense :
   False -> 2 + 2 = 5.
@@ -460,14 +388,12 @@ Proof.
   intros contra.
   inversion contra.  Qed. 
 
-(** How does this work? The [inversion] tactic breaks [contra] into
-    each of its possible cases, and yields a subgoal for each case.
-    As [contra] is evidence for [False], it has _no_ possible cases,
-    hence, there are no possible subgoals and the proof is done. *)
+(** 它是如何产生效果的？策略[inversion]将[contra]分解成各个可能出现的情况并为
+    每一种情况生成一个子目标。因为[contra]作为[False]的证据_并没有_可能出现的
+    情况，因此这里没有可能出现的子目标，而证明因此得以完成。 *)
 
 (** *** *)
-(** Conversely, the only way to prove [False] is if there is already
-    something nonsensical or contradictory in the context: *)
+(** 相反地，证明[False]的唯一方法就是让当前上下文中存在谬误或者矛盾： *)
 
 Theorem nonsense_implies_False :
   2 + 2 = 5 -> False.
@@ -475,10 +401,8 @@ Proof.
   intros contra.
   inversion contra.  Qed.
 
-(** Actually, since the proof of [False_implies_nonsense]
-    doesn't actually have anything to do with the specific nonsensical
-    thing being proved; it can easily be generalized to work for an
-    arbitrary [P]: *)
+(** 事实上[False_implies_nonsense]的证明并不与任何特定的被证明的谬误有关，
+    因此它可以很容易地被一般化并且变得可以用在任意命题[P]上：*)
 
 Theorem ex_falso_quodlibet : forall (P:Prop),
   False -> P.
@@ -487,54 +411,46 @@ Proof.
   intros P contra.
   inversion contra.  Qed.
 
-(** The Latin _ex falso quodlibet_ means, literally, "from
-    falsehood follows whatever you please."  This theorem is also
-    known as the _principle of explosion_. *)
+(** _ex falso quodlibet_ 是拉丁文，它的字面意思是：“从谬误出发你能证明
+    任何你想要证明的命题”。这一定理也被称作 _（爆炸原理）_ 。 *)
 
 
 (* #################################################### *)
-(** ** Truth *)
+(** ** 真值 *)
 
-(** Since we have defined falsehood in Coq, one might wonder whether
-    it is possible to define truth in the same way.  We can. *)
+(** 因为我们已经在Coq中定义了矛盾式，有人也许会想知道我们是否能够用相同的
+    方式定义真值。我们能够这么做。 *)
 
 (** **** Exercise: 2 stars, advanced (True)  *)
-(** Define [True] as another inductively defined proposition.  (The
-    intuition is that [True] should be a proposition for which it is
-    trivial to give evidence.) *)
+(** 将[True]定义为一个归纳定义的命题。（从直觉上说[True]应该是一个能平凡
+    地给出证据的命题。） *)
 
 (* FILL IN HERE *)
 (** [] *)
 
-(** However, unlike [False], which we'll use extensively, [True] is
-    used fairly rarely. By itself, it is trivial (and therefore
-    uninteresting) to prove as a goal, and it carries no useful
-    information as a hypothesis. But it can be useful when defining
-    complex [Prop]s using conditionals, or as a parameter to 
-    higher-order [Prop]s. *)
+(** 然而不像我们将会经常使用的[False]，[True]极少被使用到。就自身而言，它是个
+    过于平凡（因此也变得无趣）的证明目标，在作为证明的前提时也不包含任何有
+    用的信息。但是在定义复杂的、使用到了条件式的[Prop]的时候，或者作为高阶
+    [Prop]的参数的时候，[True]是十分有用的。 *)
 
 (* #################################################### *)
-(** * Negation *)
+(** * 否定 *)
 
-(** The logical complement of a proposition [P] is written [not
-    P] or, for shorthand, [~P]: *)
+(** 命题[P]的逻辑上的补写作[not P]，或者使用缩写形式[~P]： *)
 
 Definition not (P:Prop) := P -> False.
 
-(** The intuition is that, if [P] is not true, then anything at
-    all (even [False]) follows from assuming [P]. *)
+(** 在这背后的直觉是：如果[P]不为真，则任何命题，甚至[False]，都能在假设[P]的
+    情况下证明。 *)
 
 Notation "~ x" := (not x) : type_scope.
 
 Check not.
 (* ===> Prop -> Prop *)
 
-(** It takes a little practice to get used to working with
-    negation in Coq.  Even though you can see perfectly well why
-    something is true, it can be a little hard at first to get things
-    into the right configuration so that Coq can see it!  Here are
-    proofs of a few familiar facts about negation to get you warmed
-    up. *)
+(** 在习惯在Coq中处理否定之前仍需要一点练习。有时即使你完全明白为什么某些
+    命题为真，在最开始的时候通过适当的设置让Coq系统接受这一点也是有一点
+    困难的。这里有一些常见事实的证明，作为在这之前的热身。 *)
 
 Theorem not_False : 
   ~ False.
@@ -556,11 +472,12 @@ Proof.
   intros P H. unfold not. intros G. apply G. apply H.  Qed.
 
 (** **** Exercise: 2 stars, advanced (double_neg_inf)  *)
-(** Write an informal proof of [double_neg]:
+(** 写下命题[double_neg]的非形式证明：
 
-   _Theorem_: [P] implies [~~P], for any proposition [P].
+   _定理_ : 对于任意命题[P]，[P]蕴含[~~P]。
 
-   _Proof_:
+   _证明_ :
+
 (* FILL IN HERE *)
    []
 *)
@@ -580,34 +497,30 @@ Proof.
 (** [] *)
 
 (** **** Exercise: 1 star, advanced (informal_not_PNP)  *)
-(** Write an informal proof (in English) of the proposition [forall P
-    : Prop, ~(P /\ ~P)]. *)
+(** 写下命题[forall P : Prop, ~(P /\ ~P)]的非形式证明 *)
 
 (* FILL IN HERE *)
 (** [] *)
 
-(** *** Constructive logic *)
-(** Note that some theorems that are true in classical logic are _not_
-    provable in Coq's (constructive) logic.  E.g., let's look at how
-    this proof gets stuck... *)
+(** *** 构造性逻辑 *)
+(** 注意，有些在经典逻辑下成立的定理在Coq的构造性逻辑中是不可证的。
+
+    让我们看看下面这个证明是如何无法进行下去的，以作为这一事实的例证……*)
 
 Theorem classic_double_neg : forall P : Prop,
   ~~P -> P.
 Proof.
   (* WORKED IN CLASS *)
   intros P H. unfold not in H. 
-  (* But now what? There is no way to "invent" evidence for [~P] 
-     from evidence for [P]. *) 
+  (* 然后呢？我们没有办法基于[P]的证据“发明”出命题[~P]的证据。*) 
   Abort.
-  (** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
-(** For those who like a challenge, here is an exercise
-    taken from the Coq'Art book (p. 123).  The following five
-    statements are often considered as characterizations of
-    classical logic (as opposed to constructive logic, which is
-    what is "built in" to Coq).  We can't prove them in Coq, but
-    we can consistently add any one of them as an unproven axiom
-    if we wish to work in classical logic.  Prove that these five
-    propositions are equivalent. *)
+
+(** **** Exercise: 5 stars, advanced, optional (classical_axioms)  *)
+(** 对于那些喜欢挑战的人，这里有一个摘自Coq'Art（第123页）的练习。下面是五
+    条常常被认为是刻画了经典逻辑（与Coq"内置"的构造性逻辑相对）的语句。在
+    Coq中我们无法证明它们，但是如果我们希望处理在经典逻辑下的问题，我们能
+    够将它们之中的任意一句作为一个没有证明的公理加进Coq之中而不损它的一致
+    性。试证这五个命题互相等价。 *)
 
 Definition peirce := forall P Q: Prop, 
   ((P->Q)->P)->P.
@@ -624,31 +537,29 @@ Definition implies_to_or := forall P Q:Prop,
 (** [] *)
 
 (** **** Exercise: 3 stars (excluded_middle_irrefutable)  *)
-(** This theorem implies that it is always safe to add a decidability
-axiom (i.e. an instance of excluded middle) for any _particular_ Prop [P].
-Why? Because we cannot prove the negation of such an axiom; if we could,
-we would have both [~ (P \/ ~P)] and [~ ~ (P \/ ~P)], a contradiction. *)
+(** 这一定理蕴含了一个事实：对于任意_特定的_命题[P]，可以添加任意一个可判定性公
+    理（比如说排中律的一个实例）而不损安全性。为什么？因为我们不能证明这样一个公
+    理的否定；如果我们能够这么做，我们将会同时有[~ (P \/ P)]和[~ ~ (P \/ ~P)]，
+    而这是一个矛盾。*)
 
-Theorem excluded_middle_irrefutable:  forall (P:Prop), ~ ~ (P \/ ~ P).  
+Theorem excluded_middle_irrefutable: forall (P:Prop), 
+    ~ ~ (P \/ ~ P).
 Proof.
   (* FILL IN HERE *) Admitted.
 
-
+  
 (* ########################################################## *)
-(** ** Inequality *)
+(** ** 不等式 *)
 
-(** Saying [x <> y] is just the same as saying [~(x = y)]. *)
+(** 声明[x <> y]实际上就是在声明[~(x = y)]. *)
 
 Notation "x <> y" := (~ (x = y)) : type_scope.
 
-(** Since inequality involves a negation, it again requires
-    a little practice to be able to work with it fluently.  Here
-    is one very useful trick.  If you are trying to prove a goal
-    that is nonsensical (e.g., the goal state is [false = true]),
-    apply the lemma [ex_falso_quodlibet] to change the goal to
-    [False].  This makes it easier to use assumptions of the form
-    [~P] that are available in the context -- in particular,
-    assumptions of the form [x<>y]. *)
+(** 因为不等式包含了一个否定，所以学会流畅地处理不等式也需要一点练习。这里
+    是一个十分有用的技巧。如果你正试图证明一个荒谬的目标（比如说，
+    [false = true]），可以应用[ex_falso_quodlibet]将其转换成
+    [False]，这样可以更简单地利用在上下文当中的有着[~P]形式的假设——比方说，形
+    如[x <> y]的假设。*)
 
 Theorem not_false_then_true : forall b : bool,
   b <> false -> b = true.
@@ -659,11 +570,6 @@ Proof.
     unfold not in H.  
     apply ex_falso_quodlibet.
     apply H. reflexivity.   Qed.
-
-
-
-
-
 
 (** **** Exercise: 2 stars (false_beq_nat)  *)
 Theorem false_beq_nat : forall n m : nat,
@@ -682,4 +588,3 @@ Proof.
 
 
 (** $Date$ *)
-
