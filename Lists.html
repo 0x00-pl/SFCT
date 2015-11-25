@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1774,4 +1775,1497 @@ Here is a function <span class="inlinecode"><span class="id" type="var">find</sp
 </div>
 
 </body>
+=======
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Lists</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Lists</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+<a name="lab63"></a><h1 class="section">Lists: 结构化的数据</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <span class="id" title="keyword">Induction</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Module</span> <a name="NatList"><span class="id" title="module">NatList</span></a>.<br/>
+</div>
+
+<div class="doc">
+<a name="lab64"></a><h1 class="section">二元组</h1>
+
+<div class="paragraph"> </div>
+
+ 在归纳类型定义中，每个构造器（Constructor）可以有任意多个参数——可以没有（就像true和O），可以有一个（就像S），也可以更多，就像接下来那个定义： 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="NatList.natprod"><span class="id" title="inductive">natprod</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;<a name="NatList.pair"><span class="id" title="constructor">pair</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="Lists.html#natprod"><span class="id" title="inductive">natprod</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这个定义可以被理解作："只有一种方式来构造一个二元组：通过把pair这个构造器应用到两个nat类型的参数上" 
+<div class="paragraph"> </div>
+
+ 我们能够像下面这样构造一个二元组。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Check</span> (<a class="idref" href="Lists.html#NatList.pair"><span class="id" title="constructor">pair</span></a> 3 5).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab65"></a><h3 class="section"> </h3>
+
+<div class="paragraph"> </div>
+
+ 下面是两个简单的函数定义，这两个函数分别从一个二元组中抽取第一个和第二个分量。
+    （这个定义同时也展示了如何对一个两个参数的构造器进行模式匹配) 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.fst"><span class="id" title="definition">fst</span></a> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.pair"><span class="id" title="constructor">pair</span></a> <span class="id" title="var">x</span> <span class="id" title="var">y</span> ⇒ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.snd"><span class="id" title="definition">snd</span></a> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.pair"><span class="id" title="constructor">pair</span></a> <span class="id" title="var">x</span> <span class="id" title="var">y</span> ⇒ <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Eval</span> <span class="id" title="tactic">compute</span> <span class="id" title="keyword">in</span> (<a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> (<a class="idref" href="Lists.html#NatList.pair"><span class="id" title="constructor">pair</span></a> 3 5)).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab66"></a><h3 class="section"> </h3>
+
+<div class="paragraph"> </div>
+
+ 因为二元组经常被用到，所以如果能有数学记号 (x,y) 来代替 pair x y 是非常好的。
+    我们可以通过声明一个Notation让Coq接受这种记号。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">&quot;</span></a>( x , y )" := (<a class="idref" href="Lists.html#NatList.pair"><span class="id" title="constructor">pair</span></a> <span class="id" title="var">x</span> <span class="id" title="var">y</span>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这个新的记号既能被用在表达式也能被用在模式匹配中。（实际上，在上一章中我们已经使用过了——这个记号在标准库中也已经被提供了) 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Eval</span> <span class="id" title="tactic">compute</span> <span class="id" title="keyword">in</span> (<a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a>3<a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a>5<a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a>).<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.fst&acute;"><span class="id" title="definition">fst&acute;</span></a> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><span class="id" title="var">x</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><span class="id" title="var">y</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a> ⇒ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.snd&acute;"><span class="id" title="definition">snd&acute;</span></a> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><span class="id" title="var">x</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><span class="id" title="var">y</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a> ⇒ <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.swap_pair"><span class="id" title="definition">swap_pair</span></a> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>) : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><span class="id" title="var">x</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><span class="id" title="var">y</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a> ⇒ <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><span class="id" title="var">y</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><span class="id" title="var">x</span><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab67"></a><h3 class="section"> </h3>
+
+<div class="paragraph"> </div>
+
+ 我们现在来证明一些有关二元组的简单的事实。如果我们以一种特定的（稍微有点古怪）的方式来
+    书写我们的引理，仅仅通过 <span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span>（还有它自带的简化）我们就能完成证明。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.surjective_pairing&acute;"><span class="id" title="lemma">surjective_pairing&acute;</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">n</span> <span class="id" title="var">m</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">),</span></a> <a class="idref" href="Lists.html#NatList.snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a><a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">))</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+注意，但如果我们用一种自然的方式来书写这条引理的话，仅仅使用<span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span>来证明是远远不够的。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.surjective_pairing_stuck"><span class="id" title="lemma">surjective_pairing_stuck</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a> <a class="idref" href="Lists.html#NatList.snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="keyword">Abort</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab68"></a><h3 class="section"> </h3>
+ 我们必须要像Coq展示<span class="inlinecode"><a class="idref" href="ProofObjects.html#p"><span class="id" title="definition">p</span></a></span>的具体结构，这样<span class="inlinecode"><span class="id" title="tactic">simpl</span></span>才能对<span class="inlinecode"><a class="idref" href="Poly.html#fst"><span class="id" title="definition">fst</span></a></span>和<span class="inlinecode"><a class="idref" href="Poly.html#snd"><span class="id" title="definition">snd</span></a></span>做模式匹配。 
+    通过destruct可以达到这个目的。需要注意的是，不像自然数，destruct不会生成一个额外的子目标，因为一共只有一种方式可以构造二元组。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.surjective_pairing"><span class="id" title="lemma">surjective_pairing</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a> <a class="idref" href="Lists.html#NatList.snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">p</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">p</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">n</span> <span class="id" title="var">m</span>]. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab69"></a><h4 class="section">Exercise: 1 star (snd_fst_is_swap)</h4>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Theorem</span> <a name="NatList.snd_fst_is_swap"><span class="id" title="lemma">snd_fst_is_swap</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">,</span></a> <a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a><a class="idref" href="Lists.html#5933d26a4c7d589260a3f2940c9b1a3c"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.swap_pair"><span class="id" title="definition">swap_pair</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab70"></a><h4 class="section">Exercise: 1 star, optional (fst_swap_is_snd)</h4>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Theorem</span> <a name="NatList.fst_swap_is_snd"><span class="id" title="lemma">fst_swap_is_snd</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">p</span> : <a class="idref" href="Lists.html#NatList.natprod"><span class="id" title="inductive">natprod</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.fst"><span class="id" title="definition">fst</span></a> (<a class="idref" href="Lists.html#NatList.swap_pair"><span class="id" title="definition">swap_pair</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="Lists.html#p"><span class="id" title="variable">p</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab71"></a><h1 class="section">数的列表</h1>
+
+<div class="paragraph"> </div>
+
+ 通过稍稍推广一下我们对二元组的定义，我们像可以这样描述列表："一个列表要么是空的，要么就应该是一个由一个数和另一个列表组成的二元组"。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="NatList.natlist"><span class="id" title="inductive">natlist</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <a name="NatList.nil"><span class="id" title="constructor">nil</span></a> : <a class="idref" href="Lists.html#natlist"><span class="id" title="inductive">natlist</span></a><br/>
+&nbsp;&nbsp;| <a name="NatList.cons"><span class="id" title="constructor">cons</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="Lists.html#natlist"><span class="id" title="inductive">natlist</span></a> → <a class="idref" href="Lists.html#natlist"><span class="id" title="inductive">natlist</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+例如，这就是一个有三个元素的列表。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.mylist"><span class="id" title="definition">mylist</span></a> := <a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> 1 (<a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> 2 (<a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> 3 <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>)).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab72"></a><h3 class="section"> </h3>
+ 就像二元组一样，用我们已经熟悉的编程的记号来写下一个列表会显得更为方便。下面两个声明让我们可以用<span class="inlinecode">::</span>来作中缀cons操作符，用方括号来做<span class="inlinecode">外缀</span>符号来构造列表 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">&quot;</span></a>x :: l" := (<a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> <span class="id" title="var">x</span> <span class="id" title="var">l</span>) (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 60, <span class="id" title="tactic">right</span> <span class="id" title="keyword">associativity</span>).<br/>
+<span class="id" title="keyword">Notation</span> <a name="5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">&quot;</span></a>[ ]" := <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>.<br/>
+<span class="id" title="keyword">Notation</span> <a name="bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">&quot;</span></a>[ x ; .. ; y ]" := (<a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> <span class="id" title="var">x</span> .. (<a class="idref" href="Lists.html#NatList.cons"><span class="id" title="constructor">cons</span></a> <span class="id" title="var">y</span> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>) ..).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+完全理解这些声明是不必要的，但是假使你感兴趣的话，接下来我会粗略地介绍到底发生了什么。
+    right associativity 告诉 Coq 当遇到多个符号时怎么给表达式加括号。如此一来下面三个
+    声明做的就是同一件事。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.mylist1"><span class="id" title="definition">mylist1</span></a> := 1 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">(</span></a>2 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">(</span></a>3 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a><a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">))</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.mylist2"><span class="id" title="definition">mylist2</span></a> := 1 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> 2 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> 3 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.mylist3"><span class="id" title="definition">mylist3</span></a> := <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" title="tactic">at</span></span> <span class="inlinecode"><span class="id" title="keyword">level</span></span> <span class="inlinecode">60</span>这部分告诉Coq当遇到表达式还有其他中缀符号的时应该如何加括号。举个例子，
+    我们已经定义了 <span class="inlinecode">+</span> 作为 <span class="inlinecode"><a class="idref" href="Poly.html#Church.plus"><span class="id" title="definition">plus</span></a></span> 的中缀符号，它的level是50。
+Notation "x + y" := (plus x y)  
+                    (at level 50, left associativity).
+    <span class="inlinecode">+</span> 将会比 <span class="inlinecode">::</span> 结合的更紧，所以 <span class="inlinecode">1</span> <span class="inlinecode">+</span> <span class="inlinecode">2</span> <span class="inlinecode">::</span> <span class="inlinecode">[3]</span> 会被解析成 <span class="inlinecode">(1</span> <span class="inlinecode">+</span> <span class="inlinecode">2)</span> <span class="inlinecode">::</span> <span class="inlinecode">[3]</span>，就和我们期望的一样，而不是 <span class="inlinecode">1</span> <span class="inlinecode">+</span> <span class="inlinecode">(2</span> <span class="inlinecode">::</span> <span class="inlinecode">[3])。</span>
+
+<div class="paragraph"> </div>
+
+   (值得注意的是，当你在.v文件中看到"<span class="inlinecode">1</span> <span class="inlinecode">+</span> <span class="inlinecode">(2</span> <span class="inlinecode">::</span> <span class="inlinecode">[3])</span>"这样的记号会感到非常疑惑。最里面的那个框住3的方括号，指示了其是一个列表。但是外面那个方括号，在HTML中是看不到的，是用来告诉"coqdoc"这部分要被显示为代码而非普通的文本。)
+
+<div class="paragraph"> </div>
+
+   上面第二和第三个<span class="inlinecode"><span class="id" title="keyword">Notation</span></span>申明引入了标准的方括号记号来表示列表；第三个声明的右边部分展示了在Coq中申明n元记号的语法以及如何把它们翻译成嵌套的二元构造器的序列。 
+<div class="paragraph"> </div>
+
+<a name="lab73"></a><h3 class="section">Repeat</h3>
+ 很多有用的函数可以用来操作列表。比如<span class="inlinecode"><span class="id" title="tactic">repeat</span></span>函数接受一个数<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>和<span class="inlinecode"><a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a></span>，返回一个长为<span class="inlinecode"><a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a></span>，每个元素都是<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>的列表。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.repeat"><span class="id" title="definition">repeat</span></a> (<span class="id" title="var">n</span> <span class="id" title="var">count</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#count"><span class="id" title="variable">count</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a> ⇒ <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> <span class="id" title="var">count&acute;</span> ⇒ <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#repeat"><span class="id" title="definition">repeat</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <span class="id" title="var">count&acute;</span><a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab74"></a><h3 class="section">Length</h3>
+ <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span>函数用来计算列表的长度。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.length"><span class="id" title="definition">length</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> (<a class="idref" href="Lists.html#length"><span class="id" title="definition">length</span></a> <span class="id" title="var">t</span>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab75"></a><h3 class="section">Append</h3>
+ <span class="inlinecode"><a class="idref" href="Poly.html#app"><span class="id" title="definition">app</span></a></span>函数用来把两个列表联接起来。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.app"><span class="id" title="definition">app</span></a> (<span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>    ⇒ <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#app"><span class="id" title="definition">app</span></a> <span class="id" title="var">t</span> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+实际上，在接下来的很多地方都会用到<span class="inlinecode"><a class="idref" href="Poly.html#app"><span class="id" title="definition">app</span></a></span>，所以如果它有一个中缀操作符的话会很方便。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">&quot;</span></a>x ++ y" := (<a class="idref" href="Lists.html#NatList.app"><span class="id" title="definition">app</span></a> <span class="id" title="var">x</span> <span class="id" title="var">y</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="tactic">right</span> <span class="id" title="keyword">associativity</span>, <span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 60).<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_app1"><span class="id" title="definition">test_app1</span></a>:             <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_app2"><span class="id" title="definition">test_app2</span></a>:             <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_app3"><span class="id" title="definition">test_app3</span></a>:             <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+我们来看两个小例子，这两个例子都是有关如何编写有关列表的程序。
+    <span class="inlinecode"><a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a></span>函数返回列表的第一个元素（"头元素"）。类似的，<span class="inlinecode"><a class="idref" href="Lists.html#NatList.tl"><span class="id" title="definition">tl</span></a></span> 返回除了第一个元素以外
+    的所有元素。
+    当然，空列表没有第一个元素，所以我们必须传入一个默认值，让这个值成为这种情况下的返回值。  
+<div class="paragraph"> </div>
+
+<a name="lab76"></a><h3 class="section">Head (with default) and Tail</h3>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="NatList.hd"><span class="id" title="definition">hd</span></a> (<span class="id" title="var">default</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ <a class="idref" href="Lists.html#default"><span class="id" title="variable">default</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <span class="id" title="var">h</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.tl"><span class="id" title="definition">tl</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>  <br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <span class="id" title="var">t</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_hd1"><span class="id" title="definition">test_hd1</span></a>:             <a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a> 0 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 1.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_hd2"><span class="id" title="definition">test_hd2</span></a>:             <a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a> 0 <a class="idref" href="Lists.html#5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">[]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_tl"><span class="id" title="definition">test_tl</span></a>:              <a class="idref" href="Lists.html#NatList.tl"><span class="id" title="definition">tl</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab77"></a><h4 class="section">Exercise: 2 stars (list_funs)</h4>
+ 完成以下<span class="inlinecode"><a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a></span>，<span class="inlinecode"><a class="idref" href="Lists.html#NatList.oddmembers"><span class="id" title="definition">oddmembers</span></a></span>和<span class="inlinecode"><a class="idref" href="Lists.html#NatList.countoddmembers"><span class="id" title="definition">countoddmembers</span></a></span>的定义，
+    你可以查看测试函数来理解这些函数应该做什么 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_nonzeros"><span class="id" title="definition">test_nonzeros</span></a>:            <a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.oddmembers"><span class="id" title="definition">oddmembers</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_oddmembers"><span class="id" title="definition">test_oddmembers</span></a>:            <a class="idref" href="Lists.html#NatList.oddmembers"><span class="id" title="definition">oddmembers</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.countoddmembers"><span class="id" title="definition">countoddmembers</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_countoddmembers1"><span class="id" title="definition">test_countoddmembers1</span></a>:    <a class="idref" href="Lists.html#NatList.countoddmembers"><span class="id" title="definition">countoddmembers</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 4.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_countoddmembers2"><span class="id" title="definition">test_countoddmembers2</span></a>:    <a class="idref" href="Lists.html#NatList.countoddmembers"><span class="id" title="definition">countoddmembers</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>0<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_countoddmembers3"><span class="id" title="definition">test_countoddmembers3</span></a>:    <a class="idref" href="Lists.html#NatList.countoddmembers"><span class="id" title="definition">countoddmembers</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab78"></a><h4 class="section">Exercise: 3 stars, advanced (alternate)</h4>
+ 完成<span class="inlinecode"><a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a></span>的定义，它把两个列表像拉链一样"拉"起来并成为一个列表，
+    从两个列表中交替地取出元素。查看后面的tests来获得更加详细的例子。
+
+<div class="paragraph"> </div>
+
+    注意：一种自然的，优雅的方法来书写<span class="inlinecode"><a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a></span>将无法满足Coq对于<span class="inlinecode"><span class="id" title="keyword">Fixpoint</span></span>必须
+    "显然会终止"的要求。如果你发现你被这种解法束缚住了，你可以寻找一种稍微冗长一些的解法：同时考虑两个列表。（一个可行的解法需要定义新的列表，但这不是唯一的方法） 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.alternate"><span class="id" title="definition">alternate</span></a> (<span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_alternate1"><span class="id" title="definition">test_alternate1</span></a>:        <a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_alternate2"><span class="id" title="definition">test_alternate2</span></a>:        <a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_alternate3"><span class="id" title="definition">test_alternate3</span></a>:        <a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_alternate4"><span class="id" title="definition">test_alternate4</span></a>:        <a class="idref" href="Lists.html#NatList.alternate"><span class="id" title="definition">alternate</span></a> <a class="idref" href="Lists.html#5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">[]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>20<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>30<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>20<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>30<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab79"></a><h2 class="section">Bags via Lists</h2>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a></span>（或者叫<span class="inlinecode"><span class="id" title="var">multiset</span></span>）就像一个集合，但是每个元素都能够出现若干次，而不是仅仅一次。
+    背包一种合理的实现就是把它作为一个列表。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.bag"><span class="id" title="definition">bag</span></a> := <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab80"></a><h4 class="section">Exercise: 3 stars (bag_functions)</h4>
+ 完成下列<span class="inlinecode"><a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a></span>, <span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>, <span class="inlinecode"><a class="idref" href="Lists.html#NatList.add"><span class="id" title="definition">add</span></a></span> 以及 <span class="inlinecode"><a class="idref" href="Lists.html#NatList.member"><span class="id" title="definition">member</span></a></span> 的定义 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.count"><span class="id" title="definition">count</span></a> (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">s</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := <br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这些命题都能通过<span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span>来证明。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_count1"><span class="id" title="definition">test_count1</span></a>:              <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 1 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 3.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_count2"><span class="id" title="definition">test_count2</span></a>:              <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 6 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+多重集的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>非常像集合的<span class="inlinecode"><span class="id" title="var">union</span></span>:<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span> <span class="inlinecode"><a class="idref" href="Poly.html#MumbleBaz.b"><span class="id" title="constructor">b</span></a></span>包含了所有<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span>和<span class="inlinecode"><a class="idref" href="Poly.html#MumbleBaz.b"><span class="id" title="constructor">b</span></a></span>的元素。（数学上对
+    多重集上的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>的定义常常不大一样，这也是为什么我们没有使用这个名字。
+    对于<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>来说，我们给你的声明中并没有显式的给参数指派名字。除此以外，它使用<span class="inlinecode"><span class="id" title="keyword">Definition</span></span>
+    而不是<span class="inlinecode"><span class="id" title="var">Fixpont</span></span>，所以即使你给参数安排了名字，你也不能递归的处理他们。给出这个问题的意义
+    在于鼓励你思考<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>是否能用另一种方法实现——通过使用那些你已经定义过的函数。  
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.sum"><span class="id" title="definition">sum</span></a> : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> → <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> → <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> := <br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_sum1"><span class="id" title="definition">test_sum1</span></a>:              <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 1 (<a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 3.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.add"><span class="id" title="definition">add</span></a> (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">s</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> := <br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_add1"><span class="id" title="definition">test_add1</span></a>:                <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 1 (<a class="idref" href="Lists.html#NatList.add"><span class="id" title="definition">add</span></a> 1 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 3.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_add2"><span class="id" title="definition">test_add2</span></a>:                <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.add"><span class="id" title="definition">add</span></a> 1 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.member"><span class="id" title="definition">member</span></a> (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">s</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="Basics.html#bool"><span class="id" title="inductive">bool</span></a> := <br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_member1"><span class="id" title="definition">test_member1</span></a>:             <a class="idref" href="Lists.html#NatList.member"><span class="id" title="definition">member</span></a> 1 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_member2"><span class="id" title="definition">test_member2</span></a>:             <a class="idref" href="Lists.html#NatList.member"><span class="id" title="definition">member</span></a> 2 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab81"></a><h4 class="section">Exercise: 3 stars, optional (bag_more_functions)</h4>
+ 你可以把下面这些和<span class="inlinecode"><a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a></span>有关的函数当做额外的练习 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.remove_one"><span class="id" title="definition">remove_one</span></a> (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">s</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> :=<br/>
+&nbsp;&nbsp;<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_one1"><span class="id" title="definition">test_remove_one1</span></a>:         <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_one"><span class="id" title="definition">remove_one</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_one2"><span class="id" title="definition">test_remove_one2</span></a>:         <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_one"><span class="id" title="definition">remove_one</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_one3"><span class="id" title="definition">test_remove_one3</span></a>:         <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 4 (<a class="idref" href="Lists.html#NatList.remove_one"><span class="id" title="definition">remove_one</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 2.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_one4"><span class="id" title="definition">test_remove_one4</span></a>:         <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_one"><span class="id" title="definition">remove_one</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 1.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.remove_all"><span class="id" title="definition">remove_all</span></a> (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">s</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_all1"><span class="id" title="definition">test_remove_all1</span></a>:          <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_all"><span class="id" title="definition">remove_all</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_all2"><span class="id" title="definition">test_remove_all2</span></a>:          <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_all"><span class="id" title="definition">remove_all</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_all3"><span class="id" title="definition">test_remove_all3</span></a>:          <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 4 (<a class="idref" href="Lists.html#NatList.remove_all"><span class="id" title="definition">remove_all</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 2.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_remove_all4"><span class="id" title="definition">test_remove_all4</span></a>:          <a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 5 (<a class="idref" href="Lists.html#NatList.remove_all"><span class="id" title="definition">remove_all</span></a> 5 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.subset"><span class="id" title="definition">subset</span></a> (<span class="id" title="var">s1</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) (<span class="id" title="var">s2</span>:<a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>) : <a class="idref" href="Basics.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_subset1"><span class="id" title="definition">test_subset1</span></a>:              <a class="idref" href="Lists.html#NatList.subset"><span class="id" title="definition">subset</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_subset2"><span class="id" title="definition">test_subset2</span></a>:              <a class="idref" href="Lists.html#NatList.subset"><span class="id" title="definition">subset</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab82"></a><h4 class="section">Exercise: 3 stars (bag_theorem)</h4>
+ 写下一个你认为有趣的关于<span class="inlinecode"><span class="id" title="var">bags</span></span>的定理<span class="inlinecode"><span class="id" title="var">bag_theorem</span></span>，要涉及到<span class="inlinecode"><a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a></span>和<span class="inlinecode"><a class="idref" href="Lists.html#NatList.add"><span class="id" title="definition">add</span></a></span>。
+    证明他。注意，这个问题是开放的，很有可能你会遇到你写下了正确的定理，
+    但是其证明涉及到了你现在还没有学到的技巧。如果你陷入麻烦了，欢迎提问。 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab83"></a><h1 class="section">有关列表的推理</h1>
+
+<div class="paragraph"> </div>
+
+ 就像数字一样，一些简单的有关处理列表事实，有时也能仅仅通过化简来证明。
+    比方说，对于下面这个例子，<span class="inlinecode"><span class="id" title="tactic">reflexivity</span></span>中所做的简化就已经足够了…… 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.nil_app"><span class="id" title="lemma">nil_app</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">[]</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+……由于<span class="inlinecode">[]</span>被替换进了<span class="inlinecode"><a class="idref" href="Poly.html#app"><span class="id" title="definition">app</span></a></span>定义中的相应的match分支，这就使得整个<span class="inlinecode"><span class="id" title="keyword">match</span></span>得以被简化并证明目标 
+<div class="paragraph"> </div>
+
+ 并且，和数一样，又是对一个列表做分类讨论（是否是空）是非常有用的。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.tl_length_pred"><span class="id" title="lemma">tl_length_pred</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Peano.html#pred"><span class="id" title="definition">pred</span></a> (<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> (<a class="idref" href="Lists.html#NatList.tl"><span class="id" title="definition">tl</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">l</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">l&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = cons n l'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这里，如此解决<span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>这种情况是因为我们定义了<span class="inlinecode"><a class="idref" href="Lists.html#NatList.tl"><span class="id" title="definition">tl</span></a></span> <span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>。至于<span class="inlinecode"><span class="id" title="tactic">destruct</span></span>策略中的<span class="inlinecode"><span class="id" title="keyword">as</span></span>注解
+    引入的两个名字，<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>和<span class="inlinecode"><a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span>， 分别对应了<span class="inlinecode"><a class="idref" href="Poly.html#cons"><span class="id" title="constructor">cons</span></a></span>构造子的两个参数（正在构造的列表的头和尾）。 
+<div class="paragraph"> </div>
+
+ 通常的情况是，就算你不相信的话也没办法，要证明关于列表的有趣的定理需要用到归纳法。 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab84"></a><h2 class="section">一点点说教</h2>
+
+<div class="paragraph"> </div>
+
+ 知识阅读示例证明脚本的话，你不会获得什么特别有用的东西。搞清楚每一个的细节是非常重要的
+    使用Coq并思考有关每一步是如何得到的。否则练习题将一点用都没有。 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab85"></a><h2 class="section">列表上的归纳</h2>
+
+<div class="paragraph"> </div>
+
+ 读者对在像<span class="inlinecode"><a class="idref" href="MoreInd.html#natlist"><span class="id" title="inductive">natlist</span></a></span>这样的数据类型上通过归纳进行证明和对自然数归纳相比可能没有name熟悉，
+    但是基本的想法是一样简单的。每个<span class="inlinecode"><span class="id" title="keyword">Inductive</span></span>的声明定义了一集值，这些值可以用那些被声明
+    的构造器来构建：布尔值可以是<span class="inlinecode"><a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a></span>或者是<span class="inlinecode"><a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a></span>；自然数可以是<span class="inlinecode"><a class="idref" href="Basics.html#Playground1.O"><span class="id" title="constructor">O</span></a></span>或<span class="inlinecode"><a class="idref" href="Basics.html#Playground1.S"><span class="id" title="constructor">S</span></a></span>应用到另一个自然数上；
+    列表可以是<span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>或者是<span class="inlinecode"><a class="idref" href="Poly.html#cons"><span class="id" title="constructor">cons</span></a></span>应用到一个自然数和另一个列表。
+
+<div class="paragraph"> </div>
+
+    除此以外，把声明的构造子应用到别的项上面是的归纳定义的项的 <i>唯一</i> 可能的形状，并且这个是个事实
+    直接就给出了一种用来推理归纳定义集的方法：一个自然数要么是<span class="inlinecode"><a class="idref" href="Basics.html#Playground1.O"><span class="id" title="constructor">O</span></a></span>不然就是<span class="inlinecode"><a class="idref" href="Basics.html#Playground1.S"><span class="id" title="constructor">S</span></a></span>应用到某个 <i>更小</i> 的
+    自然数；一个列表要么是<span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>不然就是<span class="inlinecode"><a class="idref" href="Poly.html#cons"><span class="id" title="constructor">cons</span></a></span>应用到某个自然数和某个 <i>更小</i> 的列表上；等等。所以，
+    如果我们有某个命题<span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span>提到了列表<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>并且我们想证明<span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span>对 <i>一切</i> 列表都成立，我们可以像这样推理：
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 首先，证明 <span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span> 当 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 是 <span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span> 时对 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 成立 .
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> 然后证明 <span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span> 当 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 是 <span class="inlinecode"><a class="idref" href="Poly.html#cons"><span class="id" title="constructor">cons</span></a></span> <span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span> <span class="inlinecode"><a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span>成立， 其中 <span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span> 是某个自然数，<span class="inlinecode"><a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span> 是某个更小的列表
+        ，假设 <span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span> 对 <span class="inlinecode"><a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span> 成立.
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+    由于较大的列表只可能通过较小的列表构建起来，最终这个较小的列表会变成<span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>，这两点合一起就完成了
+    <span class="inlinecode"><a class="idref" href="UseAuto.html#P"><span class="id" title="axiom">P</span></a></span> 对一切列表 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 成立的证明。 下面是一个具体的例子。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.app_assoc"><span class="id" title="lemma">app_assoc</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>, <br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">l1</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">l1&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l1 = nil".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l1 = cons n l1'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> → <span class="id" title="var">IHl1&acute;</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+再一次强调，当你把Coq的证明当做静态的文档的话你可能不会有特别多的收获——如果你
+    通过一个交互式的Coq会话来阅读证明的话你可以看到当前的目标和上下文，但是这些状态
+    对于阅读写下来的脚本的你来说是不可见的。所以一份用自然语言写成的证明——写给人看的——会
+    需要包含更多地提示，比如提醒他们第二种情况下的归纳假设到底是什么，来帮助读者明白当前的情况。 
+<div class="paragraph"> </div>
+
+<a name="lab86"></a><h3 class="section">非形式化的版本</h3>
+
+<div class="paragraph"> </div>
+
+ <i>定理</i>: 对所有的列表 <span class="inlinecode"><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span>, <span class="inlinecode"><a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a></span>, 和 <span class="inlinecode"><a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a></span>， 
+   <span class="inlinecode">(<a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span> <span class="inlinecode">++</span> <span class="inlinecode"><a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a>)</span> <span class="inlinecode">++</span> <span class="inlinecode"><a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span> <span class="inlinecode">++</span> <span class="inlinecode">(<a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a></span> <span class="inlinecode">++</span> <span class="inlinecode"><a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a>)</span>。
+
+<div class="paragraph"> </div>
+
+   <i>证明</i>: 通过对 <span class="inlinecode"><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span> 使用归纳法。
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 首先, 假设 <span class="inlinecode"><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode">[]</span>。  我们要证明：
+       (<font size=-2>&#9744;</font> ++ l2) ++ l3 = <font size=-2>&#9744;</font> ++ (l2 ++ l3),
+     这可以通过展开 <span class="inlinecode">++</span> 的定义得到.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> 然后, 假设 <span class="inlinecode"><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a>::<span class="id" title="var">l1&acute;</span></span>， 有：
+       (l1' ++ l2) ++ l3 = l1' ++ (l2 ++ l3)
+     (归纳假设)。 我们必须证明
+       ((n :: l1') ++ l2) ++ l3 = (n :: l1') ++ 用来强调目的是一个不错 根据 <span class="inlinecode">++</span> 的定义, 上面就等价于：
+       n :: ((l1' ++ l2) ++ l3) = n :: (l1' ++ (l2 ++ l3)),
+     这可以通过我们的归纳假设立马得到。  <font size=-2>&#9744;</font>
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+<a name="lab87"></a><h3 class="section">另一个例子</h3>
+
+<div class="paragraph"> </div>
+
+  这里是一个用来在课堂上一起完成的类似的例子。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.app_length"><span class="id" title="lemma">app_length</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>, <br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> (<a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a><a class="idref" href="Basics.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">)</span></a> <a class="idref" href="Basics.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <a class="idref" href="Basics.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Basics.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">l1</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">l1&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l1 = nil".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l1 = cons".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> → <span class="id" title="var">IHl1&acute;</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab88"></a><h3 class="section">反转列表</h3>
+ 作为一个更为深入的例子，来说明在列表上使用归纳证明，假设我们定义一个"右侧cons"的函数
+    <span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>。 像这样： 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.snoc"><span class="id" title="definition">snoc</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) (<span class="id" title="var">v</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>    ⇒ <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a><a class="idref" href="Lists.html#v"><span class="id" title="variable">v</span></a><a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#snoc"><span class="id" title="definition">snoc</span></a> <span class="id" title="var">t</span> <a class="idref" href="Lists.html#v"><span class="id" title="variable">v</span></a><a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+……然后用它来定义一个反转列表的函数<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span> 像这样: 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.rev"><span class="id" title="definition">rev</span></a> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>    ⇒ <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">t</span> ⇒ <a class="idref" href="Lists.html#NatList.snoc"><span class="id" title="definition">snoc</span></a> (<a class="idref" href="Lists.html#rev"><span class="id" title="definition">rev</span></a> <span class="id" title="var">t</span>) <span class="id" title="var">h</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_rev1"><span class="id" title="definition">test_rev1</span></a>:            <a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_rev2"><span class="id" title="definition">test_rev2</span></a>:            <a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab89"></a><h3 class="section">有关反转的证明</h3>
+ 现在我们用我们新定义的<span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>和<span class="inlinecode"><span class="id" title="var">rec</span></span>来证明一些列表的定理。
+    与我们目前已经见到过的归纳证明相比，手头这个是一个更具挑战性
+    的定理：就是反转一个列表并不会改变他的长度。当我们初次尝试时
+    我们发现我们卡在了后继这种情形上。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.rev_length_firsttry"><span class="id" title="lemma">rev_length_firsttry</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> (<a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">l</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">l&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = []".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = n :: l'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">IHl&acute;</span>.<br/>
+<span class="id" title="keyword">Abort</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+所以我们把有关<span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>的可以推动证明的等式单独拿出来作为一个引理。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.length_snoc"><span class="id" title="lemma">length_snoc</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>, <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> (<a class="idref" href="Lists.html#NatList.snoc"><span class="id" title="definition">snoc</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> (<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">n</span> <span class="id" title="var">l</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">l</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n&acute;</span> <span class="id" title="var">l&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = cons n' l'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> → <span class="id" title="var">IHl&acute;</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+注意我们要使得引理尽可能的 <i>通用</i> : 具体来说，我们要对 <i>所有</i> 的<span class="inlinecode"><a class="idref" href="MoreInd.html#natlist"><span class="id" title="inductive">natlist</span></a></span>
+    进行全称量化，而不仅仅是那些由<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span>的来的。这很自然，因为这个证明目标
+    显然不依赖于被反转的列表。除此之外，证明一个更普遍的性质更容易。 
+<div class="paragraph"> </div>
+
+ 现在我们可以完成最初的那个证明。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.rev_length"><span class="id" title="lemma">rev_length</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> (<a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.length"><span class="id" title="definition">length</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">l</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n</span> <span class="id" title="var">l&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = nil".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "l = cons".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> → <a class="idref" href="Lists.html#NatList.length_snoc"><span class="id" title="lemma">length_snoc</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> → <span class="id" title="var">IHl&acute;</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+用来作对比，下面是这两个定理的非形式化的证明
+
+<div class="paragraph"> </div>
+
+    <i>定理</i>: 对一切数<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>和列表<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>，
+      <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode">(<a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Basics.html#Playground1.S"><span class="id" title="constructor">S</span></a></span> <span class="inlinecode">(<a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a>)</span>。
+
+<div class="paragraph"> </div>
+
+    <i>证明</i>: 对<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>进行归纳。
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 首先，假设<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode">[]</span>。我们要证明
+       length (snoc <font size=-2>&#9744;</font> n) = S (length <font size=-2>&#9744;</font>)，
+      通过<span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span>和<span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>的定义，上式可以显然得到。
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> 接下来，假设 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Prop.html#n&acute;"><span class="id" title="variable">n&acute;</span></a>::<a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span>，并且
+        length (snoc l' n) = S (length l')。
+      我必须要证明
+        length (snoc (n' :: l') n) = S (length (n' :: l'))。
+      通过<span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span>和<span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>，只要证明
+        S (length (snoc l' n)) = S (S (length l'))，
+      而这就是归纳假设。 <font size=-2>&#9744;</font> 
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+ <i>定理</i>: 对一切列表 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>, <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode">(<a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>.
+
+<div class="paragraph"> </div>
+
+    <i>证明</i>: 对 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 进行归纳.  
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 首先，假设<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode">[]</span>，我们要证明，
+          length (rev <font size=-2>&#9744;</font>) = length <font size=-2>&#9744;</font>。
+        通过<span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span>和<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span>的定义，上式可以显然得到。
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> 接下来，假设 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Prop.html#n&acute;"><span class="id" title="variable">n&acute;</span></a>::<a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span>，并且
+        length (rev l') = length l'。
+
+</li>
+</ul>
+      我必须要证明
+        length (rev (n' :: l')) = length (n' :: l')。
+      通过<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span>的定义，只要证明
+        length (snoc (rev l') n) = S (length l')
+      根据之前的引理，说的就是
+        S (length (rev l)) = S (length l')。
+      而这就是归纳假设。 <font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+ 显然，这些证明的样式实在是冗长而迂腐。经历过最开始的那些以后，
+    我们可能觉得细节更少并且仅仅突出那些不十分显然的步骤的那些证明
+    更容易理解（因为我们能够的在脑子中思考他们，实在不行我们还
+    可以在纸上打草稿）。下面我们以一种更加紧凑的样式
+    呈现之前的证明： 
+<div class="paragraph"> </div>
+
+ <i>定理</i>:
+     对一切列表 <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>, <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode">(<a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Poly.html#length"><span class="id" title="definition">length</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>.
+
+<div class="paragraph"> </div>
+
+    <i>证明</i>: 首先，注意到，
+       length (snoc l n) = S (length l)
+    对一切<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>成立。 通过对<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>进行归纳就可以直接得到这个结论。
+    当<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode">=</span> <span class="inlinecode"><a class="idref" href="Prop.html#n&acute;"><span class="id" title="variable">n&acute;</span></a>::<a class="idref" href="MoreCoq.html#l&acute;"><span class="id" title="variable">l&acute;</span></a></span>时，证明性质只需要再一次使用归纳法，然后
+    同时使用归纳假设和之前的观察得到的性质。<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+ 在特定情况下，我们更倾向于哪种样式取决于读者对于这个问题
+    了解程度以及当前证明和读者已经了解的那些有多相近。更加冗长
+    的版本用来强调证明目标是一个不错的方式。 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab90"></a><h2 class="section"><span class="inlinecode"><span class="id" title="keyword">SearchAbout</span></span></h2>
+
+<div class="paragraph"> </div>
+
+ 我们已经见到了很多证明需要使用之前已经证明过的结论，然后使用<span class="inlinecode"><span class="id" title="tactic">rewrite</span></span>来
+    改写当前目标，接下来我们会看到其他用来重用之前证明的定理的方式。但是
+    想要指定一个定理，我们需要知道其名字，记住所有定理的名字是很困难的！
+    记住哪些定理已经被证明过了甚至都是非常困难的，更不要说记住它们的名字了。
+
+<div class="paragraph"> </div>
+
+    Coq的<span class="inlinecode"><span class="id" title="keyword">SearchAbout</span></span>命令在遇到这种情况的时候非常有用。用<span class="inlinecode"><span class="id" title="keyword">SearchAbout</span></span> <span class="inlinecode"><a class="idref" href="Imp.html#AExp.foo"><span class="id" title="lemma">foo</span></a></span>
+    会让Coq显示所有涉及到<span class="inlinecode"><a class="idref" href="Imp.html#AExp.foo"><span class="id" title="lemma">foo</span></a></span>的定理的列表。举个例子，去掉下面的注释你会看到
+    一串我们已经证明过的关于<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span>的定理。 
+</div>
+<div class="code">
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+在你做下面的练习时和之后的课程的过程中你要记住<span class="inlinecode"><span class="id" title="keyword">SearchAbout</span></span>；他可以节约你
+    非常多的时间！ 
+<div class="paragraph"> </div>
+
+ 并且，如果你在使用ProofGeneral，你可以用<span class="inlinecode"><a class="idref" href="RecordSub.html#Examples.C"><span class="id" title="abbreviation">C</span></a>-<a class="idref" href="Poly.html#MumbleBaz.c"><span class="id" title="constructor">c</span></a></span> <span class="inlinecode"><a class="idref" href="RecordSub.html#Examples.C"><span class="id" title="abbreviation">C</span></a>-<a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span> <span class="inlinecode"><a class="idref" href="RecordSub.html#Examples.C"><span class="id" title="abbreviation">C</span></a>-<a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span>来运行<span class="inlinecode"><span class="id" title="keyword">SearchAbout</span></span>。
+    通过<span class="inlinecode"><a class="idref" href="RecordSub.html#Examples.C"><span class="id" title="abbreviation">C</span></a>-<a class="idref" href="Poly.html#MumbleBaz.c"><span class="id" title="constructor">c</span></a></span> <span class="inlinecode"><a class="idref" href="RecordSub.html#Examples.C"><span class="id" title="abbreviation">C</span></a>-;</span>可以在你的缓冲区里向下翻阅它返回的结果。 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab91"></a><h2 class="section">列表练习, 第一部分</h2>
+
+<div class="paragraph"> </div>
+
+<a name="lab92"></a><h4 class="section">练习: 三星 (list_exercises)</h4>
+ 更多的关于列表的习题 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.app_nil_end"><span class="id" title="lemma">app_nil_end</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>, <br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">[]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.rev_involutive"><span class="id" title="lemma">rev_involutive</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> (<a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+下一个练习有一个非常短的解决方法。如果你发现自己弄得一团糟，
+    你应该回头去找找更简单的方法。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.app_assoc4"><span class="id" title="lemma">app_assoc4</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> <span class="id" title="var">l4</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l4"><span class="id" title="variable">l4</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">))</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">((</span></a><a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l3"><span class="id" title="variable">l3</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l4"><span class="id" title="variable">l4</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.snoc_append"><span class="id" title="lemma">snoc_append</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) (<span class="id" title="var">n</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.snoc"><span class="id" title="definition">snoc</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a><a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a><a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.distr_rev"><span class="id" title="lemma">distr_rev</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> (<a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.rev"><span class="id" title="definition">rev</span></a> <a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+关于你的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a></span>实现的习题 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="NatList.nonzeros_app"><span class="id" title="lemma">nonzeros_app</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a> (<a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a> <a class="idref" href="Lists.html#l1"><span class="id" title="variable">l1</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">++</span></a> <a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.nonzeros"><span class="id" title="definition">nonzeros</span></a> <a class="idref" href="Lists.html#l2"><span class="id" title="variable">l2</span></a><a class="idref" href="Lists.html#673a00295a7a0120427b774318fbd36a"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab93"></a><h4 class="section">练习: 两星 (beq_natlist)</h4>
+ 填写<span class="inlinecode"><a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a></span>的定义，它通过比较列表中的数字来判断是否相等。证明对一切列表<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span>，
+    <span class="inlinecode"><a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.l"><span class="id" title="abbreviation">l</span></a></span> 返回 <span class="inlinecode"><a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a></span>。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a> (<span class="id" title="var">l1</span> <span class="id" title="var">l2</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Basics.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_beq_natlist1"><span class="id" title="definition">test_beq_natlist1</span></a> :   (<a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>).<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_beq_natlist2"><span class="id" title="definition">test_beq_natlist2</span></a> :   <a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_beq_natlist3"><span class="id" title="definition">test_beq_natlist3</span></a> :   <a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>3<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>2<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.beq_natlist_refl"><span class="id" title="lemma">beq_natlist_refl</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.beq_natlist"><span class="id" title="definition">beq_natlist</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab94"></a><h2 class="section">列表练习, 第二部分</h2>
+
+<div class="paragraph"> </div>
+
+<a name="lab95"></a><h4 class="section">练习: 两星 (list_design)</h4>
+ 设计练习：
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> 写下一个不平凡的，涉及到<span class="inlinecode"><a class="idref" href="Poly.html#cons"><span class="id" title="constructor">cons</span></a></span>(<span class="inlinecode">::</span>)，<span class="inlinecode"><a class="idref" href="References.html#STLCRef.snoc"><span class="id" title="definition">snoc</span></a></span>，<span class="inlinecode"><a class="idref" href="Poly.html#app"><span class="id" title="definition">app</span></a></span>(<span class="inlinecode">++</span>)
+      的定理<span class="inlinecode"><span class="id" title="var">cons_snoc_app</span></span>。
+
+</li>
+<li> 证明它。 
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab96"></a><h4 class="section">练习: 三星, 进阶 (bag_proofs)</h4>
+ 下面是关于你之前对于背包的一些定义的定理。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.count_member_nonzero"><span class="id" title="lemma">count_member_nonzero</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">s</span> : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Basics.html#ble_nat"><span class="id" title="definition">ble_nat</span></a> 1 (<a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 1 (1 <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <a class="idref" href="Lists.html#s"><span class="id" title="variable">s</span></a>)) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+下面这条关于<span class="inlinecode"><a class="idref" href="SfLib.html#ble_nat"><span class="id" title="definition">ble_nat</span></a></span>的引理在你完成下一个证明时可能会有帮助。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.ble_n_Sn"><span class="id" title="lemma">ble_n_Sn</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">n</span>,<br/>
+&nbsp;&nbsp;<a class="idref" href="Basics.html#ble_nat"><span class="id" title="definition">ble_nat</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">n</span> <span class="id" title="keyword">as</span> [| <span class="id" title="var">n&acute;</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "0".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Case</span> "S n'".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">IHn&acute;</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.remove_decreases_count"><span class="id" title="lemma">remove_decreases_count</span></a>: <span class="id" title="keyword">∀</span> (<span class="id" title="var">s</span> : <a class="idref" href="Lists.html#NatList.bag"><span class="id" title="definition">bag</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Basics.html#ble_nat"><span class="id" title="definition">ble_nat</span></a> (<a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 0 (<a class="idref" href="Lists.html#NatList.remove_one"><span class="id" title="definition">remove_one</span></a> 0 <a class="idref" href="Lists.html#s"><span class="id" title="variable">s</span></a>)) (<a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a> 0 <a class="idref" href="Lists.html#s"><span class="id" title="variable">s</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab97"></a><h4 class="section">练习: 三星, 可选 (bag_count_sum)</h4>
+ 写下一个涉及到<span class="inlinecode"><a class="idref" href="Lists.html#NatList.count"><span class="id" title="definition">count</span></a></span>和<span class="inlinecode"><a class="idref" href="Lists.html#NatList.sum"><span class="id" title="definition">sum</span></a></span>的，关于<span class="inlinecode"><span class="id" title="var">bag_count_sum</span></span>的定理，并证明。
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab98"></a><h4 class="section">练习: 四星, 进阶 (rev_injective)</h4>
+ 证明<span class="inlinecode"><a class="idref" href="Poly.html#rev"><span class="id" title="definition">rev</span></a></span>是一个单射，也就是说，
+      forall (l1 l2 : natlist), rev l1 = rev l2 -&gt; l1 = l2.
+    有一种简单和一种困难的方法来解决这个问题。
+
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab99"></a><h1 class="section">可能的失败</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a></span>的一种用法是用来从函数中返回"错误码"。举个例子，
+    假设我们想要写一个返回某个列表第<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>个元素的函数。如果我们让
+    它的类型是<span class="inlinecode"><a class="idref" href="Poly.html#Church.nat"><span class="id" title="definition">nat</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><a class="idref" href="MoreInd.html#natlist"><span class="id" title="inductive">natlist</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><a class="idref" href="Poly.html#Church.nat"><span class="id" title="definition">nat</span></a></span>，那么当列表过短的时候我们
+    仍然必须要返回某个数。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.index_bad"><span class="id" title="definition">index_bad</span></a> (<span class="id" title="var">n</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ 42  <br/>
+&nbsp;&nbsp;| <span class="id" title="var">a</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">l&acute;</span> ⇒ <span class="id" title="keyword">match</span> <a class="idref" href="Basics.html#beq_nat"><span class="id" title="definition">beq_nat</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a> <span class="id" title="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a> ⇒ <span class="id" title="var">a</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a> ⇒ <a class="idref" href="Lists.html#index_bad"><span class="id" title="definition">index_bad</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Peano.html#pred"><span class="id" title="definition">pred</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a>) <span class="id" title="var">l&acute;</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab100"></a><h3 class="section"> </h3>
+ 另一方面，如果我们让它的类型成为<span class="inlinecode"><a class="idref" href="Poly.html#Church.nat"><span class="id" title="definition">nat</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><a class="idref" href="MoreInd.html#natlist"><span class="id" title="inductive">natlist</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a></span>，
+    那么当列表不够长时，我们就能返回<span class="inlinecode"><a class="idref" href="Poly.html#None"><span class="id" title="constructor">None</span></a></span>，当列表有足够的元素时返回<span class="inlinecode"><a class="idref" href="Poly.html#Some"><span class="id" title="constructor">Some</span></a></span> <span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span>，
+    其中<span class="inlinecode"><a class="idref" href="Records.html#STLCExtendedRecords.a"><span class="id" title="abbreviation">a</span></a></span>出现在列表的第<span class="inlinecode"><a class="idref" href="MoreStlc.html#STLCExtended.Examples.n"><span class="id" title="abbreviation">n</span></a></span>位。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="NatList.natoption"><span class="id" title="inductive">natoption</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <a name="NatList.Some"><span class="id" title="constructor">Some</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="Lists.html#natoption"><span class="id" title="inductive">natoption</span></a><br/>
+&nbsp;&nbsp;| <a name="NatList.None"><span class="id" title="constructor">None</span></a> : <a class="idref" href="Lists.html#natoption"><span class="id" title="inductive">natoption</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.index"><span class="id" title="definition">index</span></a> (<span class="id" title="var">n</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ <a class="idref" href="Lists.html#NatList.None"><span class="id" title="constructor">None</span></a> <br/>
+&nbsp;&nbsp;| <span class="id" title="var">a</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">l&acute;</span> ⇒ <span class="id" title="keyword">match</span> <a class="idref" href="Basics.html#beq_nat"><span class="id" title="definition">beq_nat</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a> <span class="id" title="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Basics.html#true"><span class="id" title="constructor">true</span></a> ⇒ <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">a</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a> ⇒ <a class="idref" href="Lists.html#index"><span class="id" title="definition">index</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Peano.html#pred"><span class="id" title="definition">pred</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a>) <span class="id" title="var">l&acute;</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_index1"><span class="id" title="definition">test_index1</span></a> :    <a class="idref" href="Lists.html#NatList.index"><span class="id" title="definition">index</span></a> 0 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>7<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> 4.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_index2"><span class="id" title="definition">test_index2</span></a> :    <a class="idref" href="Lists.html#NatList.index"><span class="id" title="definition">index</span></a> 3 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>7<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> 7.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_index3"><span class="id" title="definition">test_index3</span></a> :    <a class="idref" href="Lists.html#NatList.index"><span class="id" title="definition">index</span></a> 10 <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>4<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>7<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.None"><span class="id" title="constructor">None</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这个例子同样是可以用来介绍Coq语言的一个小特性——条件表达式…… 
+<div class="paragraph"> </div>
+
+<a name="lab101"></a><h3 class="section"> </h3>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.index&acute;"><span class="id" title="definition">index&acute;</span></a> (<span class="id" title="var">n</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.nil"><span class="id" title="constructor">nil</span></a> ⇒ <a class="idref" href="Lists.html#NatList.None"><span class="id" title="constructor">None</span></a> <br/>
+&nbsp;&nbsp;| <span class="id" title="var">a</span> <a class="idref" href="Lists.html#d858c414b8a4cf4fa2d591e272c1f4fb"><span class="id" title="notation">::</span></a> <span class="id" title="var">l&acute;</span> ⇒ <span class="id" title="keyword">if</span> <a class="idref" href="Basics.html#beq_nat"><span class="id" title="definition">beq_nat</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a> <span class="id" title="keyword">then</span> <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">a</span> <span class="id" title="keyword">else</span> <a class="idref" href="Lists.html#index&acute;"><span class="id" title="definition">index&acute;</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Peano.html#pred"><span class="id" title="definition">pred</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a>) <span class="id" title="var">l&acute;</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Coq的条件语句就和其他语言中的一样，无非加上了一点小小的推广。由于布尔类型
+    不是内建的，事实上，Coq允许在任意有两个构造子的归纳定义的类型上使用条件表达式。
+    当表达式求值到归纳定义中的第一个构造子时，它被认为是真的，当其被求值到第二个
+    构造子时，它被认为是假的。 
+<div class="paragraph"> </div>
+
+ 下面的函数从<span class="inlinecode"><a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a></span>中取出一个<span class="inlinecode"><a class="idref" href="Poly.html#Church.nat"><span class="id" title="definition">nat</span></a></span>，在<span class="inlinecode"><a class="idref" href="Poly.html#None"><span class="id" title="constructor">None</span></a></span>的情况下返回提供的默认值。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.option_elim"><span class="id" title="definition">option_elim</span></a> (<span class="id" title="var">d</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">o</span> : <a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a>) : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#o"><span class="id" title="variable">o</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">n&acute;</span> ⇒ <span class="id" title="var">n&acute;</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.None"><span class="id" title="constructor">None</span></a> ⇒ <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab102"></a><h4 class="section">练习：两星 (hd_opt)</h4>
+ 使用相同的想法，修正之前的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a></span>函数来使我们不需要为<span class="inlinecode"><a class="idref" href="Poly.html#nil"><span class="id" title="constructor">nil</span></a></span>提供一个默认的元素。  
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.hd_opt"><span class="id" title="definition">hd_opt</span></a> (<span class="id" title="var">l</span> : <a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) : <a class="idref" href="Lists.html#NatList.natoption"><span class="id" title="inductive">natoption</span></a> :=<br/>
+&nbsp;&nbsp; <a class="idref" href="Basics.html#admit"><span class="id" title="axiom">admit</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_hd_opt1"><span class="id" title="definition">test_hd_opt1</span></a> : <a class="idref" href="Lists.html#NatList.hd_opt"><span class="id" title="definition">hd_opt</span></a> <a class="idref" href="Lists.html#5379aedf9373a87f66d3920b2018278f"><span class="id" title="notation">[]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.None"><span class="id" title="constructor">None</span></a>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_hd_opt2"><span class="id" title="definition">test_hd_opt2</span></a> : <a class="idref" href="Lists.html#NatList.hd_opt"><span class="id" title="definition">hd_opt</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>1<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> 1.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Example</span> <a name="NatList.test_hd_opt3"><span class="id" title="definition">test_hd_opt3</span></a> : <a class="idref" href="Lists.html#NatList.hd_opt"><span class="id" title="definition">hd_opt</span></a> <a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">[</span></a>5<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">;</span></a>6<a class="idref" href="Lists.html#bfc30fcd015c2a885d24f82c695312f8"><span class="id" title="notation">]</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Some"><span class="id" title="constructor">Some</span></a> 5.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab103"></a><h4 class="section">练习: 一星, 可选 (option_elim_hd)</h4>
+ 这个练习让你把新的<span class="inlinecode"><a class="idref" href="Poly.html#hd_opt"><span class="id" title="definition">hd_opt</span></a></span>和旧的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a></span>联系起来 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.option_elim_hd"><span class="id" title="lemma">option_elim_hd</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">l</span>:<a class="idref" href="Lists.html#NatList.natlist"><span class="id" title="inductive">natlist</span></a>) (<span class="id" title="var">default</span>:<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Lists.html#NatList.hd"><span class="id" title="definition">hd</span></a> <a class="idref" href="Lists.html#default"><span class="id" title="variable">default</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.option_elim"><span class="id" title="definition">option_elim</span></a> <a class="idref" href="Lists.html#default"><span class="id" title="variable">default</span></a> (<a class="idref" href="Lists.html#NatList.hd_opt"><span class="id" title="definition">hd_opt</span></a> <a class="idref" href="Lists.html#l"><span class="id" title="variable">l</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab104"></a><h1 class="section">字典</h1>
+
+<div class="paragraph"> </div>
+
+ 作为最后一个演示在Coq中如何定义基础的数据结构的例子，这里是
+    一个简单的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a></span>的声明，使用数作为关键字和值
+    （也就是说，一个字典代表了一个有限的从自然数到自然数的映射。） 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Module</span> <a name="NatList.Dictionary"><span class="id" title="module">Dictionary</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <a name="NatList.Dictionary.empty"><span class="id" title="constructor">empty</span></a>  : <a class="idref" href="Lists.html#dictionary"><span class="id" title="inductive">dictionary</span></a> <br/>
+&nbsp;&nbsp;| <a name="NatList.Dictionary.record"><span class="id" title="constructor">record</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> → <a class="idref" href="Lists.html#dictionary"><span class="id" title="inductive">dictionary</span></a> → <a class="idref" href="Lists.html#dictionary"><span class="id" title="inductive">dictionary</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这个声明可以被读作："有两种方式来构造<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a></span>：要么用<span class="inlinecode"><a class="idref" href="RecordSub.html#empty"><span class="id" title="definition">empty</span></a></span>
+    来构造一个空的字典，要么把<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.record"><span class="id" title="constructor">record</span></a></span>应用到键，值和一个已经存在的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a></span>
+    来构造一个附加了键值的<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a></span>"。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="NatList.Dictionary.insert"><span class="id" title="definition">insert</span></a> (<span class="id" title="var">key</span> <span class="id" title="var">value</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">d</span> : <a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a>) : <a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a> :=<br/>
+&nbsp;&nbsp;(<a class="idref" href="Lists.html#NatList.Dictionary.record"><span class="id" title="constructor">record</span></a> <a class="idref" href="Lists.html#key"><span class="id" title="variable">key</span></a> <a class="idref" href="Lists.html#value"><span class="id" title="variable">value</span></a> <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+这里是一个<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.find"><span class="id" title="definition">find</span></a></span>函数，它在一个<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a></span>查找给定的键。如果该键
+    无法被找到，他就返回<span class="inlinecode"><a class="idref" href="Poly.html#None"><span class="id" title="constructor">None</span></a></span>，否则返回<span class="inlinecode"><a class="idref" href="Poly.html#Some"><span class="id" title="constructor">Some</span></a></span> <span class="inlinecode"><span class="id" title="var">val</span></span>其中<span class="inlinecode"><span class="id" title="var">val</span></span>是字典中
+    该键所对应的。如果同一个键被映到多个值，<span class="inlinecode"><a class="idref" href="Lists.html#NatList.Dictionary.find"><span class="id" title="definition">find</span></a></span>就会返回它第一个找到的。 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="NatList.Dictionary.find"><span class="id" title="definition">find</span></a> (<span class="id" title="var">key</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">d</span> : <a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a>) : <a class="idref" href="Lists.html#NatList.Dictionary.natoption"><span class="id" title="inductive">natoption</span></a> := <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a> <span class="id" title="keyword">with</span> <br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.Dictionary.empty"><span class="id" title="constructor">empty</span></a>         ⇒ <a class="idref" href="Lists.html#NatList.Dictionary.None"><span class="id" title="constructor">None</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="Lists.html#NatList.Dictionary.record"><span class="id" title="constructor">record</span></a> <span class="id" title="var">k</span> <span class="id" title="var">v</span> <span class="id" title="var">d&acute;</span> ⇒ <span class="id" title="keyword">if</span> (<a class="idref" href="Basics.html#beq_nat"><span class="id" title="definition">beq_nat</span></a> <a class="idref" href="Lists.html#key"><span class="id" title="variable">key</span></a> <span class="id" title="var">k</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">then</span> (<a class="idref" href="Lists.html#NatList.Dictionary.Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">else</span> (<a class="idref" href="Lists.html#find"><span class="id" title="definition">find</span></a> <a class="idref" href="Lists.html#key"><span class="id" title="variable">key</span></a> <span class="id" title="var">d&acute;</span>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab105"></a><h4 class="section">练习: 一星 (dictionary_invariant1)</h4>
+ 完成下列证明 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.Dictionary.dictionary_invariant1&acute;"><span class="id" title="lemma">dictionary_invariant1&acute;</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">d</span> : <a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a>) (<span class="id" title="var">k</span> <span class="id" title="var">v</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">(</span></a><a class="idref" href="Lists.html#NatList.Dictionary.find"><span class="id" title="definition">find</span></a> <a class="idref" href="Lists.html#k"><span class="id" title="variable">k</span></a> (<a class="idref" href="Lists.html#NatList.Dictionary.insert"><span class="id" title="definition">insert</span></a> <a class="idref" href="Lists.html#k"><span class="id" title="variable">k</span></a> <a class="idref" href="Lists.html#v"><span class="id" title="variable">v</span></a> <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a>)<a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Dictionary.Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="Lists.html#v"><span class="id" title="variable">v</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+<div class="paragraph"> </div>
+
+<a name="lab106"></a><h4 class="section">练习: 一星 (dictionary_invariant2)</h4>
+ 完成下列证明 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <a name="NatList.Dictionary.dictionary_invariant2&acute;"><span class="id" title="lemma">dictionary_invariant2&acute;</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">d</span> : <a class="idref" href="Lists.html#NatList.Dictionary.dictionary"><span class="id" title="inductive">dictionary</span></a>) (<span class="id" title="var">m</span> <span class="id" title="var">n</span> <span class="id" title="var">o</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>),<br/>
+&nbsp;&nbsp;<a class="idref" href="Basics.html#beq_nat"><span class="id" title="definition">beq_nat</span></a> <a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Basics.html#false"><span class="id" title="constructor">false</span></a> → <a class="idref" href="Lists.html#NatList.Dictionary.find"><span class="id" title="definition">find</span></a> <a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a> <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl6/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="Lists.html#NatList.Dictionary.find"><span class="id" title="definition">find</span></a> <a class="idref" href="Lists.html#m"><span class="id" title="variable">m</span></a> (<a class="idref" href="Lists.html#NatList.Dictionary.insert"><span class="id" title="definition">insert</span></a> <a class="idref" href="Lists.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="Lists.html#o"><span class="id" title="variable">o</span></a> <a class="idref" href="Lists.html#d"><span class="id" title="variable">d</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+ <span class="id" title="var">Admitted</span>.<br/>
+</div>
+
+<div class="doc">
+<font size=-2>&#9744;</font> 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Lists.html#Dictionary"><span class="id" title="module">Dictionary</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Lists.html#"><span class="id" title="module">NatList</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+ 
+</div>
+<div class="code">
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 </html>
