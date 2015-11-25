@@ -1,33 +1,26 @@
-(** * Lists: Working with Structured Data *)
+(** * Lists: 结构化的数据 *)
 
 Require Export Induction.
 
 Module NatList. 
-
 (* ###################################################### *)
-(** * Pairs of Numbers *)
+(** * 二元组 *)
 
-(** In an [Inductive] type definition, each constructor can take
-    any number of arguments -- none (as with [true] and [O]), one (as
-    with [S]), or more than one, as in this definition: *)
+(** 在归纳类型定义中，每个构造器（Constructor）可以有任意多个参数——可以没有（就像true和O），可以有一个（就像S），也可以更多，就像接下来那个定义： *)
 
 Inductive natprod : Type :=
 | pair : nat -> nat -> natprod.
 
-(** This declaration can be read: "There is just one way to
-    construct a pair of numbers: by applying the constructor [pair] to
-    two arguments of type [nat]." *)
+(** 这个定义可以被理解作："只有一种方式来构造一个二元组：通过把pair这个构造器应用到两个nat类型的参数上" *)
 
-(** We can construct an element of [natprod] like this: *)
+(** 我们能够像下面这样构造一个二元组。 *)
 
 Check (pair 3 5).
 
 (** *** *)
 
-(** Here are two simple function definitions for extracting the
-    first and second components of a pair.  (The definitions also
-    illustrate how to do pattern matching on two-argument
-    constructors.) *)
+(** 下面是两个简单的函数定义，这两个函数分别从一个二元组中抽取第一个和第二个分量。
+    （这个定义同时也展示了如何对一个两个参数的构造器进行模式匹配) *)
 
 Definition fst (p : natprod) : nat := 
   match p with
@@ -43,17 +36,12 @@ Compute (fst (pair 3 5)).
 
 (** *** *)
 
-(** Since pairs are used quite a bit, it is nice to be able to
-    write them with the standard mathematical notation [(x,y)] instead
-    of [pair x y].  We can tell Coq to allow this with a [Notation]
-    declaration. *)
+(** 因为二元组经常被用到，所以如果能有数学记号 (x,y) 来代替 pair x y 是非常好的。
+    我们可以通过声明一个Notation让Coq接受这种记号。 *)
 
 Notation "( x , y )" := (pair x y).
 
-(** The new notation can be used both in expressions and in
-    pattern matches (indeed, we've seen it already in the previous
-    chapter -- this notation is provided as part of the standard
-    library): *)
+(** 这个新的记号既能被用在表达式也能被用在模式匹配中。（实际上，在上一章中我们已经使用过了——这个记号在标准库中也已经被提供了) *)
 
 Compute (fst (3,5)).
 
@@ -73,18 +61,15 @@ Definition swap_pair (p : natprod) : natprod :=
 
 (** *** *)
 
-(** Let's try and prove a few simple facts about pairs.  If we
-    state the lemmas in a particular (and slightly peculiar) way, we
-    can prove them with just reflexivity (and its built-in
-    simplification): *)
+(** 我们现在来证明一些有关二元组的简单的事实。如果我们以一种特定的（稍微有点古怪）的方式来
+    书写我们的引理，仅仅通过 [reflexivity]（还有它自带的简化）我们就能完成证明。 *)
 
 Theorem surjective_pairing' : forall (n m : nat),
   (n,m) = (fst (n,m), snd (n,m)).
 Proof.
   reflexivity.  Qed.
 
-(** Note that [reflexivity] is not enough if we state the lemma in a
-    more natural way: *)
+(** 注意，但如果我们用一种自然的方式来书写这条引理的话，仅仅使用[reflexivity]来证明是远远不够的。 *)
 
 Theorem surjective_pairing_stuck : forall (p : natprod),
   p = (fst p, snd p).
@@ -93,19 +78,14 @@ Proof.
 Abort.
 
 (** *** *)
-(** We have to expose the structure of [p] so that [simpl] can
-    perform the pattern match in [fst] and [snd].  We can do this with
-    [destruct].
-
-    Notice that, unlike for [nat]s, [destruct] doesn't generate an
-    extra subgoal here.  That's because [natprod]s can only be
-    constructed in one way.  *)
+(** 我们必须要像Coq展示[p]的具体结构，这样[simpl]才能对[fst]和[snd]做模式匹配。 
+    通过destruct可以达到这个目的。需要注意的是，不像自然数，destruct不会生成一个额外的子目标，因为一共只有一种方式可以构造二元组。 *)
 
 Theorem surjective_pairing : forall (p : natprod),
   p = (fst p, snd p).
 Proof.
   intros p.  destruct p as [n m].  simpl.  reflexivity.  Qed.
-
+          
 (** **** Exercise: 1 star (snd_fst_is_swap)  *)
 Theorem snd_fst_is_swap : forall (p : natprod),
   (snd p, fst p) = swap_pair p.
@@ -121,71 +101,46 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** * Lists of Numbers *)
+(** * 数的列表 *)
 
-(** Generalizing the definition of pairs a little, we can
-    describe the type of _lists_ of numbers like this: "A list is
-    either the empty list or else a pair of a number and another
-    list." *)
+(** 通过稍稍推广一下我们对二元组的定义，我们像可以这样描述列表："一个列表要么是空的，要么就应该是一个由一个数和另一个列表组成的二元组"。 *)
 
 Inductive natlist : Type :=
   | nil : natlist
   | cons : nat -> natlist -> natlist.
 
-(** For example, here is a three-element list: *)
+(** 例如，这就是一个有三个元素的列表。 *)
 
 Definition mylist := cons 1 (cons 2 (cons 3 nil)).
 
 
 (** *** *)
-(** As with pairs, it is more convenient to write lists in
-    familiar programming notation.  The following two declarations
-    allow us to use [::] as an infix [cons] operator and square
-    brackets as an "outfix" notation for constructing lists. *)
+(** 就像二元组一样，用我们已经熟悉的编程的记号来写下一个列表会显得更为方便。下面两个声明让我们可以用[::]来作中缀cons操作符，用方括号来做[外缀]符号来构造列表 *)
 
 Notation "x :: l" := (cons x l) (at level 60, right associativity).
 Notation "[ ]" := nil.
 Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
 
-(** It is not necessary to fully understand these declarations,
-    but in case you are interested, here is roughly what's going on.
-
-    The [right associativity] annotation tells Coq how to parenthesize
-    expressions involving several uses of [::] so that, for example,
-    the next three declarations mean exactly the same thing: *)
+(** 完全理解这些声明是不必要的，但是假使你感兴趣的话，接下来我会粗略地介绍到底发生了什么。
+    right associativity 告诉 Coq 当遇到多个符号时怎么给表达式加括号。如此一来下面三个
+    声明做的就是同一件事。 *)
 
 Definition mylist1 := 1 :: (2 :: (3 :: nil)).
 Definition mylist2 := 1 :: 2 :: 3 :: nil.
 Definition mylist3 := [1;2;3].
 
-(** The [at level 60] part tells Coq how to parenthesize
-    expressions that involve both [::] and some other infix operator.
-    For example, since we defined [+] as infix notation for the [plus]
-    function at level 50,
+(** [at level 60]这部分告诉Coq当遇到表达式还有其他中缀符号的时应该如何加括号。举个例子，
+    我们已经定义了 [+] 作为 [plus] 的中缀符号，它的level是50。
 Notation "x + y" := (plus x y)  
                     (at level 50, left associativity).
-   The [+] operator will bind tighter than [::], so [1 + 2 :: [3]]
-   will be parsed, as we'd expect, as [(1 + 2) :: [3]] rather than [1
-   + (2 :: [3])].
+    [+] 将会比 [::] 结合的更紧，所以 [1 + 2 :: [3]] 会被解析成 [(1 + 2) :: [3]]，就和我们期望的一样，而不是 [1 + (2 :: [3])。]
 
-   (By the way, it's worth noting in passing that expressions like "[1
-   + 2 :: [3]]" can be a little confusing when you read them in a .v
-   file.  The inner brackets, around 3, indicate a list, but the outer
-   brackets, which are invisible in the HTML rendering, are there to
-   instruct the "coqdoc" tool that the bracketed part should be
-   displayed as Coq code rather than running text.)
+   (值得注意的是，当你在.v文件中看到"[1 + (2 :: [3])]"这样的记号会感到非常疑惑。最里面的那个框住3的方括号，指示了其是一个列表。但是外面那个方括号，在HTML中是看不到的，是用来告诉"coqdoc"这部分要被显示为代码而非普通的文本。)
 
-   The second and third [Notation] declarations above introduce the
-   standard square-bracket notation for lists; the right-hand side of
-   the third one illustrates Coq's syntax for declaring n-ary
-   notations and translating them to nested sequences of binary
-   constructors. *)
+   上面第二和第三个[Notation]申明引入了标准的方括号记号来表示列表；第三个声明的右边部分展示了在Coq中申明n元记号的语法以及如何把它们翻译成嵌套的二元构造器的序列。 *)
 
 (** *** Repeat *)
-(** A number of functions are useful for manipulating lists.
-    For example, the [repeat] function takes a number [n] and a
-    [count] and returns a list of length [count] where every element
-    is [n]. *)
+(** 很多有用的函数可以用来操作列表。比如[repeat]函数接受一个数[n]和[count]，返回一个长为[count]，每个元素都是[n]的列表。 *)
 
 Fixpoint repeat (n count : nat) : natlist := 
   match count with
@@ -194,7 +149,7 @@ Fixpoint repeat (n count : nat) : natlist :=
   end.
 
 (** *** Length *)
-(** The [length] function calculates the length of a list. *)
+(** [length]函数用来计算列表的长度。 *)
 
 Fixpoint length (l:natlist) : nat := 
   match l with
@@ -203,7 +158,7 @@ Fixpoint length (l:natlist) : nat :=
   end.
 
 (** *** Append *)
-(** The [app] ("append") function concatenates two lists. *)
+(** [app]函数用来把两个列表联接起来。 *)
 
 Fixpoint app (l1 l2 : natlist) : natlist := 
   match l1 with
@@ -211,8 +166,7 @@ Fixpoint app (l1 l2 : natlist) : natlist :=
   | h :: t => h :: (app t l2)
   end.
 
-(** Actually, [app] will be used a lot in some parts of what
-    follows, so it is convenient to have an infix operator for it. *)
+(** 实际上，在接下来的很多地方都会用到[app]，所以如果它有一个中缀操作符的话会很方便。 *)
 
 Notation "x ++ y" := (app x y) 
                      (right associativity, at level 60).
@@ -224,12 +178,10 @@ Proof. reflexivity.  Qed.
 Example test_app3:             [1;2;3] ++ nil = [1;2;3].
 Proof. reflexivity.  Qed.
 
-(** Here are two smaller examples of programming with lists.
-    The [hd] function returns the first element (the "head") of the
-    list, while [tl] returns everything but the first
-    element (the "tail").  
-    Of course, the empty list has no first element, so we
-    must pass a default value to be returned in that case.  *)
+(** 我们来看两个小例子，这两个例子都是有关如何编写有关列表的程序。
+    [hd]函数返回列表的第一个元素（"头元素"）。类似的，[tl] 返回除了第一个元素以外
+    的所有元素。
+    当然，空列表没有第一个元素，所以我们必须传入一个默认值，让这个值成为这种情况下的返回值。  *)
 
 (** *** Head (with default) and Tail *)
 Definition hd (default:nat) (l:natlist) : nat :=
@@ -252,9 +204,8 @@ Example test_tl:              tl [1;2;3] = [2;3].
 Proof. reflexivity.  Qed.
 
 (** **** Exercise: 2 stars (list_funs)  *)
-(** Complete the definitions of [nonzeros], [oddmembers] and
-    [countoddmembers] below. Have a look at the tests to understand
-    what these functions should do. *)
+(** 完成以下[nonzeros]，[oddmembers]和[countoddmembers]的定义，
+    你可以查看测试函数来理解这些函数应该做什么 *)
 
 Fixpoint nonzeros (l:natlist) : natlist :=
   (* FILL IN HERE *) admit.
@@ -280,17 +231,11 @@ Example test_countoddmembers3:    countoddmembers nil = 0.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (alternate)  *)
-(** Complete the definition of [alternate], which "zips up" two lists
-    into one, alternating between elements taken from the first list
-    and elements from the second.  See the tests below for more
-    specific examples.
+(** 完成[alternate]的定义，它把两个列表像拉链一样"拉"起来并成为一个列表，
+    从两个列表中交替地取出元素。查看后面的tests来获得更加详细的例子。
 
-    Note: one natural and elegant way of writing [alternate] will fail
-    to satisfy Coq's requirement that all [Fixpoint] definitions be
-    "obviously terminating."  If you find yourself in this rut, look
-    for a slightly more verbose solution that considers elements of
-    both lists at the same time.  (One possible solution requires
-    defining a new kind of pairs, but this is not the only way.)  *)
+    注意：一种自然的，优雅的方法来书写[alternate]将无法满足Coq对于[Fixpoint]必须
+    "显然会终止"的要求。如果你发现你被这种解法束缚住了，你可以寻找一种稍微冗长一些的解法：同时考虑两个列表。（一个可行的解法需要定义新的列表，但这不是唯一的方法） *)
 
 
 Fixpoint alternate (l1 l2 : natlist) : natlist :=
@@ -310,38 +255,29 @@ Example test_alternate4:        alternate [] [20;30] = [20;30].
 (* ###################################################### *)
 (** ** Bags via Lists *)
 
-(** A [bag] (or [multiset]) is like a set, but each element can appear
-    multiple times instead of just once.  One reasonable
-    implementation of bags is to represent a bag of numbers as a
-    list. *)
+(** [bag]（或者叫[multiset]）就像一个集合，但是每个元素都能够出现若干次，而不是仅仅一次。
+    背包一种合理的实现就是把它作为一个列表。 *)
 
 Definition bag := natlist.  
 
 (** **** Exercise: 3 stars (bag_functions)  *)
-(** Complete the following definitions for the functions
-    [count], [sum], [add], and [member] for bags. *)
+(** 完成下列[count], [sum], [add] 以及 [member] 的定义 *)
 
 Fixpoint count (v:nat) (s:bag) : nat := 
   (* FILL IN HERE *) admit.
 
-(** All these proofs can be done just by [reflexivity]. *)
+(** 这些命题都能通过[reflexivity]来证明。 *)
 
 Example test_count1:              count 1 [1;2;3;1;4;1] = 3.
  (* FILL IN HERE *) Admitted.
 Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
  (* FILL IN HERE *) Admitted.
 
-(** Multiset [sum] is similar to set [union]: [sum a b] contains
-    all the elements of [a] and of [b].  (Mathematicians usually
-    define [union] on multisets a little bit differently, which
-    is why we don't use that name for this operation.)
-    For [sum] we're giving you a header that does not give explicit
-    names to the arguments.  Moreover, it uses the keyword
-    [Definition] instead of [Fixpoint], so even if you had names for
-    the arguments, you wouldn't be able to process them recursively.
-    The point of stating the question this way is to encourage you to
-    think about whether [sum] can be implemented in another way --
-    perhaps by using functions that have already been defined.  *)
+(** 多重集的[sum]非常像集合的[union]:[sum a b]包含了所有[a]和[b]的元素。（数学上对
+    多重集上的[sum]的定义常常不大一样，这也是为什么我们没有使用这个名字。
+    对于[sum]来说，我们给你的声明中并没有显式的给参数指派名字。除此以外，它使用[Definition]
+    而不是[Fixpont]，所以即使你给参数安排了名字，你也不能递归的处理他们。给出这个问题的意义
+    在于鼓励你思考[sum]是否能用另一种方法实现——通过使用那些你已经定义过的函数。  *)
 
 Definition sum : bag -> bag -> bag := 
   (* FILL IN HERE *) admit.
@@ -367,11 +303,10 @@ Example test_member2:             member 2 [1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (bag_more_functions)  *)
-(** Here are some more bag functions for you to practice with. *)
+(** 你可以把下面这些和[bag]有关的函数当做额外的练习 *)
 
 Fixpoint remove_one (v:nat) (s:bag) : bag :=
-  (* When remove_one is applied to a bag without the number to remove,
-     it should return the same bag unchanged. *)
+  (* 当[remove_one]被应用到一个没有数可以移除的背包时，它应该返回原来的那个而不做任何改变。 *)
   (* FILL IN HERE *) admit.
 
 Example test_remove_one1:         count 5 (remove_one 5 [2;1;5;4;1]) = 0.
@@ -405,6 +340,7 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars (bag_theorem)  *)
+<<<<<<< HEAD
 (** Write down an interesting theorem [bag_theorem] about bags
     involving the functions [count] and [add], and prove it.  For
     this, replace the [admit] command below with the statement of your
@@ -416,27 +352,28 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 Theorem bag_theorem :
   (* FILL IN HERE *) admit.
 (* FILL IN HERE *) Admitted.
+=======
+(** 写下一个你认为有趣的关于[bags]的定理[bag_theorem]，要涉及到[count]和[add]。
+    证明他。注意，这个问题是开放的，很有可能你会遇到你写下了正确的定理，
+    但是其证明涉及到了你现在还没有学到的技巧。如果你陷入麻烦了，欢迎提问。 *)
+
+(* FILL IN HERE *)
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 (** [] *)
 
 (* ###################################################### *)
-(** * Reasoning About Lists *)
+(** * 有关列表的推理 *)
 
-(** Just as with numbers, simple facts about list-processing
-    functions can sometimes be proved entirely by simplification. For
-    example, the simplification performed by [reflexivity] is enough
-    for this theorem... *)
+(** 就像数字一样，一些简单的有关处理列表事实，有时也能仅仅通过化简来证明。
+    比方说，对于下面这个例子，[reflexivity]中所做的简化就已经足够了…… *)
 
 Theorem nil_app : forall l:natlist,
   [] ++ l = l.
 Proof. reflexivity. Qed.
 
-(** ... because the [[]] is substituted into the match position
-    in the definition of [app], allowing the match itself to be
-    simplified. *)
+(** ……由于[[]]被替换进了[app]定义中的相应的match分支，这就使得整个[match]得以被简化并证明目标 *)
 
-(** Also, as with numbers, it is sometimes helpful to perform case
-    analysis on the possible shapes (empty or non-empty) of an unknown
-    list. *)
+(** 并且，和数一样，又是对一个列表做分类讨论（是否是空）是非常有用的。 *)
 
 Theorem tl_length_pred : forall l:natlist,
   pred (length l) = length (tl l).
@@ -447,54 +384,37 @@ Proof.
   - (* l = cons n l' *)
     reflexivity.  Qed.
 
-(** Here, the [nil] case works because we've chosen to define
-    [tl nil = nil]. Notice that the [as] annotation on the [destruct]
-    tactic here introduces two names, [n] and [l'], corresponding to
-    the fact that the [cons] constructor for lists takes two
-    arguments (the head and tail of the list it is constructing). *)
+(** 这里，如此解决[nil]这种情况是因为我们定义了[tl nil = nil]。至于[destruct]策略中的[as]注解
+    引入的两个名字，[n]和[l']， 分别对应了[cons]构造子的两个参数（正在构造的列表的头和尾）。 *)
 
-(** Usually, though, interesting theorems about lists require
-    induction for their proofs. *)
+(** 通常的情况是，就算你不相信的话也没办法，要证明关于列表的有趣的定理需要用到归纳法。 *)
 
 (* ###################################################### *)
-(** ** Micro-Sermon *)
+(** ** 一点点说教 *)
 
-(** Simply reading example proof scripts will not get you very far!
-    It is very important to work through the details of each one,
-    using Coq and thinking about what each step achieves.  Otherwise
-    it is more or less guaranteed that the exercises will make no
-    sense... *)
+(** 知识阅读示例证明脚本的话，你不会获得什么特别有用的东西。搞清楚每一个的细节是非常重要的
+    使用Coq并思考有关每一步是如何得到的。否则练习题将一点用都没有。 *)
 
 (* ###################################################### *)
-(** ** Induction on Lists *)
+(** ** 列表上的归纳 *)
 
-(** Proofs by induction over datatypes like [natlist] are
-    perhaps a little less familiar than standard natural number
-    induction, but the basic idea is equally simple.  Each [Inductive]
-    declaration defines a set of data values that can be built up from
-    the declared constructors: a boolean can be either [true] or
-    [false]; a number can be either [O] or [S] applied to a number; a
-    list can be either [nil] or [cons] applied to a number and a list.
+(** 读者对在像[natlist]这样的数据类型上通过归纳进行证明和对自然数归纳相比可能没有name熟悉，
+    但是基本的想法是一样简单的。每个[Inductive]的声明定义了一集值，这些值可以用那些被声明
+    的构造器来构建：布尔值可以是[true]或者是[false]；自然数可以是[O]或[S]应用到另一个自然数上；
+    列表可以是[nil]或者是[cons]应用到一个自然数和另一个列表。
 
-    Moreover, applications of the declared constructors to one another
-    are the _only_ possible shapes that elements of an inductively
-    defined set can have, and this fact directly gives rise to a way
-    of reasoning about inductively defined sets: a number is either
-    [O] or else it is [S] applied to some _smaller_ number; a list is
-    either [nil] or else it is [cons] applied to some number and some
-    _smaller_ list; etc. So, if we have in mind some proposition [P]
-    that mentions a list [l] and we want to argue that [P] holds for
-    _all_ lists, we can reason as follows:
+    除此以外，把声明的构造子应用到别的项上面是的归纳定义的项的 _唯一_ 可能的形状，并且这个是个事实
+    直接就给出了一种用来推理归纳定义集的方法：一个自然数要么是[O]不然就是[S]应用到某个 _更小_ 的
+    自然数；一个列表要么是[nil]不然就是[cons]应用到某个自然数和某个 _更小_ 的列表上；等等。所以，
+    如果我们有某个命题[P]提到了列表[l]并且我们想证明[P]对 _一切_ 列表都成立，我们可以像这样推理：
 
-      - First, show that [P] is true of [l] when [l] is [nil].
+      - 首先，证明 [P] 当 [l] 是 [nil] 时对 [l] 成立 .
 
-      - Then show that [P] is true of [l] when [l] is [cons n l'] for
-        some number [n] and some smaller list [l'], assuming that [P]
-        is true for [l'].
+      - 然后证明 [P] 当 [l] 是 [cons n l']成立， 其中 [n] 是某个自然数，[l'] 是某个更小的列表
+        ，假设 [P] 对 [l'] 成立.
 
-    Since larger lists can only be built up from smaller ones,
-    eventually reaching [nil], these two things together establish the
-    truth of [P] for all lists [l].  Here's a concrete example: *)
+    由于较大的列表只可能通过较小的列表构建起来，最终这个较小的列表会变成[nil]，这两点合一起就完成了
+    [P] 对一切列表 [l] 成立的证明。 下面是一个具体的例子。 *)
 
 Theorem app_assoc : forall l1 l2 l3 : natlist, 
   (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).   
@@ -505,6 +425,7 @@ Proof.
   - (* l1 = cons n l1' *)
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
+<<<<<<< HEAD
 (** Notice that, as when doing induction on natural numbers, the
     [as...] clause provided to the [induction] tactic gives a name to
     the induction hypothesis corresponding to the smaller list [l1']
@@ -518,31 +439,35 @@ Proof.
     particular, it will help the reader stay oriented if we remind
     them exactly what the induction hypothesis is in the second case.
     *)
+=======
+(** 再一次强调，当你把Coq的证明当做静态的文档的话你可能不会有特别多的收获——如果你
+    通过一个交互式的Coq会话来阅读证明的话你可以看到当前的目标和上下文，但是这些状态
+    对于阅读写下来的脚本的你来说是不可见的。所以一份用自然语言写成的证明——写给人看的——会
+    需要包含更多地提示，比如提醒他们第二种情况下的归纳假设到底是什么，来帮助读者明白当前的情况。 *)
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 
-(** *** Informal version *)
+(** *** 非形式化的版本 *)
 
-(** _Theorem_: For all lists [l1], [l2], and [l3], 
-   [(l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3)].
+(** _定理_: 对所有的列表 [l1], [l2], 和 [l3]， 
+   [(l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3)]。
 
-   _Proof_: By induction on [l1].
+   _证明_: 通过对 [l1] 使用归纳法。
 
-   - First, suppose [l1 = []].  We must show
+   - 首先, 假设 [l1 = []]。  我们要证明：
        ([] ++ l2) ++ l3 = [] ++ (l2 ++ l3),
-     which follows directly from the definition of [++].
+     这可以通过展开 [++] 的定义得到.
 
-   - Next, suppose [l1 = n::l1'], with
+   - 然后, 假设 [l1 = n::l1']， 有：
        (l1' ++ l2) ++ l3 = l1' ++ (l2 ++ l3)
-     (the induction hypothesis). We must show
-       ((n :: l1') ++ l2) ++ l3 = (n :: l1') ++ (l2 ++ l3).
-]]  
-     By the definition of [++], this follows from
+     (归纳假设)。 我们必须证明
+       ((n :: l1') ++ l2) ++ l3 = (n :: l1') ++ 用来强调目的是一个不错 根据 [++] 的定义, 上面就等价于：
        n :: ((l1' ++ l2) ++ l3) = n :: (l1' ++ (l2 ++ l3)),
-     which is immediate from the induction hypothesis.  []
+     这可以通过我们的归纳假设立马得到。  []
 *)
 
-(** *** Another example *)
+(** *** 另一个例子 *)
 (**
-  Here is a similar example to be worked together in class: *)
+  这里是一个用来在课堂上一起完成的类似的例子。 *)
 
 Theorem app_length : forall l1 l2 : natlist, 
   length (l1 ++ l2) = (length l1) + (length l2).
@@ -555,10 +480,9 @@ Proof.
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
 
-(** *** Reversing a list *)
-(** For a slightly more involved example of an inductive proof
-    over lists, suppose we define a "cons on the right" function
-    [snoc] like this... *)
+(** *** 反转列表 *)
+(** 作为一个更为深入的例子，来说明在列表上使用归纳证明，假设我们定义一个"右侧cons"的函数
+    [snoc]。 像这样： *)
 
 Fixpoint snoc (l:natlist) (v:nat) : natlist := 
   match l with
@@ -566,8 +490,7 @@ Fixpoint snoc (l:natlist) (v:nat) : natlist :=
   | h :: t => h :: (snoc t v)
   end.
 
-(** ... and use it to define a list-reversing function [rev]
-    like this: *)
+ (** ……然后用它来定义一个反转列表的函数[rev] 像这样: *)
 
 Fixpoint rev (l:natlist) : natlist := 
   match l with
@@ -580,12 +503,11 @@ Proof. reflexivity.  Qed.
 Example test_rev2:            rev nil = nil.
 Proof. reflexivity.  Qed.
 
-(** *** Proofs about reverse *)
-(** Now let's prove some more list theorems using our newly
-    defined [snoc] and [rev].  For something a little more challenging
-    than the inductive proofs we've seen so far, let's prove that
-    reversing a list does not change its length.  Our first attempt at
-    this proof gets stuck in the successor case... *)
+(** *** 有关反转的证明 *)
+(** 现在我们用我们新定义的[snoc]和[rec]来证明一些列表的定理。
+    与我们目前已经见到过的归纳证明相比，手头这个是一个更具挑战性
+    的定理：就是反转一个列表并不会改变他的长度。当我们初次尝试时
+    我们发现我们卡在了后继这种情形上。 *)
 
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
@@ -593,24 +515,24 @@ Proof.
   intros l. induction l as [| n l' IHl'].
   - (* l = [] *)
     reflexivity.
+<<<<<<< HEAD
   - (* l = n :: l' *)
     (* This is the tricky case.  Let's begin as usual 
        by simplifying. *)
+=======
+  Case "l = n :: l'".
+    (* 这是一个比较棘手的情况。我们从普通的化简开始。 *)
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
     simpl. 
-    (* Now we seem to be stuck: the goal is an equality 
-       involving [snoc], but we don't have any equations 
-       in either the immediate context or the global 
-       environment that have anything to do with [snoc]! 
+    (* 现在我们好像卡在什么地方了：目标是要证明涉及[snoc]的等式，
+       但是我们在上下文和全局环境下并没有任何有关[snoc]的等式！
 
-       We can make a little progress by using the IH to 
-       rewrite the goal... *)
+       通过IH来重写目标，我们可以获得一点点进展…… *)
     rewrite <- IHl'.
-    (* ... but now we can't go any further. *)
+    (* ……但也仅此而已 *)
 Abort.
 
-(** So let's take the equation about [snoc] that would have
-    enabled us to make progress and prove it as a separate lemma. 
-*)
+(** 所以我们把有关[snoc]的可以推动证明的等式单独拿出来作为一个引理。 *)
 
 Theorem length_snoc : forall n : nat, forall l : natlist,
   length (snoc l n) = S (length l).
@@ -618,19 +540,19 @@ Proof.
   intros n l. induction l as [| n' l' IHl'].
   - (* l = nil *)
     reflexivity.
+<<<<<<< HEAD
   - (* l = cons n' l' *)
+=======
+  Case "l = cons n' l'".
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
     simpl. rewrite -> IHl'. reflexivity.  Qed.
 
-(**
-    Note that we make the lemma as _general_ as possible: in particular,
-    we quantify over _all_ [natlist]s, not just those that result
-    from an application of [rev]. This should seem natural, 
-    because the truth of the goal clearly doesn't depend on 
-    the list having been reversed.  Moreover, it is much easier
-    to prove the more general property. 
-*)
+
+(** 注意我们要使得引理尽可能的 _通用_ : 具体来说，我们要对 _所有_ 的[natlist]
+    进行全称量化，而不仅仅是那些由[rev]的来的。这很自然，因为这个证明目标
+    显然不依赖于被反转的列表。除此之外，证明一个更普遍的性质更容易。 *)
     
-(** Now we can complete the original proof. *)
+(** 现在我们可以完成最初的那个证明。 *)
 
 Theorem rev_length : forall l : natlist,
   length (rev l) = length l.
@@ -642,100 +564,87 @@ Proof.
     simpl. rewrite -> length_snoc.
     rewrite -> IHl'. reflexivity.  Qed.
 
-(** For comparison, here are informal proofs of these two theorems: 
+(** 用来作对比，下面是这两个定理的非形式化的证明
 
-    _Theorem_: For all numbers [n] and lists [l],
-       [length (snoc l n) = S (length l)].
+    _定理_: 对一切数[n]和列表[l]，
+      [length (snoc l n) = S (length l)]。
  
-    _Proof_: By induction on [l].
+    _证明_: 对[l]进行归纳。
 
-    - First, suppose [l = []].  We must show
-        length (snoc [] n) = S (length []),
-      which follows directly from the definitions of
-      [length] and [snoc].
+    - 首先，假设[l = []]。我们要证明
+       length (snoc [] n) = S (length [])，
+      通过[length]和[snoc]的定义，上式可以显然得到。
 
-    - Next, suppose [l = n'::l'], with
-        length (snoc l' n) = S (length l').
-      We must show
-        length (snoc (n' :: l') n) = S (length (n' :: l')).
-      By the definitions of [length] and [snoc], this
-      follows from
-        S (length (snoc l' n)) = S (S (length l')),
-]] 
-      which is immediate from the induction hypothesis. [] *)
+    - 接下来，假设 [l = n'::l']，并且
+        length (snoc l' n) = S (length l')。
+      我必须要证明
+        length (snoc (n' :: l') n) = S (length (n' :: l'))。
+      通过[length]和[snoc]，只要证明
+        S (length (snoc l' n)) = S (S (length l'))，
+      而这就是归纳假设。 [] *)
                         
-(** _Theorem_: For all lists [l], [length (rev l) = length l].
+(** _定理_: 对一切列表 [l], [length (rev l) = length l].
     
-    _Proof_: By induction on [l].  
+    _证明_: 对 [l] 进行归纳.  
 
-      - First, suppose [l = []].  We must show
-          length (rev []) = length [],
-        which follows directly from the definitions of [length] 
-        and [rev].
+      - 首先，假设[l = []]，我们要证明，
+          length (rev []) = length []。
+        通过[length]和[rev]的定义，上式可以显然得到。
     
-      - Next, suppose [l = n::l'], with
-          length (rev l') = length l'.
-        We must show
-          length (rev (n :: l')) = length (n :: l').
-        By the definition of [rev], this follows from
-          length (snoc (rev l') n) = S (length l')
-        which, by the previous lemma, is the same as
-          S (length (rev l')) = S (length l').
-        This is immediate from the induction hypothesis. [] *)
+      - 接下来，假设 [l = n'::l']，并且
+        length (rev l') = length l'。
+      我必须要证明
+        length (rev (n' :: l')) = length (n' :: l')。
+      通过[rev]的定义，只要证明
+        length (snoc (rev l') n) = S (length l')
+      根据之前的引理，说的就是
+        S (length (rev l)) = S (length l')。
+      而这就是归纳假设。 [] *)
 
-(** Obviously, the style of these proofs is rather longwinded
-    and pedantic.  After the first few, we might find it easier to
-    follow proofs that give fewer details (since we can easily work
-    them out in our own minds or on scratch paper if necessary) and
-    just highlight the non-obvious steps.  In this more compressed
-    style, the above proof might look more like this: *)
+(** 显然，这些证明的样式实在是冗长而迂腐。经历过最开始的那些以后，
+    我们可能觉得细节更少并且仅仅突出那些不十分显然的步骤的那些证明
+    更容易理解（因为我们能够的在脑子中思考他们，实在不行我们还
+    可以在纸上打草稿）。下面我们以一种更加紧凑的样式
+    呈现之前的证明： *)
 
-(** _Theorem_:
-     For all lists [l], [length (rev l) = length l].
+(** _定理_:
+     对一切列表 [l], [length (rev l) = length l].
 
-    _Proof_: First, observe that
+    _证明_: 首先，注意到，
        length (snoc l n) = S (length l)
-     for any [l].  This follows by a straightforward induction on [l].
-     The main property now follows by another straightforward
-     induction on [l], using the observation together with the
-     induction hypothesis in the case where [l = n'::l']. [] *)
+    对一切[l]成立。 通过对[l]进行归纳就可以直接得到这个结论。
+    当[l = n'::l']时，证明性质只需要再一次使用归纳法，然后
+    同时使用归纳假设和之前的观察得到的性质。[] *)
 
-(** Which style is preferable in a given situation depends on
-    the sophistication of the expected audience and on how similar the
-    proof at hand is to ones that the audience will already be
-    familiar with.  The more pedantic style is a good default for
-    present purposes. *)
+(** 在特定情况下，我们更倾向于哪种样式取决于读者对于这个问题
+    了解程度以及当前证明和读者已经了解的那些有多相近。更加冗长
+    的版本用来强调证明目标是一个不错的方式。 *)
 
 (* ###################################################### *)
 (** ** [SearchAbout] *)
 
-(** We've seen that proofs can make use of other theorems we've
-    already proved, using [rewrite], and later we will see other ways
-    of reusing previous theorems.  But in order to refer to a theorem,
-    we need to know its name, and remembering the names of all the
-    theorems we might ever want to use can become quite difficult!  It
-    is often hard even to remember what theorems have been proven,
-    much less what they are named.
+(** 我们已经见到了很多证明需要使用之前已经证明过的结论，然后使用[rewrite]来
+    改写当前目标，接下来我们会看到其他用来重用之前证明的定理的方式。但是
+    想要指定一个定理，我们需要知道其名字，记住所有定理的名字是很困难的！
+    记住哪些定理已经被证明过了甚至都是非常困难的，更不要说记住它们的名字了。
 
-    Coq's [SearchAbout] command is quite helpful with this.  Typing
-    [SearchAbout foo] will cause Coq to display a list of all theorems
-    involving [foo].  For example, try uncommenting the following to
-    see a list of theorems that we have proved about [rev]: *)
+    Coq的[SearchAbout]命令在遇到这种情况的时候非常有用。用[SearchAbout foo]
+    会让Coq显示所有涉及到[foo]的定理的列表。举个例子，去掉下面的注释你会看到
+    一串我们已经证明过的关于[rev]的定理。 *)
 
 (*  SearchAbout rev. *)
 
-(** Keep [SearchAbout] in mind as you do the following exercises and
-    throughout the rest of the course; it can save you a lot of time! *)
+(** 在你做下面的练习时和之后的课程的过程中你要记住[SearchAbout]；他可以节约你
+    非常多的时间！ *)
 
-(** Also, if you are using ProofGeneral, you can run [SearchAbout]
-    with [C-c C-a C-a]. Pasting its response into your buffer can be
-    accomplished with [C-c C-;]. *)
+(** 并且，如果你在使用ProofGeneral，你可以用[C-c C-a C-a]来运行[SearchAbout]。
+    通过[C-c C-;]可以在你的缓冲区里向下翻阅它返回的结果。 *)
 
 (* ###################################################### *)
-(** ** List Exercises, Part 1 *)
+(** ** 列表练习, 第一部分 *)
 
-(** **** Exercise: 3 stars (list_exercises)  *)
-(** More practice with lists. *)
+(** **** 练习: 三星 (list_exercises)  *)
+(** 更多的关于列表的习题 *)
 
 Theorem app_nil_end : forall l : natlist, 
   l ++ [] = l.   
@@ -748,9 +657,8 @@ Theorem rev_involutive : forall l : natlist,
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** There is a short solution to the next exercise.  If you find
-    yourself getting tangled up, step back and try to look for a
-    simpler way. *)
+(** 下一个练习有一个非常短的解决方法。如果你发现自己弄得一团糟，
+    你应该回头去找找更简单的方法。 *)
 
 Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
   l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
@@ -768,7 +676,7 @@ Theorem distr_rev : forall l1 l2 : natlist,
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** An exercise about your implementation of [nonzeros]: *)
+(** 关于你的[nonzeros]实现的习题 *)
 
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
@@ -776,10 +684,9 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 2 stars (beq_natlist)  *)
-(** Fill in the definition of [beq_natlist], which compares
-    lists of numbers for equality.  Prove that [beq_natlist l l]
-    yields [true] for every list [l]. *)
+(** **** 练习: 两星 (beq_natlist)  *)
+(** 填写[beq_natlist]的定义，它通过比较列表中的数字来判断是否相等。证明对一切列表[l]，
+    [beq_natlist l l] 返回 [true]。 *)
 
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
   (* FILL IN HERE *) admit.
@@ -798,27 +705,26 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** ** List Exercises, Part 2 *)
+(** ** 列表练习, 第二部分 *)
 
-(** **** Exercise: 2 stars (list_design)  *)
-(** Design exercise: 
-     - Write down a non-trivial theorem [cons_snoc_app]
-       involving [cons] ([::]), [snoc], and [app] ([++]).  
-     - Prove it. *) 
+(** **** 练习: 两星 (list_design)  *)
+(** 设计练习：
+    - 写下一个不平凡的，涉及到[cons]([::])，[snoc]，[app]([++])
+      的定理[cons_snoc_app]。
+    - 证明它。 *) 
 
 (* FILL IN HERE *)
 (** [] *)
 
-(** **** Exercise: 3 stars, advanced (bag_proofs)  *)
-(** Here are a couple of little theorems to prove about your
-    definitions about bags earlier in the file. *)
+(** **** 练习: 三星, 进阶 (bag_proofs)  *)
+(** 下面是关于你之前对于背包的一些定义的定理。 *)
 
 Theorem count_member_nonzero : forall (s : bag),
   ble_nat 1 (count 1 (1 :: s)) = true.
 Proof.
   (* FILL IN HERE *) Admitted.
 
-(** The following lemma about [ble_nat] might help you in the next proof. *)
+(** 下面这条关于[ble_nat]的引理在你完成下一个证明时可能会有帮助。 *)
 
 Theorem ble_n_Sn : forall n,
   ble_nat n (S n) = true.
@@ -835,19 +741,16 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 3 stars, optional (bag_count_sum)  *)  
-(** Write down an interesting theorem [bag_count_sum] about bags 
-    involving the functions [count] and [sum], and prove it.*)
+(** **** 练习: 三星, 可选 (bag_count_sum)  *)  
+(** 写下一个涉及到[count]和[sum]的，关于[bag_count_sum]的定理，并证明。*)
 
 (* FILL IN HERE *)
 (** [] *)
 
-(** **** Exercise: 4 stars, advanced (rev_injective)  *)
-(** Prove that the [rev] function is injective, that is,
-
-    forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
-
-There is a hard way and an easy way to solve this exercise.
+(** **** 练习: 四星, 进阶 (rev_injective)  *)
+(** 证明[rev]是一个单射，也就是说，
+      forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
+    有一种简单和一种困难的方法来解决这个问题。
 *)
 
 (* FILL IN HERE *)
@@ -855,14 +758,13 @@ There is a hard way and an easy way to solve this exercise.
 
 
 (* ###################################################### *)
-(** * Options *)
+(** * 可能的失败 *)
 
 
-(** One use of [natoption] is as a way of returning "error
-    codes" from functions.  For example, suppose we want to write a
-    function that returns the [n]th element of some list.  If we give
-    it type [nat -> natlist -> nat], then we'll have to return some
-    number when the list is too short! *)
+(** [natoption]的一种用法是用来从函数中返回"错误码"。举个例子，
+    假设我们想要写一个返回某个列表第[n]个元素的函数。如果我们让
+    它的类型是[nat -> natlist -> nat]，那么当列表过短的时候我们
+    仍然必须要返回某个数。 *)
 
 Fixpoint index_bad (n:nat) (l:natlist) : nat :=
   match l with
@@ -874,10 +776,9 @@ Fixpoint index_bad (n:nat) (l:natlist) : nat :=
   end.
 
 (** *** *)
-(** On the other hand, if we give it type [nat -> natlist ->
-    natoption], then we can return [None] when the list is too short
-    and [Some a] when the list has enough members and [a] appears at
-    position [n]. *)
+(** 另一方面，如果我们让它的类型成为[nat -> natlist -> natoption]，
+    那么当列表不够长时，我们就能返回[None]，当列表有足够的元素时返回[Some a]，
+    其中[a]出现在列表的第[n]位。 *)
 
 Inductive natoption : Type :=
   | Some : nat -> natoption
@@ -900,9 +801,7 @@ Proof. reflexivity.  Qed.
 Example test_index3 :    index 10 [4;5;6;7] = None.
 Proof. reflexivity.  Qed.
 
-(** This example is also an opportunity to introduce one more
-    small feature of Coq's programming language: conditional
-    expressions... *)
+(** 这个例子同样是可以用来介绍Coq语言的一个小特性——条件表达式…… *)
 
 (** *** *)
 
@@ -912,16 +811,12 @@ Fixpoint index' (n:nat) (l:natlist) : natoption :=
   | a :: l' => if beq_nat n O then Some a else index' (pred n) l'
   end.
 
-(** Coq's conditionals are exactly like those found in any other
-    language, with one small generalization.  Since the boolean type
-    is not built in, Coq actually allows conditional expressions over
-    _any_ inductively defined type with exactly two constructors.  The
-    guard is considered true if it evaluates to the first constructor
-    in the [Inductive] definition and false if it evaluates to the
-    second. *)
+(** Coq的条件语句就和其他语言中的一样，无非加上了一点小小的推广。由于布尔类型
+    不是内建的，事实上，Coq允许在任意有两个构造子的归纳定义的类型上使用条件表达式。
+    当表达式求值到归纳定义中的第一个构造子时，它被认为是真的，当其被求值到第二个
+    构造子时，它被认为是假的。 *)
 
-(** The function below pulls the [nat] out of a [natoption], returning
-    a supplied default in the [None] case. *)
+(** 下面的函数从[natoption]中取出一个[nat]，在[None]的情况下返回提供的默认值。 *)
 
 Definition option_elim (d : nat) (o : natoption) : nat :=
   match o with
@@ -929,9 +824,8 @@ Definition option_elim (d : nat) (o : natoption) : nat :=
   | None => d
   end.
 
-(** **** Exercise: 2 stars (hd_opt)  *)
-(** Using the same idea, fix the [hd] function from earlier so we don't
-   have to pass a default element for the [nil] case.  *)
+(** **** 练习：两星 (hd_opt)  *)
+(** 使用相同的想法，修正之前的[hd]函数来使我们不需要为[nil]提供一个默认的元素。  *)
 
 Definition hd_opt (l : natlist) : natoption :=
   (* FILL IN HERE *) admit.
@@ -946,8 +840,8 @@ Example test_hd_opt3 : hd_opt [5;6] = Some 5.
  (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 1 star, optional (option_elim_hd)  *)
-(** This exercise relates your new [hd_opt] to the old [hd]. *)
+(** **** 练习: 一星, 可选 (option_elim_hd)  *)
+(** 这个练习让你把新的[hd_opt]和旧的[hd]联系起来 *)
 
 Theorem option_elim_hd : forall (l:natlist) (default:nat),
   hd default l = option_elim default (hd_opt l).
@@ -956,13 +850,11 @@ Proof.
 (** [] *)
 
 (* ###################################################### *)
-(** * Dictionaries *)
+(** * 字典 *)
 
-(** As a final illustration of how fundamental data structures
-    can be defined in Coq, here is the declaration of a simple
-    [dictionary] data type, using numbers for both the keys and the
-    values stored under these keys.  (That is, a dictionary represents
-    a finite map from numbers to numbers.) *)
+(** 作为最后一个演示在Coq中如何定义基础的数据结构的例子，这里是
+    一个简单的[dictionary]的声明，使用数作为关键字和值
+    （也就是说，一个字典代表了一个有限的从自然数到自然数的映射。） *)
 
 Module Dictionary.
 
@@ -970,20 +862,24 @@ Inductive dictionary : Type :=
   | empty  : dictionary 
   | record : nat -> nat -> dictionary -> dictionary. 
 
-(** This declaration can be read: "There are two ways to construct a
-    [dictionary]: either using the constructor [empty] to represent an
-    empty dictionary, or by applying the constructor [record] to
-    a key, a value, and an existing [dictionary] to construct a
-    [dictionary] with an additional key to value mapping." *)
+(** 这个声明可以被读作："有两种方式来构造[dictionary]：要么用[empty]
+    来构造一个空的字典，要么把[record]应用到键，值和一个已经存在的[dictionary]
+    来构造一个附加了键值的[dictionary]"。 *)
 
 Definition insert (key value : nat) (d : dictionary) : dictionary :=
   (record key value d).
 
+<<<<<<< HEAD
 (** Here is a function [find] that searches a [dictionary] for a given
     key.  It evaluates to [None] if the key was not found and [Some
     val] if the key was mapped to [val] in the dictionary. If the same
     key is mapped to multiple values, [find] will return the first one
     it finds. *)
+=======
+(** 这里是一个[find]函数，它在一个[dictionary]查找给定的键。如果该键
+    无法被找到，他就返回[None]，否则返回[Some val]其中[val]是字典中
+    该键所对应的。如果同一个键被映到多个值，[find]就会返回它第一个找到的。 *)
+>>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 
 Fixpoint find (key : nat) (d : dictionary) : natoption := 
   match d with 
@@ -995,8 +891,8 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 
 
 
-(** **** Exercise: 1 star (dictionary_invariant1)  *)
-(** Complete the following proof. *)
+(** **** 练习: 一星 (dictionary_invariant1)  *)
+(** 完成下列证明 *)
 
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
   find k (insert k v d) = Some v.
@@ -1004,8 +900,8 @@ Proof.
  (* FILL IN HERE *) Admitted.
 (** [] *)
 
-(** **** Exercise: 1 star (dictionary_invariant2)  *)
-(** Complete the following proof. *)
+(** **** 练习: 一星 (dictionary_invariant2)  *)
+(** 完成下列证明 *)
 
 Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
   beq_nat m n = false -> find m d = find m (insert n o d).
