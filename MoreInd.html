@@ -35,7 +35,7 @@
 </div>
 
 <div class="doc">
-<a name="lab321"></a><h1 class="section">Induction Principles</h1>
+<a name="lab322"></a><h1 class="section">Induction Principles</h1>
 
 <div class="paragraph"> </div>
 
@@ -67,7 +67,7 @@
 </div>
 
 <div class="doc">
-<a name="lab322"></a><h3 class="section"> </h3>
+<a name="lab323"></a><h3 class="section"> </h3>
  The <span class="inlinecode"><span class="id" type="tactic">induction</span></span> tactic is a straightforward wrapper that, at
     its core, simply performs <span class="inlinecode"><span class="id" type="tactic">apply</span></span> <span class="inlinecode"><span class="id" type="var">t_ind</span></span>.  To see this more
     clearly, let's experiment a little with using <span class="inlinecode"><span class="id" type="tactic">apply</span></span> <span class="inlinecode"><span class="id" type="var">nat_ind</span></span>
@@ -122,7 +122,7 @@ This proof is basically the same as the earlier one, but a
     applying <span class="inlinecode"><span class="id" type="var">nat_ind</span></span> is what we are really doing. 
 <div class="paragraph"> </div>
 
-<a name="lab323"></a><h4 class="section">Exercise: 2 stars, optional (plus_one_r')</h4>
+<a name="lab324"></a><h4 class="section">Exercise: 2 stars, optional (plus_one_r')</h4>
  Complete this proof as we did <span class="inlinecode"><span class="id" type="var">mult_0_r'</span></span> above, without using
     the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> tactic. 
 </div>
@@ -188,7 +188,7 @@ This proof is basically the same as the earlier one, but a
 </div>
 
 <div class="doc">
-<a name="lab324"></a><h4 class="section">Exercise: 1 star, optional (rgb)</h4>
+<a name="lab325"></a><h4 class="section">Exercise: 1 star, optional (rgb)</h4>
  Write out the induction principle that Coq will generate for the
     following datatype.  Write down your answer on paper or type it
     into a comment, and then compare it with what Coq prints. 
@@ -230,7 +230,7 @@ This proof is basically the same as the earlier one, but a
 </div>
 
 <div class="doc">
-<a name="lab325"></a><h4 class="section">Exercise: 1 star, optional (natlist1)</h4>
+<a name="lab326"></a><h4 class="section">Exercise: 1 star, optional (natlist1)</h4>
  Suppose we had written the above definition a little
    differently: 
 </div>
@@ -282,7 +282,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 
 <div class="paragraph"> </div>
 
-<a name="lab326"></a><h4 class="section">Exercise: 1 star, optional (byntree_ind)</h4>
+<a name="lab327"></a><h4 class="section">Exercise: 1 star, optional (byntree_ind)</h4>
  Write out the induction principle that Coq will generate for the
     following datatype.  Write down your answer on paper or type it
     into a comment, and then compare it with what Coq prints. 
@@ -300,7 +300,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab327"></a><h4 class="section">Exercise: 1 star, optional (ex_set)</h4>
+<a name="lab328"></a><h4 class="section">Exercise: 1 star, optional (ex_set)</h4>
  Here is an induction principle for an inductively defined
     set.
 
@@ -369,7 +369,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
     specialized to the type <span class="inlinecode"><span class="id" type="var">list</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span>. 
 <div class="paragraph"> </div>
 
-<a name="lab328"></a><h4 class="section">Exercise: 1 star, optional (tree)</h4>
+<a name="lab329"></a><h4 class="section">Exercise: 1 star, optional (tree)</h4>
  Write out the induction principle that Coq will generate for
    the following datatype.  Compare your answer with what Coq
    prints. 
@@ -387,7 +387,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab329"></a><h4 class="section">Exercise: 1 star, optional (mytype)</h4>
+<a name="lab330"></a><h4 class="section">Exercise: 1 star, optional (mytype)</h4>
  Find an inductive definition that gives rise to the
     following induction principle:
 
@@ -407,7 +407,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab330"></a><h4 class="section">Exercise: 1 star, optional (foo)</h4>
+<a name="lab331"></a><h4 class="section">Exercise: 1 star, optional (foo)</h4>
  Find an inductive definition that gives rise to the
     following induction principle:
 
@@ -427,7 +427,7 @@ Now what will the induction principle look like?  <font size=-2>&#9744;</font>
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab331"></a><h4 class="section">Exercise: 1 star, optional (foo')</h4>
+<a name="lab332"></a><h4 class="section">Exercise: 1 star, optional (foo')</h4>
  Consider the following inductive definition: 
 </div>
 <div class="code code-tight">
@@ -468,7 +468,7 @@ What induction principle will Coq generate for <span class="inlinecode"><span cl
 </div>
 
 <div class="doc">
-<a name="lab332"></a><h2 class="section">Induction Hypotheses</h2>
+<a name="lab333"></a><h2 class="section">Induction Hypotheses</h2>
 
 <div class="paragraph"> </div>
 
@@ -562,7 +562,7 @@ This extra naming step isn't something that we'll do in
 </div>
 
 <div class="doc">
-<a name="lab333"></a><h2 class="section">More on the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> Tactic</h2>
+<a name="lab334"></a><h2 class="section">More on the <span class="inlinecode"><span class="id" type="tactic">induction</span></span> Tactic</h2>
 
 <div class="paragraph"> </div>
 
@@ -679,7 +679,7 @@ Note that <span class="inlinecode"><span class="id" type="tactic">induction</spa
 </div>
 
 <div class="doc">
-<a name="lab334"></a><h4 class="section">Exercise: 1 star, optional (plus_explicit_prop)</h4>
+<a name="lab335"></a><h4 class="section">Exercise: 1 star, optional (plus_explicit_prop)</h4>
  Rewrite both <span class="inlinecode"><span class="id" type="var">plus_assoc'</span></span> and <span class="inlinecode"><span class="id" type="var">plus_comm'</span></span> and their proofs in
     the same style as <span class="inlinecode"><span class="id" type="var">mult_0_r''</span></span> above &mdash; that is, for each theorem,
     give an explicit <span class="inlinecode"><span class="id" type="keyword">Definition</span></span> of the proposition being proved by
@@ -696,7 +696,7 @@ Note that <span class="inlinecode"><span class="id" type="tactic">induction</spa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab335"></a><h2 class="section">Generalizing Inductions.</h2>
+<a name="lab336"></a><h2 class="section">Generalizing Inductions.</h2>
 
 <div class="paragraph"> </div>
 
@@ -788,7 +788,7 @@ proof state out of the original one.
 </div>
 
 <div class="doc">
-<a name="lab336"></a><h1 class="section">Informal Proofs (Advanced)</h1>
+<a name="lab337"></a><h1 class="section">Informal Proofs (Advanced)</h1>
 
 <div class="paragraph"> </div>
 
@@ -842,7 +842,7 @@ proof state out of the original one.
    Another key point: if we're comparing a formal proof of a
    proposition <span class="inlinecode"><span class="id" type="var">P</span></span> and an informal proof of <span class="inlinecode"><span class="id" type="var">P</span></span>, the proposition <span class="inlinecode"><span class="id" type="var">P</span></span>
    doesn't change.  That is, formal and informal proofs are <i>talking
-   about the same world</i> and they <i>must play by the same rules</i>. <a name="lab337"></a><h2 class="section">Informal Proofs by Induction</h2>
+   about the same world</i> and they <i>must play by the same rules</i>. <a name="lab338"></a><h2 class="section">Informal Proofs by Induction</h2>
 
 <div class="paragraph"> </div>
 
@@ -866,7 +866,7 @@ proof state out of the original one.
     for <i>all</i> of your inductive proofs. 
 <div class="paragraph"> </div>
 
-<a name="lab338"></a><h3 class="section">Induction Over an Inductively Defined Set</h3>
+<a name="lab339"></a><h3 class="section">Induction Over an Inductively Defined Set</h3>
 
 <div class="paragraph"> </div>
 
@@ -975,7 +975,7 @@ proof state out of the original one.
 
 <div class="paragraph"> </div>
 
-<a name="lab339"></a><h3 class="section">Induction Over an Inductively Defined Proposition</h3>
+<a name="lab340"></a><h3 class="section">Induction Over an Inductively Defined Proposition</h3>
 
 <div class="paragraph"> </div>
 
@@ -1079,7 +1079,7 @@ proof state out of the original one.
 </div>
 
 <div class="doc">
-<a name="lab340"></a><h1 class="section">Induction Principles in <span class="inlinecode"><span class="id" type="keyword">Prop</span></span> (Advanced)</h1>
+<a name="lab341"></a><h1 class="section">Induction Principles in <span class="inlinecode"><span class="id" type="keyword">Prop</span></span> (Advanced)</h1>
 
 <div class="paragraph"> </div>
 
@@ -1374,11 +1374,11 @@ By contrast, the induction principle that Coq calculates for the
 </div>
 
 <div class="doc">
-<a name="lab341"></a><h1 class="section">Additional Exercises</h1>
+<a name="lab342"></a><h1 class="section">Additional Exercises</h1>
 
 <div class="paragraph"> </div>
 
-<a name="lab342"></a><h4 class="section">Exercise: 2 stars, optional (foo_ind_principle)</h4>
+<a name="lab343"></a><h4 class="section">Exercise: 2 stars, optional (foo_ind_principle)</h4>
  Suppose we make the following inductive definition:
 
 <div class="paragraph"> </div>
@@ -1415,7 +1415,7 @@ By contrast, the induction principle that Coq calculates for the
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab343"></a><h4 class="section">Exercise: 2 stars, optional (bar_ind_principle)</h4>
+<a name="lab344"></a><h4 class="section">Exercise: 2 stars, optional (bar_ind_principle)</h4>
  Consider the following induction principle:
 
 <div class="paragraph"> </div>
@@ -1448,7 +1448,7 @@ By contrast, the induction principle that Coq calculates for the
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab344"></a><h4 class="section">Exercise: 2 stars, optional (no_longer_than_ind)</h4>
+<a name="lab345"></a><h4 class="section">Exercise: 2 stars, optional (no_longer_than_ind)</h4>
  Given the following inductively defined proposition:
 
 <div class="paragraph"> </div>
@@ -1493,7 +1493,7 @@ By contrast, the induction principle that Coq calculates for the
 </div>
 
 <div class="doc">
-<a name="lab345"></a><h2 class="section">Induction Principles for other Logical Propositions</h2>
+<a name="lab346"></a><h2 class="section">Induction Principles for other Logical Propositions</h2>
 
 <div class="paragraph"> </div>
 
@@ -1561,7 +1561,7 @@ This principle says that if <span class="inlinecode"><span class="id" type="var"
     discussed above.  You try first: 
 <div class="paragraph"> </div>
 
-<a name="lab346"></a><h4 class="section">Exercise: 1 star, optional (and_ind_principle)</h4>
+<a name="lab347"></a><h4 class="section">Exercise: 1 star, optional (and_ind_principle)</h4>
  See if you can predict the induction principle for conjunction. 
 </div>
 <div class="code code-tight">
@@ -1574,7 +1574,7 @@ This principle says that if <span class="inlinecode"><span class="id" type="var"
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab347"></a><h4 class="section">Exercise: 1 star, optional (or_ind_principle)</h4>
+<a name="lab348"></a><h4 class="section">Exercise: 1 star, optional (or_ind_principle)</h4>
  See if you can predict the induction principle for disjunction. 
 </div>
 <div class="code code-tight">
@@ -1669,7 +1669,7 @@ From the inductive definition of the proposition <span class="inlinecode"><span 
 
 <div class="paragraph"> </div>
 
-<a name="lab348"></a><h4 class="section">Exercise: 1 star, optional (False_ind_principle)</h4>
+<a name="lab349"></a><h4 class="section">Exercise: 1 star, optional (False_ind_principle)</h4>
  Can you predict the induction principle for falsehood? 
 </div>
 <div class="code code-tight">
@@ -1710,7 +1710,7 @@ This induction principle can be understood as follows: If we have
 </div>
 
 <div class="doc">
-<a name="lab349"></a><h2 class="section">Explicit Proof Objects for Induction</h2>
+<a name="lab350"></a><h2 class="section">Explicit Proof Objects for Induction</h2>
 
 <div class="paragraph"> </div>
 
@@ -1865,7 +1865,7 @@ Once you get the hang of it, it is entirely straightforward to
 </div>
 
 <div class="doc">
-<a name="lab350"></a><h2 class="section">The Coq Trusted Computing Base</h2>
+<a name="lab351"></a><h2 class="section">The Coq Trusted Computing Base</h2>
 
 <div class="paragraph"> </div>
 

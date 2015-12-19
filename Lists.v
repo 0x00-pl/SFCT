@@ -9,7 +9,7 @@ Module NatList.
 (** 在归纳类型定义中，每个构造器（Constructor）可以有任意多个参数——可以没有（就像true和O），可以有一个（就像S），也可以更多，就像接下来那个定义： *)
 
 Inductive natprod : Type :=
-| pair : nat -> nat -> natprod.
+  pair : nat -> nat -> natprod.
 
 (** 这个定义可以被理解作："只有一种方式来构造一个二元组：通过把pair这个构造器应用到两个nat类型的参数上" *)
 
@@ -31,7 +31,7 @@ Definition snd (p : natprod) : nat :=
   | pair x y => y
   end.
 
-Compute (fst (pair 3 5)).
+Eval compute in (fst (pair 3 5)).
 (* ===> 3 *)
 
 (** *** *)
@@ -43,7 +43,7 @@ Notation "( x , y )" := (pair x y).
 
 (** 这个新的记号既能被用在表达式也能被用在模式匹配中。（实际上，在上一章中我们已经使用过了——这个记号在标准库中也已经被提供了) *)
 
-Compute (fst (3,5)).
+Eval compute in (fst (3,5)).
 
 Definition fst' (p : natprod) : nat := 
   match p with
@@ -340,25 +340,11 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
 (** [] *)
 
 (** **** Exercise: 3 stars (bag_theorem)  *)
-<<<<<<< HEAD
-(** Write down an interesting theorem [bag_theorem] about bags
-    involving the functions [count] and [add], and prove it.  For
-    this, replace the [admit] command below with the statement of your
-    theorem. Note that, since this problem is somewhat open-ended,
-    it's possible that you may come up with a theorem which is true,
-    but whose proof requires techniques you haven't learned yet.  Feel
-    free to ask for help if you get stuck! *)
-
-Theorem bag_theorem :
-  (* FILL IN HERE *) admit.
-(* FILL IN HERE *) Admitted.
-=======
 (** 写下一个你认为有趣的关于[bags]的定理[bag_theorem]，要涉及到[count]和[add]。
     证明他。注意，这个问题是开放的，很有可能你会遇到你写下了正确的定理，
     但是其证明涉及到了你现在还没有学到的技巧。如果你陷入麻烦了，欢迎提问。 *)
 
 (* FILL IN HERE *)
->>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 (** [] *)
 
 (* ###################################################### *)
@@ -379,9 +365,9 @@ Theorem tl_length_pred : forall l:natlist,
   pred (length l) = length (tl l).
 Proof.
   intros l. destruct l as [| n l'].
-  - (* l = nil *)
+  (* Case "l = nil". *)
     reflexivity.
-  - (* l = cons n l' *)
+  (* Case "l = cons n l'". *)
     reflexivity.  Qed.
 
 (** 这里，如此解决[nil]这种情况是因为我们定义了[tl nil = nil]。至于[destruct]策略中的[as]注解
@@ -419,32 +405,16 @@ Proof.
 Theorem app_assoc : forall l1 l2 l3 : natlist, 
   (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).   
 Proof.
-  intros l1 l2 l3. induction l1 as [| n l1' IHl1'].
-  - (* l1 = nil *)
+  intros l1 l2 l3. induction l1 as [| n l1'].
+  (* Case "l1 = nil". *)
     reflexivity.
-  - (* l1 = cons n l1' *)
+  (* Case "l1 = cons n l1'". *)
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
-<<<<<<< HEAD
-(** Notice that, as when doing induction on natural numbers, the
-    [as...] clause provided to the [induction] tactic gives a name to
-    the induction hypothesis corresponding to the smaller list [l1']
-    in the [cons] case. Once again, this Coq proof is not especially
-    illuminating as a static written document -- it is easy to see
-    what's going on if you are reading the proof in an interactive Coq
-    session and you can see the current goal and context at each
-    point, but this state is not visible in the written-down parts of
-    the Coq proof.  So a natural-language proof -- one written for
-    human readers -- will need to include more explicit signposts; in
-    particular, it will help the reader stay oriented if we remind
-    them exactly what the induction hypothesis is in the second case.
-    *)
-=======
 (** 再一次强调，当你把Coq的证明当做静态的文档的话你可能不会有特别多的收获——如果你
     通过一个交互式的Coq会话来阅读证明的话你可以看到当前的目标和上下文，但是这些状态
     对于阅读写下来的脚本的你来说是不可见的。所以一份用自然语言写成的证明——写给人看的——会
     需要包含更多地提示，比如提醒他们第二种情况下的归纳假设到底是什么，来帮助读者明白当前的情况。 *)
->>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 
 (** *** 非形式化的版本 *)
 
@@ -473,10 +443,10 @@ Theorem app_length : forall l1 l2 : natlist,
   length (l1 ++ l2) = (length l1) + (length l2).
 Proof.
   (* WORKED IN CLASS *)
-  intros l1 l2. induction l1 as [| n l1' IHl1'].
-  - (* l1 = nil *)
+  intros l1 l2. induction l1 as [| n l1'].
+  (* Case "l1 = nil". *)
     reflexivity.
-  - (* l1 = cons *)
+  (* Case "l1 = cons". *)
     simpl. rewrite -> IHl1'. reflexivity.  Qed.
 
 
@@ -512,17 +482,11 @@ Proof. reflexivity.  Qed.
 Theorem rev_length_firsttry : forall l : natlist,
   length (rev l) = length l.
 Proof.
-  intros l. induction l as [| n l' IHl'].
-  - (* l = [] *)
+  intros l. induction l as [| n l'].
+  (* Case "l = []". *)
     reflexivity.
-<<<<<<< HEAD
-  - (* l = n :: l' *)
-    (* This is the tricky case.  Let's begin as usual 
-       by simplifying. *)
-=======
-  Case "l = n :: l'".
+  (* Case "l = n :: l'". *)
     (* 这是一个比较棘手的情况。我们从普通的化简开始。 *)
->>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
     simpl. 
     (* 现在我们好像卡在什么地方了：目标是要证明涉及[snoc]的等式，
        但是我们在上下文和全局环境下并没有任何有关[snoc]的等式！
@@ -537,14 +501,10 @@ Abort.
 Theorem length_snoc : forall n : nat, forall l : natlist,
   length (snoc l n) = S (length l).
 Proof.
-  intros n l. induction l as [| n' l' IHl'].
-  - (* l = nil *)
+  intros n l. induction l as [| n' l'].
+  (* Case "l = nil".*)
     reflexivity.
-<<<<<<< HEAD
-  - (* l = cons n' l' *)
-=======
-  Case "l = cons n' l'".
->>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
+  (* Case "l = cons n' l'". *)
     simpl. rewrite -> IHl'. reflexivity.  Qed.
 
 
@@ -557,11 +517,11 @@ Proof.
 Theorem rev_length : forall l : natlist,
   length (rev l) = length l.
 Proof.
-  intros l. induction l as [| n l' IHl'].
-  - (* l = nil *)
+  intros l. induction l as [| n l'].
+  (* Case "l = nil". *)
     reflexivity.
-  - (* l = cons *)
-    simpl. rewrite -> length_snoc.
+  (* Case "l = cons". *)
+    simpl. rewrite -> length_snoc. 
     rewrite -> IHl'. reflexivity.  Qed.
 
 (** 用来作对比，下面是这两个定理的非形式化的证明
@@ -729,10 +689,10 @@ Proof.
 Theorem ble_n_Sn : forall n,
   ble_nat n (S n) = true.
 Proof.
-  intros n. induction n as [| n' IHn'].
-  - (* 0 *)  
+  intros n. induction n as [| n'].
+  (* Case "0".  *)
     simpl.  reflexivity.
-  - (* S n' *)
+  (* Case "S n'". *)
     simpl.  rewrite IHn'.  reflexivity.  Qed.
 
 Theorem remove_decreases_count: forall (s : bag),
@@ -869,24 +829,16 @@ Inductive dictionary : Type :=
 Definition insert (key value : nat) (d : dictionary) : dictionary :=
   (record key value d).
 
-<<<<<<< HEAD
-(** Here is a function [find] that searches a [dictionary] for a given
-    key.  It evaluates to [None] if the key was not found and [Some
-    val] if the key was mapped to [val] in the dictionary. If the same
-    key is mapped to multiple values, [find] will return the first one
-    it finds. *)
-=======
 (** 这里是一个[find]函数，它在一个[dictionary]查找给定的键。如果该键
     无法被找到，他就返回[None]，否则返回[Some val]其中[val]是字典中
     该键所对应的。如果同一个键被映到多个值，[find]就会返回它第一个找到的。 *)
->>>>>>> d4a3e2fd43ee566d388b874a2c9d6d17e31f9171
 
 Fixpoint find (key : nat) (d : dictionary) : natoption := 
   match d with 
   | empty         => None
-  | record k v d' => if beq_nat key k
-                     then Some v
-                     else find key d'
+  | record k v d' => if (beq_nat key k) 
+                       then (Some v) 
+                       else (find key d')
   end.
 
 
@@ -895,7 +847,7 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 (** 完成下列证明 *)
 
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
-  find k (insert k v d) = Some v.
+  (find k (insert k v d)) = Some v.
 Proof.
  (* FILL IN HERE *) Admitted.
 (** [] *)
@@ -915,5 +867,5 @@ End Dictionary.
 
 End NatList.
 
-(** $Date$ *)
+(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
 

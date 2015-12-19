@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="coqdoc.css" rel="stylesheet" type="text/css"/>
-<title>ImpParser: Lexing and Parsing in Coq</title>
+<title>ImpParser: 用Coq做词法分析和语法分析</title>
 <script type="text/javascript" src="jquery-1.8.3.js"></script>
 <script type="text/javascript" src="main.js"></script>
 </head>
@@ -18,7 +18,7 @@
 
 <div id="main">
 
-<h1 class="libtitle">ImpParser<span class="subtitle">Lexing and Parsing in Coq</span></h1>
+<h1 class="libtitle">ImpParser<span class="subtitle">用Coq做词法分析和语法分析</span></h1>
 
 <div class="code code-tight">
 </div>
@@ -27,24 +27,19 @@
 
 <div class="paragraph"> </div>
 
- The development of the <span class="inlinecode"><span class="id" type="var">Imp</span></span> language in Imp.v completely ignores
-    issues of concrete syntax &mdash; how an ascii string that a programmer
-    might write gets translated into the abstract syntax trees defined
-    by the datatypes <span class="inlinecode"><span class="id" type="var">aexp</span></span>, <span class="inlinecode"><span class="id" type="var">bexp</span></span>, and <span class="inlinecode"><span class="id" type="var">com</span></span>.  In this file we
-    illustrate how the rest of the story can be filled in by building
-    a simple lexical analyzer and parser using Coq's functional
-    programming facilities.
+ 在Imp.v中设计<span class="inlinecode"><span class="id" type="var">Imp</span></span>语言时完全忽略了具体语法的问题 —— 如何把
+    程序员可能写下的ascii字符串翻译成一棵由<span class="inlinecode"><span class="id" type="var">aexp</span></span>，<span class="inlinecode"><span class="id" type="var">bexp</span></span>，
+    <span class="inlinecode"><span class="id" type="var">com</span></span>所定义的抽象语法树。在这个文件能我们将通过用Coq的
+    函数式语言特性来构建一个简单的词法分析器和语法解析器，并回答
+    之前的遗留问题。
 
 <div class="paragraph"> </div>
 
-    This development is not intended to be understood in detail: the
-    explanations are fairly terse and there are no exercises.  The
-    main point is simply to demonstrate that it can be done.  You are
-    invited to look through the code &mdash; most of it is not very
-    complicated, though the parser relies on some "monadic"
-    programming idioms that may require a little work to make out &mdash;
-    but most readers will probably want to just skip down to the
-    Examples section at the very end to get the punchline. 
+    这一章读者可以不求甚解：本章解释都相当的简短并且也没什么
+    练习题。主要的意义是为了演示我们能做什么。非常欢迎你通读
+    这段代码 —— 大部分不那么复杂，尽管解析器依赖于某种"monadic"
+    的编程风格，这可能需要你花点时间来理解 —— 大部分读者可以直接
+    跳到末尾的例子部分弄懂这章做了什么。 
 </div>
 <div class="code code-tight">
 
@@ -52,7 +47,7 @@
 </div>
 
 <div class="doc">
-<a name="lab433"></a><h1 class="section">Internals</h1>
+<a name="lab434"></a><h1 class="section">内部结构</h1>
 
 </div>
 <div class="code code-space">
@@ -72,7 +67,7 @@
 </div>
 
 <div class="doc">
-<a name="lab434"></a><h2 class="section">Lexical Analysis</h2>
+<a name="lab435"></a><h2 class="section">词法分析</h2>
 
 </div>
 <div class="code code-space">
@@ -167,7 +162,7 @@
 </div>
 
 <div class="doc">
-<a name="lab435"></a><h2 class="section">Parsing</h2>
+<a name="lab436"></a><h2 class="section">解析</h2>
 
 </div>
 <div class="code code-space">
@@ -176,13 +171,13 @@
 </div>
 
 <div class="doc">
-<a name="lab436"></a><h3 class="section">Options with Errors</h3>
+<a name="lab437"></a><h3 class="section">出错后的备选</h3>
 
 </div>
 <div class="code code-space">
 
 <br/>
-<span class="comment">(*&nbsp;An&nbsp;option&nbsp;with&nbsp;error&nbsp;messages.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;带出错信息的option&nbsp;*)</span><br/>
 <span class="id" type="keyword">Inductive</span> <span class="id" type="var">optionE</span> (<span class="id" type="var">X</span>:<span class="id" type="keyword">Type</span>) : <span class="id" type="keyword">Type</span> :=<br/>
 &nbsp;&nbsp;| <span class="id" type="var">SomeE</span> : <span class="id" type="var">X</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">optionE</span> <span class="id" type="var">X</span><br/>
 &nbsp;&nbsp;| <span class="id" type="var">NoneE</span> : <span class="id" type="var">string</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">optionE</span> <span class="id" type="var">X</span>.<br/>
@@ -192,8 +187,7 @@
 <span class="id" type="keyword">Implicit Arguments</span> <span class="id" type="var">NoneE</span> [[<span class="id" type="var">X</span>]].<br/>
 
 <br/>
-<span class="comment">(*&nbsp;Some&nbsp;syntactic&nbsp;sugar&nbsp;to&nbsp;make&nbsp;writing&nbsp;nested&nbsp;match-expressions&nbsp;on<br/>
-&nbsp;&nbsp;&nbsp;optionE&nbsp;more&nbsp;convenient.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;加点语法糖来使得书写嵌套的匹配optionE的表达式更加方便。&nbsp;*)</span><br/>
 
 <br/>
 <span class="id" type="keyword">Notation</span> "'DO' ( x , y ) &lt;== e1 ; e2" <br/>
@@ -215,16 +209,15 @@
 </div>
 
 <div class="doc">
-<a name="lab437"></a><h3 class="section">Symbol Table</h3>
+<a name="lab438"></a><h3 class="section">符号表</h3>
 
 </div>
 <div class="code code-space">
 
 <br/>
-<span class="comment">(*&nbsp;Build&nbsp;a&nbsp;mapping&nbsp;from&nbsp;<span class="inlinecode"><span class="id" type="var">tokens</span></span>&nbsp;to&nbsp;<span class="inlinecode"><span class="id" type="var">nats</span></span>.&nbsp;&nbsp;A&nbsp;real&nbsp;parser&nbsp;would&nbsp;do<br/>
-&nbsp;&nbsp;&nbsp;this&nbsp;incrementally&nbsp;as&nbsp;it&nbsp;encountered&nbsp;new&nbsp;symbols,&nbsp;but&nbsp;passing<br/>
-&nbsp;&nbsp;&nbsp;around&nbsp;the&nbsp;symbol&nbsp;table&nbsp;inside&nbsp;the&nbsp;parsing&nbsp;functions&nbsp;is&nbsp;a&nbsp;bit<br/>
-&nbsp;&nbsp;&nbsp;inconvenient,&nbsp;so&nbsp;instead&nbsp;we&nbsp;do&nbsp;it&nbsp;as&nbsp;a&nbsp;first&nbsp;pass.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;构建一个从<span class="inlinecode"><span class="id" type="var">tokens</span></span>到<span class="inlinecode"><span class="id" type="var">nats</span></span>的映射。一个真实的解析器在它遇到<br/>
+&nbsp;&nbsp;&nbsp;新的符号时会将其增加进表中，但是在解析函数中把符号表传来传去<br/>
+&nbsp;&nbsp;&nbsp;不大方便，所以我们把其单独作为第一遍语法处理。&nbsp;*)</span><br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">build_symtable</span> (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>) (<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>) : (<span class="id" type="var">token</span> <span style="font-family: arial;">&rarr;</span> <span class="id" type="var">nat</span>) :=<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">xs</span> <span class="id" type="keyword">with</span><br/>
 &nbsp;&nbsp;| [] ⇒ (<span class="id" type="keyword">fun</span> <span class="id" type="var">s</span> ⇒ <span class="id" type="var">n</span>)<br/>
@@ -238,7 +231,7 @@
 </div>
 
 <div class="doc">
-<a name="lab438"></a><h3 class="section">Generic Combinators for Building Parsers</h3>
+<a name="lab439"></a><h3 class="section">构造解析器的通用组合子</h3>
 
 </div>
 <div class="code code-space">
@@ -259,12 +252,12 @@
 <span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;A&nbsp;(step-indexed)&nbsp;parser&nbsp;which&nbsp;expects&nbsp;zero&nbsp;or&nbsp;more&nbsp;<span class="inlinecode"><span class="id" type="var">p</span></span>s&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;一个接受零个或多个<span class="inlinecode"><span class="id" type="var">p</span></span>的解析器&nbsp;*)</span><br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">many</span> {<span class="id" type="var">T</span>} (<span class="id" type="var">p</span> : <span class="id" type="var">parser</span> <span class="id" type="var">T</span>) (<span class="id" type="var">steps</span> : <span class="id" type="var">nat</span>) : <span class="id" type="var">parser</span> (<span class="id" type="var">list</span> <span class="id" type="var">T</span>) :=<br/>
 &nbsp;&nbsp;<span class="id" type="var">many_helper</span> <span class="id" type="var">p</span> [] <span class="id" type="var">steps</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;A&nbsp;parser&nbsp;which&nbsp;expects&nbsp;a&nbsp;given&nbsp;token,&nbsp;followed&nbsp;by&nbsp;p&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;一个接受紧跟在<span class="inlinecode"><span class="id" type="var">p</span></span>后给定的符号的解析器&nbsp;*)</span><br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">firstExpect</span> {<span class="id" type="var">T</span>} (<span class="id" type="var">t</span> : <span class="id" type="var">token</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">parser</span> <span class="id" type="var">T</span>) : <span class="id" type="var">parser</span> <span class="id" type="var">T</span> :=<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">fun</span> <span class="id" type="var">xs</span> ⇒ <span class="id" type="keyword">match</span> <span class="id" type="var">xs</span> <span class="id" type="keyword">with</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">x</span>::<span class="id" type="var">xs'</span> ⇒ <span class="id" type="keyword">if</span> <span class="id" type="var">string_dec</span> <span class="id" type="var">x</span> <span class="id" type="var">t</span> <br/>
@@ -274,7 +267,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;A&nbsp;parser&nbsp;which&nbsp;expects&nbsp;a&nbsp;particular&nbsp;token&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;一个接受某个特定符号的解析器&nbsp;*)</span><br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">expect</span> (<span class="id" type="var">t</span> : <span class="id" type="var">token</span>) : <span class="id" type="var">parser</span> <span class="id" type="var">unit</span> :=<br/>
 &nbsp;&nbsp;<span class="id" type="var">firstExpect</span> <span class="id" type="var">t</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">xs</span> ⇒ <span class="id" type="var">SomeE</span>(<span class="id" type="var">tt</span>, <span class="id" type="var">xs</span>)).<br/>
 
@@ -282,13 +275,13 @@
 </div>
 
 <div class="doc">
-<a name="lab439"></a><h3 class="section">A Recursive-Descent Parser for Imp</h3>
+<a name="lab440"></a><h3 class="section">Imp的一个递归下降的解析器</h3>
 
 </div>
 <div class="code code-space">
 
 <br/>
-<span class="comment">(*&nbsp;Identifiers&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;标识符&nbsp;*)</span><br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">parseIdentifier</span> (<span class="id" type="var">symtable</span> :<span class="id" type="var">string</span><span style="font-family: arial;">&rarr;</span><span class="id" type="var">nat</span>) (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">optionE</span> (<span class="id" type="var">id</span> × <span class="id" type="var">list</span> <span class="id" type="var">token</span>) :=<br/>
 <span class="id" type="keyword">match</span> <span class="id" type="var">xs</span> <span class="id" type="keyword">with</span><br/>
@@ -301,7 +294,7 @@
 <span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;Numbers&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;数字&nbsp;*)</span><br/>
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">parseNumber</span> (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>) : <span class="id" type="var">optionE</span> (<span class="id" type="var">nat</span> × <span class="id" type="var">list</span> <span class="id" type="var">token</span>) :=<br/>
 <span class="id" type="keyword">match</span> <span class="id" type="var">xs</span> <span class="id" type="keyword">with</span> <br/>
 | [] ⇒ <span class="id" type="var">NoneE</span> "Expected number"<br/>
@@ -317,7 +310,7 @@
 <span class="id" type="keyword">end</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;Parse&nbsp;arithmetic&nbsp;expressions&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;解析算数表达式&nbsp;*)</span><br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">parsePrimaryExp</span> (<span class="id" type="var">steps</span>:<span class="id" type="var">nat</span>) <span class="id" type="var">symtable</span> (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>) <br/>
 &nbsp;&nbsp;&nbsp;: <span class="id" type="var">optionE</span> (<span class="id" type="var">aexp</span> × <span class="id" type="var">list</span> <span class="id" type="var">token</span>) :=<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">steps</span> <span class="id" type="keyword">with</span><br/>
@@ -369,7 +362,7 @@
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">parseAExp</span> := <span class="id" type="var">parseSumExp</span>.<br/>
 
 <br/>
-<span class="comment">(*&nbsp;Parsing&nbsp;boolean&nbsp;expressions.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;解析布尔表达式&nbsp;*)</span><br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">parseAtomicExp</span> (<span class="id" type="var">steps</span>:<span class="id" type="var">nat</span>) (<span class="id" type="var">symtable</span> : <span class="id" type="var">string</span><span style="font-family: arial;">&rarr;</span><span class="id" type="var">nat</span>) (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>)  :=<br/>
 <span class="id" type="keyword">match</span> <span class="id" type="var">steps</span> <span class="id" type="keyword">with</span><br/>
 &nbsp;&nbsp;| 0 ⇒ <span class="id" type="var">NoneE</span> "Too many recursive calls"<br/>
@@ -407,16 +400,16 @@
 <span class="id" type="keyword">Definition</span> <span class="id" type="var">parseBExp</span> := <span class="id" type="var">parseConjunctionExp</span>.<br/>
 
 <br/>
-<span class="comment">(*<br/>
-Compute<br/>
+<span class="comment">(*&nbsp;<br/>
+Eval&nbsp;compute&nbsp;in&nbsp;<br/>
 &nbsp;&nbsp;(parseProductExp&nbsp;100&nbsp;(tokenize&nbsp;"x*y*(x*x)*x")).<br/>
 <br/>
-Compute<br/>
+Eval&nbsp;compute&nbsp;in&nbsp;<br/>
 &nbsp;&nbsp;(parseDisjunctionExp&nbsp;100&nbsp;(tokenize&nbsp;"not((x==x||x*x&lt;=(x*x)*x)&amp;&amp;x==x)")).&nbsp;<br/>
 *)</span><br/>
 
 <br/>
-<span class="comment">(*&nbsp;Parsing&nbsp;commands&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;解析命令&nbsp;*)</span><br/>
 <span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">parseSimpleCommand</span> (<span class="id" type="var">steps</span>:<span class="id" type="var">nat</span>) (<span class="id" type="var">symtable</span>:<span class="id" type="var">string</span><span style="font-family: arial;">&rarr;</span><span class="id" type="var">nat</span>) (<span class="id" type="var">xs</span> : <span class="id" type="var">list</span> <span class="id" type="var">token</span>) :=<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">match</span> <span class="id" type="var">steps</span> <span class="id" type="keyword">with</span><br/>
 &nbsp;&nbsp;| 0 ⇒ <span class="id" type="var">NoneE</span> "Too many recursive calls"<br/>
@@ -471,14 +464,14 @@ Compute<br/>
 </div>
 
 <div class="doc">
-<a name="lab440"></a><h1 class="section">Examples</h1>
+<a name="lab441"></a><h1 class="section">例子</h1>
 
 </div>
 <div class="code code-space">
 
 <br/>
 <span class="comment">(*<br/>
-Compute&nbsp;parse&nbsp;"<br/>
+Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;x&nbsp;==&nbsp;y&nbsp;+&nbsp;1&nbsp;+&nbsp;2&nbsp;-&nbsp;y&nbsp;*&nbsp;6&nbsp;+&nbsp;3&nbsp;THEN<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;:=&nbsp;x&nbsp;*&nbsp;1;;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;:=&nbsp;0<br/>
@@ -498,8 +491,8 @@ Compute&nbsp;parse&nbsp;"<br/>
 
 <br/>
 <span class="comment">(*<br/>
-Compute&nbsp;parse&nbsp;"<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;SKIP;;<br/>
+Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;SKIP;;a<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;z:=x*y*(x*x);;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;WHILE&nbsp;x==x&nbsp;DO<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;z&nbsp;&lt;=&nbsp;z*z&nbsp;&amp;&amp;&nbsp;not&nbsp;x&nbsp;==&nbsp;2&nbsp;THEN<br/>
@@ -529,7 +522,7 @@ Compute&nbsp;parse&nbsp;"<br/>
 
 <br/>
 <span class="comment">(*<br/>
-Compute&nbsp;parse&nbsp;"<br/>
+Eval&nbsp;compute&nbsp;in&nbsp;parse&nbsp;"<br/>
 &nbsp;&nbsp;&nbsp;SKIP;;<br/>
 &nbsp;&nbsp;&nbsp;z:=x*y*(x*x);;<br/>
 &nbsp;&nbsp;&nbsp;WHILE&nbsp;x==x&nbsp;DO<br/>

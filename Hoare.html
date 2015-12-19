@@ -145,7 +145,7 @@ In the past couple of chapters, we've begun applying the
 </div>
 
 <div class="doc">
-<a name="lab508"></a><h1 class="section">Hoare Logic</h1>
+<a name="lab509"></a><h1 class="section">Hoare Logic</h1>
 
 <div class="paragraph"> </div>
 
@@ -162,7 +162,7 @@ In the past couple of chapters, we've begun applying the
 </div>
 
 <div class="doc">
-<a name="lab509"></a><h2 class="section">Assertions</h2>
+<a name="lab510"></a><h2 class="section">Assertions</h2>
 
 <div class="paragraph"> </div>
 
@@ -182,7 +182,7 @@ In the past couple of chapters, we've begun applying the
 </div>
 
 <div class="doc">
-<a name="lab510"></a><h4 class="section">Exercise: 1 star, optional (assertions)</h4>
+<a name="lab511"></a><h4 class="section">Exercise: 1 star, optional (assertions)</h4>
 
 </div>
 <div class="code code-space">
@@ -219,7 +219,7 @@ Paraphrase the following assertions in English.
 </div>
 
 <div class="doc">
-<a name="lab511"></a><h2 class="section">Notation for Assertions</h2>
+<a name="lab512"></a><h2 class="section">Notation for Assertions</h2>
 
 <div class="paragraph"> </div>
 
@@ -286,7 +286,7 @@ We'll also have occasion to use the "iff" variant of implication
 </div>
 
 <div class="doc">
-<a name="lab512"></a><h2 class="section">Hoare Triples</h2>
+<a name="lab513"></a><h2 class="section">Hoare Triples</h2>
 
 <div class="paragraph"> </div>
 
@@ -358,7 +358,7 @@ Since we'll be working a lot with Hoare triples, it's useful to
     context.) 
 <div class="paragraph"> </div>
 
-<a name="lab513"></a><h4 class="section">Exercise: 1 star, optional (triples)</h4>
+<a name="lab514"></a><h4 class="section">Exercise: 1 star, optional (triples)</h4>
  Paraphrase the following Hoare triples in English.
 
 <div class="paragraph"> </div>
@@ -391,7 +391,7 @@ Since we'll be working a lot with Hoare triples, it's useful to
  <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab514"></a><h4 class="section">Exercise: 1 star, optional (valid_triples)</h4>
+<a name="lab515"></a><h4 class="section">Exercise: 1 star, optional (valid_triples)</h4>
  Which of the following Hoare triples are <i>valid</i> &mdash; i.e., the
     claimed relation between <span class="inlinecode"><span class="id" type="var">P</span></span>, <span class="inlinecode"><span class="id" type="var">c</span></span>, and <span class="inlinecode"><span class="id" type="var">Q</span></span> is true?
 
@@ -475,7 +475,7 @@ Since we'll be working a lot with Hoare triples, it's useful to
 </div>
 
 <div class="doc">
-<a name="lab515"></a><h2 class="section">Proof Rules</h2>
+<a name="lab516"></a><h2 class="section">Proof Rules</h2>
 
 <div class="paragraph"> </div>
 
@@ -496,7 +496,7 @@ Since we'll be working a lot with Hoare triples, it's useful to
 </div>
 
 <div class="doc">
-<a name="lab516"></a><h3 class="section">Assignment</h3>
+<a name="lab517"></a><h3 class="section">Assignment</h3>
 
 <div class="paragraph"> </div>
 
@@ -767,7 +767,7 @@ Here's a first formal proof using this rule.
 </div>
 
 <div class="doc">
-<a name="lab517"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_examples)</h4>
+<a name="lab518"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_examples)</h4>
  Translate these informal Hoare triples...
 
 <div class="paragraph"> </div>
@@ -796,7 +796,7 @@ Here's a first formal proof using this rule.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab518"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_wrong)</h4>
+<a name="lab519"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_wrong)</h4>
  The assignment rule looks backward to almost everyone the first
     time they see it.  If it still seems backward to you, it may help
     to think a little about alternative "forward" rules.  Here is a
@@ -829,7 +829,7 @@ Here's a first formal proof using this rule.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab519"></a><h4 class="section">Exercise: 3 stars, advanced (hoare_asgn_fwd)</h4>
+<a name="lab520"></a><h4 class="section">Exercise: 3 stars, advanced (hoare_asgn_fwd)</h4>
  However, using an auxiliary variable <span class="inlinecode"><span class="id" type="var">m</span></span> to remember the original
     value of <span class="inlinecode"><span class="id" type="var">X</span></span> we can define a Hoare rule for assignment that does,
     intuitively, "work forwards" rather than backwards.
@@ -884,7 +884,7 @@ Here's a first formal proof using this rule.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab520"></a><h4 class="section">Exercise: 2 stars, advanced (hoare_asgn_fwd_exists)</h4>
+<a name="lab521"></a><h4 class="section">Exercise: 2 stars, advanced (hoare_asgn_fwd_exists)</h4>
  Another way to define a forward rule for assignment is to
     existentially quantify over the previous value of the assigned
     variable.
@@ -941,7 +941,7 @@ Here's a first formal proof using this rule.
 </div>
 
 <div class="doc">
-<a name="lab521"></a><h3 class="section">Consequence</h3>
+<a name="lab522"></a><h3 class="section">Consequence</h3>
 
 <div class="paragraph"> </div>
 
@@ -1150,7 +1150,7 @@ Finally, for convenience in some proofs, we can state a "combined"
 </div>
 
 <div class="doc">
-<a name="lab522"></a><h3 class="section">Digression: The <span class="inlinecode"><span class="id" type="tactic">eapply</span></span> Tactic</h3>
+<a name="lab523"></a><h3 class="section">Digression: The <span class="inlinecode"><span class="id" type="tactic">eapply</span></span> Tactic</h3>
 
 <div class="paragraph"> </div>
 
@@ -1327,7 +1327,7 @@ In the last step we did <span class="inlinecode"><span class="id" type="tactic">
 </div>
 
 <div class="doc">
-<a name="lab523"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_examples_2)</h4>
+<a name="lab524"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_examples_2)</h4>
  Translate these informal Hoare triples...
 
 <div class="paragraph"> </div>
@@ -1356,7 +1356,7 @@ In the last step we did <span class="inlinecode"><span class="id" type="tactic">
 </div>
 
 <div class="doc">
-<a name="lab524"></a><h3 class="section">Skip</h3>
+<a name="lab525"></a><h3 class="section">Skip</h3>
 
 <div class="paragraph"> </div>
 
@@ -1393,7 +1393,7 @@ In the last step we did <span class="inlinecode"><span class="id" type="tactic">
 </div>
 
 <div class="doc">
-<a name="lab525"></a><h3 class="section">Sequencing</h3>
+<a name="lab526"></a><h3 class="section">Sequencing</h3>
 
 <div class="paragraph"> </div>
 
@@ -1494,7 +1494,7 @@ You will most often use <span class="inlinecode"><span class="id" type="var">hoa
     as done above. 
 <div class="paragraph"> </div>
 
-<a name="lab526"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_example4)</h4>
+<a name="lab527"></a><h4 class="section">Exercise: 2 stars (hoare_asgn_example4)</h4>
  Translate this "decorated program" into a formal proof:
 
 <div class="paragraph"> </div>
@@ -1526,7 +1526,7 @@ You will most often use <span class="inlinecode"><span class="id" type="var">hoa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab527"></a><h4 class="section">Exercise: 3 stars (swap_exercise)</h4>
+<a name="lab528"></a><h4 class="section">Exercise: 3 stars (swap_exercise)</h4>
  Write an Imp program <span class="inlinecode"><span class="id" type="var">c</span></span> that swaps the values of <span class="inlinecode"><span class="id" type="var">X</span></span> and <span class="inlinecode"><span class="id" type="var">Y</span></span>
     and show (in Coq) that it satisfies the following
     specification:
@@ -1559,7 +1559,7 @@ You will most often use <span class="inlinecode"><span class="id" type="var">hoa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab528"></a><h4 class="section">Exercise: 3 stars (hoarestate1)</h4>
+<a name="lab529"></a><h4 class="section">Exercise: 3 stars (hoarestate1)</h4>
  Explain why the following proposition can't be proven:
 
 <div class="paragraph"> </div>
@@ -1589,7 +1589,7 @@ You will most often use <span class="inlinecode"><span class="id" type="var">hoa
 </div>
 
 <div class="doc">
-<a name="lab529"></a><h3 class="section">Conditionals</h3>
+<a name="lab530"></a><h3 class="section">Conditionals</h3>
 
 <div class="paragraph"> </div>
 
@@ -1742,7 +1742,7 @@ Now we can formalize the Hoare proof rule for conditionals
 </div>
 
 <div class="doc">
-<a name="lab530"></a><h1 class="section">Hoare Logic: So Far</h1>
+<a name="lab531"></a><h1 class="section">Hoare Logic: So Far</h1>
 
 <div class="paragraph"> </div>
 
@@ -1789,7 +1789,7 @@ The basic structure is given by <i>Hoare triples</i> of the form:
 
 <div class="paragraph"> </div>
 
-<a name="lab531"></a><h2 class="section">Hoare Logic Rules (so far)</h2>
+<a name="lab532"></a><h2 class="section">Hoare Logic Rules (so far)</h2>
 
 <div class="paragraph"> </div>
 
@@ -1880,7 +1880,7 @@ The basic structure is given by <i>Hoare triples</i> of the form:
 </table></center>
 <div class="paragraph"> </div>
 
-<a name="lab532"></a><h3 class="section">Example</h3>
+<a name="lab533"></a><h3 class="section">Example</h3>
  Here is a formal proof that the program we used to motivate the
     rule satisfies the specification we gave. 
 </div>
@@ -1916,7 +1916,7 @@ The basic structure is given by <i>Hoare triples</i> of the form:
 </div>
 
 <div class="doc">
-<a name="lab533"></a><h4 class="section">Exercise: 2 stars (if_minus_plus)</h4>
+<a name="lab534"></a><h4 class="section">Exercise: 2 stars (if_minus_plus)</h4>
  Prove the following hoare triple using <span class="inlinecode"><span class="id" type="var">hoare_if</span></span>: 
 </div>
 <div class="code code-tight">
@@ -1936,11 +1936,11 @@ The basic structure is given by <i>Hoare triples</i> of the form:
 </div>
 
 <div class="doc">
-<a name="lab534"></a><h3 class="section">Exercise: One-sided conditionals</h3>
+<a name="lab535"></a><h3 class="section">Exercise: One-sided conditionals</h3>
 
 <div class="paragraph"> </div>
 
-<a name="lab535"></a><h4 class="section">Exercise: 4 stars (if1_hoare)</h4>
+<a name="lab536"></a><h4 class="section">Exercise: 4 stars (if1_hoare)</h4>
 
 <div class="paragraph"> </div>
 
@@ -2109,7 +2109,7 @@ For full credit, prove formally <span class="inlinecode"><span class="id" type="
 </div>
 
 <div class="doc">
-<a name="lab536"></a><h3 class="section">Loops</h3>
+<a name="lab537"></a><h3 class="section">Loops</h3>
 
 <div class="paragraph"> </div>
 
@@ -2138,7 +2138,7 @@ For full credit, prove formally <span class="inlinecode"><span class="id" type="
     is a valid triple. 
 <div class="paragraph"> </div>
 
-<a name="lab537"></a><h3 class="section"> </h3>
+<a name="lab538"></a><h3 class="section"> </h3>
 
 <div class="paragraph"> </div>
 
@@ -2320,7 +2320,7 @@ For full credit, prove formally <span class="inlinecode"><span class="id" type="
 </div>
 
 <div class="doc">
-<a name="lab538"></a><h3 class="section"> </h3>
+<a name="lab539"></a><h3 class="section"> </h3>
  We can use the while rule to prove the following Hoare triple,
     which may seem surprising at first... 
 </div>
@@ -2369,7 +2369,7 @@ Of course, this result is not surprising if we remember that
 </div>
 
 <div class="doc">
-<a name="lab539"></a><h3 class="section">Exercise: <span class="inlinecode"><span class="id" type="var">REPEAT</span></span></h3>
+<a name="lab540"></a><h3 class="section">Exercise: <span class="inlinecode"><span class="id" type="var">REPEAT</span></span></h3>
 
 </div>
 <div class="code code-space">
@@ -2381,7 +2381,7 @@ Of course, this result is not surprising if we remember that
 </div>
 
 <div class="doc">
-<a name="lab540"></a><h4 class="section">Exercise: 4 stars, advanced (hoare_repeat)</h4>
+<a name="lab541"></a><h4 class="section">Exercise: 4 stars, advanced (hoare_repeat)</h4>
  In this exercise, we'll add a new command to our language of
     commands: <span class="inlinecode"><span class="id" type="var">REPEAT</span></span> c <span class="inlinecode"><span class="id" type="var">UNTIL</span></span> a <span class="inlinecode"><span class="id" type="var">END</span></span>. You will write the
     evaluation rule for <span class="inlinecode"><span class="id" type="tactic">repeat</span></span> and add a new Hoare rule to
@@ -2559,11 +2559,11 @@ For full credit, make sure (informally) that your rule can be used
 </div>
 
 <div class="doc">
-<a name="lab541"></a><h2 class="section">Exercise: <span class="inlinecode"><span class="id" type="var">HAVOC</span></span></h2>
+<a name="lab542"></a><h2 class="section">Exercise: <span class="inlinecode"><span class="id" type="var">HAVOC</span></span></h2>
 
 <div class="paragraph"> </div>
 
-<a name="lab542"></a><h4 class="section">Exercise: 3 stars (himp_hoare)</h4>
+<a name="lab543"></a><h4 class="section">Exercise: 3 stars (himp_hoare)</h4>
 
 <div class="paragraph"> </div>
 
@@ -2680,7 +2680,7 @@ Complete the Hoare rule for <span class="inlinecode"><span class="id" type="var"
 </div>
 
 <div class="doc">
-<a name="lab543"></a><h2 class="section">Complete List of Hoare Logic Rules</h2>
+<a name="lab544"></a><h2 class="section">Complete List of Hoare Logic Rules</h2>
 
 <div class="paragraph"> </div>
 

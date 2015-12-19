@@ -1,24 +1,19 @@
-(** * ImpParser: Lexing and Parsing in Coq *)
+(** * ImpParser: 用Coq做词法分析和语法分析 *)
 
-(** The development of the [Imp] language in Imp.v completely ignores
-    issues of concrete syntax -- how an ascii string that a programmer
-    might write gets translated into the abstract syntax trees defined
-    by the datatypes [aexp], [bexp], and [com].  In this file we
-    illustrate how the rest of the story can be filled in by building
-    a simple lexical analyzer and parser using Coq's functional
-    programming facilities.
-
-    This development is not intended to be understood in detail: the
-    explanations are fairly terse and there are no exercises.  The
-    main point is simply to demonstrate that it can be done.  You are
-    invited to look through the code -- most of it is not very
-    complicated, though the parser relies on some "monadic"
-    programming idioms that may require a little work to make out --
-    but most readers will probably want to just skip down to the
-    Examples section at the very end to get the punchline. *)
+(** 在Imp.v中设计[Imp]语言时完全忽略了具体语法的问题 —— 如何把
+    程序员可能写下的ascii字符串翻译成一棵由[aexp]，[bexp]，
+    [com]所定义的抽象语法树。在这个文件能我们将通过用Coq的
+    函数式语言特性来构建一个简单的词法分析器和语法解析器，并回答
+    之前的遗留问题。
+    
+    这一章读者可以不求甚解：本章解释都相当的简短并且也没什么
+    练习题。主要的意义是为了演示我们能做什么。非常欢迎你通读
+    这段代码 —— 大部分不那么复杂，尽管解析器依赖于某种"monadic"
+    的编程风格，这可能需要你花点时间来理解 —— 大部分读者可以直接
+    跳到末尾的例子部分弄懂这章做了什么。 *)
 
 (* ####################################################### *)
-(** * Internals *)
+(** * 内部结构 *)
 
 Require Import SfLib.
 Require Import Imp.
@@ -29,7 +24,7 @@ Require Import Ascii.
 Open Scope list_scope.
 
 (* ####################################################### *)
-(** ** Lexical Analysis *)
+(** ** 词法分析 *)
 
 Definition isWhite (c : ascii) : bool :=
   let n := nat_of_ascii c in
@@ -105,12 +100,12 @@ Example tokenize_ex1 :
 Proof. reflexivity. Qed.
 
 (* ####################################################### *)
-(** ** Parsing *)
+(** ** 解析 *)
 
 (* ####################################################### *)
-(** *** Options with Errors *)
+(** *** 出错后的备选 *)
 
-(* An option with error messages. *)
+(* 带出错信息的option *)
 Inductive optionE (X:Type) : Type :=
   | SomeE : X -> optionE X
   | NoneE : string -> optionE X.
@@ -118,8 +113,7 @@ Inductive optionE (X:Type) : Type :=
 Implicit Arguments SomeE [[X]].
 Implicit Arguments NoneE [[X]].
 
-(* Some syntactic sugar to make writing nested match-expressions on
-   optionE more convenient. *)
+(* 加点语法糖来使得书写嵌套的匹配optionE的表达式更加方便。 *)
 
 Notation "'DO' ( x , y ) <== e1 ; e2" 
    := (match e1 with
@@ -136,12 +130,11 @@ Notation "'DO' ( x , y ) <-- e1 ; e2 'OR' e3"
    (right associativity, at level 60, e2 at next level). 
 
 (* ####################################################### *)
-(** *** Symbol Table *)
+(** *** 符号表 *)
 
-(* Build a mapping from [tokens] to [nats].  A real parser would do
-   this incrementally as it encountered new symbols, but passing
-   around the symbol table inside the parsing functions is a bit
-   inconvenient, so instead we do it as a first pass. *)
+(* 构建一个从[tokens]到[nats]的映射。一个真实的解析器在它遇到
+   新的符号时会将其增加进表中，但是在解析函数中把符号表传来传去
+   不大方便，所以我们把其单独作为第一遍语法处理。 *)
 Fixpoint build_symtable (xs : list token) (n : nat) : (token -> nat) :=
   match xs with
   | [] => (fun s => n)
@@ -152,7 +145,7 @@ Fixpoint build_symtable (xs : list token) (n : nat) : (token -> nat) :=
   end.
 
 (* ####################################################### *)
-(** *** Generic Combinators for Building Parsers *)
+(** *** 构造解析器的通用组合子 *)
 
 Open Scope string_scope.
 
@@ -166,11 +159,11 @@ match steps, p xs with
 | S steps', SomeE (t, xs') => many_helper p (t::acc) steps' xs'
 end.
 
-(* A (step-indexed) parser which expects zero or more [p]s *)
+(* 一个接受零个或多个[p]的解析器 *)
 Fixpoint many {T} (p : parser T) (steps : nat) : parser (list T) :=
   many_helper p [] steps.
 
-(* A parser which expects a given token, followed by p *)
+(* 一个接受紧跟在[p]后给定的符号的解析器 *)
 Definition firstExpect {T} (t : token) (p : parser T) : parser T :=
   fun xs => match xs with
               | x::xs' => if string_dec x t 
@@ -179,14 +172,14 @@ Definition firstExpect {T} (t : token) (p : parser T) : parser T :=
               | [] =>  NoneE ("expected '" ++ t ++ "'.")
             end. 
 
-(* A parser which expects a particular token *)
+(* 一个接受某个特定符号的解析器 *)
 Definition expect (t : token) : parser unit :=
   firstExpect t (fun xs => SomeE(tt, xs)).
 
 (* ####################################################### *)
-(** *** A Recursive-Descent Parser for Imp *)
+(** *** Imp的一个递归下降的解析器 *)
 
-(* Identifiers *)
+(* 标识符 *)
 Definition parseIdentifier (symtable :string->nat) (xs : list token) 
                          : optionE (id * list token) :=
 match xs with
@@ -198,7 +191,7 @@ match xs with
       NoneE ("Illegal identifier:'" ++ x ++ "'")
 end.
 
-(* Numbers *)
+(* 数字 *)
 Definition parseNumber (xs : list token) : optionE (nat * list token) :=
 match xs with 
 | [] => NoneE "Expected number"
@@ -213,7 +206,7 @@ match xs with
       NoneE "Expected number"
 end.
 
-(* Parse arithmetic expressions *)
+(* 解析算数表达式 *)
 Fixpoint parsePrimaryExp (steps:nat) symtable (xs : list token) 
    : optionE (aexp * list token) :=
   match steps with
@@ -263,7 +256,7 @@ with parseSumExp (steps:nat) symtable (xs : list token)  :=
 
 Definition parseAExp := parseSumExp.
 
-(* Parsing boolean expressions. *)
+(* 解析布尔表达式 *)
 Fixpoint parseAtomicExp (steps:nat) (symtable : string->nat) (xs : list token)  :=
 match steps with
   | 0 => NoneE "Too many recursive calls"
@@ -299,15 +292,15 @@ with parseConjunctionExp (steps:nat) (symtable : string->nat) (xs : list token) 
 
 Definition parseBExp := parseConjunctionExp.
 
-(*
-Compute
+(* 
+Eval compute in 
   (parseProductExp 100 (tokenize "x*y*(x*x)*x")).
 
-Compute
+Eval compute in 
   (parseDisjunctionExp 100 (tokenize "not((x==x||x*x<=(x*x)*x)&&x==x)")). 
 *)
 
-(* Parsing commands *)
+(* 解析命令 *)
 Fixpoint parseSimpleCommand (steps:nat) (symtable:string->nat) (xs : list token) :=
   match steps with
   | 0 => NoneE "Too many recursive calls"
@@ -357,10 +350,11 @@ Definition parse (str : string) : optionE (com * list token) :=
   parseSequencedCommand bignumber (build_symtable tokens 0) tokens.
 
 (* ####################################################### *)
-(** * Examples *)
+(** * 例子 *)
+
 
 (*
-Compute parse "
+Eval compute in parse "
     IF x == y + 1 + 2 - y * 6 + 3 THEN
       x := x * 1;;
       y := 0
@@ -379,8 +373,8 @@ Compute parse "
 *)
 
 (*
-Compute parse "
-    SKIP;;
+Eval compute in parse "
+    SKIP;;a
     z:=x*y*(x*x);;
     WHILE x==x DO
       IF z <= z*z && not x == 2 THEN
@@ -409,7 +403,7 @@ Compute parse "
 *)
 
 (*
-Compute parse "
+Eval compute in parse "
    SKIP;;
    z:=x*y*(x*x);;
    WHILE x==x DO
@@ -440,5 +434,5 @@ Compute parse "
          []).
 *)
 
-(** $Date$ *)
+(** $Date: 2014-12-31 11:17:56 -0500 (Wed, 31 Dec 2014) $ *)
 

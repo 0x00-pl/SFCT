@@ -35,7 +35,7 @@
 </div>
 
 <div class="doc">
-<a name="lab285"></a><h1 class="section">Existential Quantification</h1>
+<a name="lab286"></a><h1 class="section">Existential Quantification</h1>
 
 <div class="paragraph"> </div>
 
@@ -65,7 +65,7 @@ That is, <span class="inlinecode"><span class="id" type="var">ex</span></span> i
 
 <div class="paragraph"> </div>
 
-<a name="lab286"></a><h3 class="section"> </h3>
+<a name="lab287"></a><h3 class="section"> </h3>
  Coq's <span class="inlinecode"><span class="id" type="keyword">Notation</span></span> facility can be used to introduce more
     familiar notation for writing existentially quantified
     propositions, exactly parallel to the built-in syntax for
@@ -87,7 +87,7 @@ That is, <span class="inlinecode"><span class="id" type="var">ex</span></span> i
 </div>
 
 <div class="doc">
-<a name="lab287"></a><h3 class="section"> </h3>
+<a name="lab288"></a><h3 class="section"> </h3>
  We can use the usual set of tactics for
     manipulating existentials.  For example, to prove an
     existential, we can <span class="inlinecode"><span class="id" type="tactic">apply</span></span> the constructor <span class="inlinecode"><span class="id" type="var">ex_intro</span></span>.  Since the
@@ -110,7 +110,7 @@ That is, <span class="inlinecode"><span class="id" type="var">ex</span></span> i
 Note that we have to explicitly give the witness. 
 <div class="paragraph"> </div>
 
-<a name="lab288"></a><h3 class="section"> </h3>
+<a name="lab289"></a><h3 class="section"> </h3>
  Or, instead of writing <span class="inlinecode"><span class="id" type="tactic">apply</span></span> <span class="inlinecode"><span class="id" type="var">ex_intro</span></span> <span class="inlinecode"><span class="id" type="keyword">with</span></span> <span class="inlinecode">(<span class="id" type="var">witness</span>:=<span class="id" type="var">e</span>)</span> all the
     time, we can use the convenient shorthand <span class="inlinecode"><span style="font-family: arial;">&exist;</span></span> <span class="inlinecode"><span class="id" type="var">e</span></span>, which means
     the same thing. 
@@ -127,7 +127,7 @@ Note that we have to explicitly give the witness.
 </div>
 
 <div class="doc">
-<a name="lab289"></a><h3 class="section"> </h3>
+<a name="lab290"></a><h3 class="section"> </h3>
  Conversely, if we have an existential hypothesis in the
     context, we can eliminate it with <span class="inlinecode"><span class="id" type="tactic">inversion</span></span>.  Note the use
     of the <span class="inlinecode"><span class="id" type="keyword">as</span>...</span> pattern to name the variable that Coq
@@ -170,7 +170,7 @@ Here is another example of how to work with existentials.
 </div>
 
 <div class="doc">
-<a name="lab290"></a><h4 class="section">Exercise: 1 star, optional (english_exists)</h4>
+<a name="lab291"></a><h4 class="section">Exercise: 1 star, optional (english_exists)</h4>
  In English, what does the proposition 
 
 <div class="paragraph"> </div>
@@ -193,7 +193,7 @@ Here is another example of how to work with existentials.
 </div>
 
 <div class="doc">
-<a name="lab291"></a><h4 class="section">Exercise: 1 star (dist_not_exists)</h4>
+<a name="lab292"></a><h4 class="section">Exercise: 1 star (dist_not_exists)</h4>
  Prove that "<span class="inlinecode"><span class="id" type="var">P</span></span> holds for all <span class="inlinecode"><span class="id" type="var">x</span></span>" implies "there is no <span class="inlinecode"><span class="id" type="var">x</span></span> for
     which <span class="inlinecode"><span class="id" type="var">P</span></span> does not hold." 
 </div>
@@ -210,7 +210,7 @@ Here is another example of how to work with existentials.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab292"></a><h4 class="section">Exercise: 3 stars, optional (not_exists_dist)</h4>
+<a name="lab293"></a><h4 class="section">Exercise: 3 stars, optional (not_exists_dist)</h4>
  (The other direction of this theorem requires the classical "law
     of the excluded middle".) 
 </div>
@@ -229,7 +229,7 @@ Here is another example of how to work with existentials.
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab293"></a><h4 class="section">Exercise: 2 stars (dist_exists_or)</h4>
+<a name="lab294"></a><h4 class="section">Exercise: 2 stars (dist_exists_or)</h4>
  Prove that existential quantification distributes over
     disjunction. 
 </div>
@@ -251,7 +251,7 @@ Here is another example of how to work with existentials.
 </div>
 
 <div class="doc">
-<a name="lab294"></a><h1 class="section">Evidence-Carrying Booleans</h1>
+<a name="lab295"></a><h1 class="section">Evidence-Carrying Booleans</h1>
 
 <div class="paragraph"> </div>
 
@@ -265,7 +265,7 @@ Here is another example of how to work with existentials.
     quickly gets tedious. 
 <div class="paragraph"> </div>
 
-<a name="lab295"></a><h3 class="section"> </h3>
+<a name="lab296"></a><h3 class="section"> </h3>
  It turns out that we can get the benefits of both forms at once by
     using a construct called <span class="inlinecode"><span class="id" type="var">sumbool</span></span>. 
 </div>
@@ -293,7 +293,7 @@ Think of <span class="inlinecode"><span class="id" type="var">sumbool</span></sp
     technical distinction that allows us to compute with them.) 
 <div class="paragraph"> </div>
 
-<a name="lab296"></a><h3 class="section"> </h3>
+<a name="lab297"></a><h3 class="section"> </h3>
 
 <div class="paragraph"> </div>
 
@@ -343,7 +343,7 @@ Read as a theorem, this says that equality on <span class="inlinecode"><span cla
     interpretation.) 
 <div class="paragraph"> </div>
 
-<a name="lab297"></a><h3 class="section"> </h3>
+<a name="lab298"></a><h3 class="section"> </h3>
  Here's a simple example illustrating the advantages of the
    <span class="inlinecode"><span class="id" type="var">sumbool</span></span> form. 
 </div>
@@ -377,7 +377,7 @@ Compare this to the more laborious proof (in BasicTactics.v) for the
     booleans to a Prop. 
 <div class="paragraph"> </div>
 
-<a name="lab298"></a><h4 class="section">Exercise: 1 star (override_shadow')</h4>
+<a name="lab299"></a><h4 class="section">Exercise: 1 star (override_shadow')</h4>
 
 </div>
 <div class="code code-space">
@@ -396,11 +396,11 @@ Compare this to the more laborious proof (in BasicTactics.v) for the
 </div>
 
 <div class="doc">
-<a name="lab299"></a><h1 class="section">Additional Exercises</h1>
+<a name="lab300"></a><h1 class="section">Additional Exercises</h1>
 
 <div class="paragraph"> </div>
 
-<a name="lab300"></a><h4 class="section">Exercise: 3 stars (all_forallb)</h4>
+<a name="lab301"></a><h4 class="section">Exercise: 3 stars (all_forallb)</h4>
  Inductively define a property <span class="inlinecode"><span class="id" type="var">all</span></span> of lists, parameterized by a
     type <span class="inlinecode"><span class="id" type="var">X</span></span> and a property <span class="inlinecode"><span class="id" type="var">P</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">X</span></span> <span class="inlinecode"><span style="font-family: arial;">&rarr;</span></span> <span class="inlinecode"><span class="id" type="keyword">Prop</span></span>, such that <span class="inlinecode"><span class="id" type="var">all</span></span> <span class="inlinecode"><span class="id" type="var">X</span></span> <span class="inlinecode"><span class="id" type="var">P</span></span> <span class="inlinecode"><span class="id" type="var">l</span></span>
     asserts that <span class="inlinecode"><span class="id" type="var">P</span></span> is true for every element of the list <span class="inlinecode"><span class="id" type="var">l</span></span>. 
@@ -451,7 +451,7 @@ Using the property <span class="inlinecode"><span class="id" type="var">all</spa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab301"></a><h4 class="section">Exercise: 4 stars, advanced (filter_challenge)</h4>
+<a name="lab302"></a><h4 class="section">Exercise: 4 stars, advanced (filter_challenge)</h4>
  One of the main purposes of Coq is to prove that programs match
     their specifications.  To this end, let's prove that our
     definition of <span class="inlinecode"><span class="id" type="var">filter</span></span> matches a specification.  Here is the
@@ -511,7 +511,7 @@ Using the property <span class="inlinecode"><span class="id" type="var">all</spa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab302"></a><h4 class="section">Exercise: 5 stars, advanced, optional (filter_challenge_2)</h4>
+<a name="lab303"></a><h4 class="section">Exercise: 5 stars, advanced, optional (filter_challenge_2)</h4>
  A different way to formally characterize the behavior of <span class="inlinecode"><span class="id" type="var">filter</span></span>
     goes like this: Among all subsequences of <span class="inlinecode"><span class="id" type="var">l</span></span> with the property
     that <span class="inlinecode"><span class="id" type="var">test</span></span> evaluates to <span class="inlinecode"><span class="id" type="var">true</span></span> on all their members, <span class="inlinecode"><span class="id" type="var">filter</span></span> <span class="inlinecode"><span class="id" type="var">test</span></span>
@@ -527,7 +527,7 @@ Using the property <span class="inlinecode"><span class="id" type="var">all</spa
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab303"></a><h4 class="section">Exercise: 4 stars, advanced (no_repeats)</h4>
+<a name="lab304"></a><h4 class="section">Exercise: 4 stars, advanced (no_repeats)</h4>
  The following inductively defined proposition... 
 </div>
 <div class="code code-tight">
@@ -609,7 +609,7 @@ Finally, state and prove one or more interesting theorems relating
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab304"></a><h4 class="section">Exercise: 3 stars (nostutter)</h4>
+<a name="lab305"></a><h4 class="section">Exercise: 3 stars (nostutter)</h4>
  Formulating inductive definitions of predicates is an important
     skill you'll need in this course.  Try to solve this exercise
     without any help at all.
@@ -687,7 +687,7 @@ Make sure each of these tests succeeds, but you are free
 <font size=-2>&#9744;</font> 
 <div class="paragraph"> </div>
 
-<a name="lab305"></a><h4 class="section">Exercise: 4 stars, advanced (pigeonhole principle)</h4>
+<a name="lab306"></a><h4 class="section">Exercise: 4 stars, advanced (pigeonhole principle)</h4>
  The "pigeonhole principle" states a basic fact about counting:
    if you distribute more than <span class="inlinecode"><span class="id" type="var">n</span></span> items into <span class="inlinecode"><span class="id" type="var">n</span></span> pigeonholes, some 
    pigeonhole must contain at least two items.  As is often the case,

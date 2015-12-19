@@ -1247,9 +1247,7 @@ module Coq_Pos =
          (fun _ ->
          false)
          (fun n' ->
-         testbit_nat
-           p0
-           n')
+         testbit_nat p0 n')
          n0)
     | XH ->
       ((fun zero succ n ->
@@ -1260,90 +1258,37 @@ module Coq_Pos =
          false)
          n0)
   
-  (** val testbit :
-      positive
-      ->
-      n
-      ->
-      bool **)
+  (** val testbit : positive -> n -> bool **)
   
   let rec testbit p n0 =
     match p with
     | XI p0 ->
       (match n0 with
-       | N0 ->
-         true
-       | Npos n1 ->
-         testbit
-           p0
-           (pred_N
-             n1))
+       | N0 -> true
+       | Npos n1 -> testbit p0 (pred_N n1))
     | XO p0 ->
       (match n0 with
-       | N0 ->
-         false
-       | Npos n1 ->
-         testbit
-           p0
-           (pred_N
-             n1))
+       | N0 -> false
+       | Npos n1 -> testbit p0 (pred_N n1))
     | XH ->
       (match n0 with
-       | N0 ->
-         true
-       | Npos p0 ->
-         false)
+       | N0 -> true
+       | Npos p0 -> false)
   
-  (** val iter_op :
-      ('a1
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val iter_op : ('a1 -> 'a1 -> 'a1) -> positive -> 'a1 -> 'a1 **)
   
   let rec iter_op op p a =
     match p with
-    | XI p0 ->
-      op
-        a
-        (iter_op
-          op
-          p0
-          (op
-            a
-            a))
-    | XO p0 ->
-      iter_op
-        op
-        p0
-        (op
-          a
-          a)
-    | XH ->
-      a
+    | XI p0 -> op a (iter_op op p0 (op a a))
+    | XO p0 -> iter_op op p0 (op a a)
+    | XH -> a
   
-  (** val to_nat :
-      positive
-      ->
-      int **)
+  (** val to_nat : positive -> int **)
   
   let to_nat x =
-    iter_op
-      plus
-      x
-      ((fun x -> x + 1)
-      0)
+    iter_op plus x ((fun x -> x + 1) 0)
   
-  (** val of_nat :
-      int
-      ->
-      positive **)
+  (** val of_nat : int -> positive **)
   
   let rec of_nat n0 =
     (fun zero succ n ->
@@ -1356,16 +1301,11 @@ module Coq_Pos =
         (fun _ ->
         XH)
         (fun n1 ->
-        succ
-          (of_nat
-            x))
+        succ (of_nat x))
         x)
       n0
   
-  (** val of_succ_nat :
-      int
-      ->
-      positive **)
+  (** val of_succ_nat : int -> positive **)
   
   let rec of_succ_nat n0 =
     (fun zero succ n ->
@@ -1373,332 +1313,116 @@ module Coq_Pos =
       (fun _ ->
       XH)
       (fun x ->
-      succ
-        (of_succ_nat
-          x))
+      succ (of_succ_nat x))
       n0
   
-  (** val eq_dec :
-      positive
-      ->
-      positive
-      ->
-      bool **)
+  (** val eq_dec : positive -> positive -> bool **)
   
   let rec eq_dec p y0 =
     match p with
     | XI p0 ->
       (match y0 with
-       | XI p1 ->
-         eq_dec
-           p0
-           p1
-       | _ ->
-         false)
+       | XI p1 -> eq_dec p0 p1
+       | _ -> false)
     | XO p0 ->
       (match y0 with
-       | XO p1 ->
-         eq_dec
-           p0
-           p1
-       | _ ->
-         false)
+       | XO p1 -> eq_dec p0 p1
+       | _ -> false)
     | XH ->
       (match y0 with
-       | XH ->
-         true
-       | _ ->
-         false)
+       | XH -> true
+       | _ -> false)
   
-  (** val peano_rect :
-      'a1
-      ->
-      (positive
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      'a1 **)
+  (** val peano_rect : 'a1 -> (positive -> 'a1 -> 'a1) -> positive -> 'a1 **)
   
   let rec peano_rect a f p =
-    let f2 =
-      peano_rect
-        (f
-          XH
-          a)
-        (fun p0 x ->
-        f
-          (succ
-            (XO
-            p0))
-          (f
-            (XO
-            p0)
-            x))
+    let f2 = peano_rect (f XH a) (fun p0 x -> f (succ (XO p0)) (f (XO p0) x))
     in
     (match p with
-     | XI q ->
-       f
-         (XO
-         q)
-         (f2
-           q)
-     | XO q ->
-       f2
-         q
-     | XH ->
-       a)
+     | XI q -> f (XO q) (f2 q)
+     | XO q -> f2 q
+     | XH -> a)
   
-  (** val peano_rec :
-      'a1
-      ->
-      (positive
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      'a1 **)
+  (** val peano_rec : 'a1 -> (positive -> 'a1 -> 'a1) -> positive -> 'a1 **)
   
   let peano_rec =
     peano_rect
   
   type coq_PeanoView =
   | PeanoOne
-  | PeanoSucc of positive
-     * coq_PeanoView
+  | PeanoSucc of positive * coq_PeanoView
   
   (** val coq_PeanoView_rect :
-      'a1
-      ->
-      (positive
-      ->
-      coq_PeanoView
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      coq_PeanoView
-      ->
-      'a1 **)
+      'a1 -> (positive -> coq_PeanoView -> 'a1 -> 'a1) -> positive ->
+      coq_PeanoView -> 'a1 **)
   
   let rec coq_PeanoView_rect f f0 p = function
-  | PeanoOne ->
-    f
-  | PeanoSucc (p1,
-               p2) ->
-    f0
-      p1
-      p2
-      (coq_PeanoView_rect
-        f
-        f0
-        p1
-        p2)
+  | PeanoOne -> f
+  | PeanoSucc (p1, p2) -> f0 p1 p2 (coq_PeanoView_rect f f0 p1 p2)
   
   (** val coq_PeanoView_rec :
-      'a1
-      ->
-      (positive
-      ->
-      coq_PeanoView
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      coq_PeanoView
-      ->
-      'a1 **)
+      'a1 -> (positive -> coq_PeanoView -> 'a1 -> 'a1) -> positive ->
+      coq_PeanoView -> 'a1 **)
   
   let rec coq_PeanoView_rec f f0 p = function
-  | PeanoOne ->
-    f
-  | PeanoSucc (p1,
-               p2) ->
-    f0
-      p1
-      p2
-      (coq_PeanoView_rec
-        f
-        f0
-        p1
-        p2)
+  | PeanoOne -> f
+  | PeanoSucc (p1, p2) -> f0 p1 p2 (coq_PeanoView_rec f f0 p1 p2)
   
-  (** val peanoView_xO :
-      positive
-      ->
-      coq_PeanoView
-      ->
-      coq_PeanoView **)
+  (** val peanoView_xO : positive -> coq_PeanoView -> coq_PeanoView **)
   
   let rec peanoView_xO p = function
-  | PeanoOne ->
-    PeanoSucc
-      (XH,
-      PeanoOne)
-  | PeanoSucc (p0,
-               q0) ->
-    PeanoSucc
-      ((succ
-         (XO
-         p0)),
-      (PeanoSucc
-      ((XO
-      p0),
-      (peanoView_xO
-        p0
-        q0))))
+  | PeanoOne -> PeanoSucc (XH, PeanoOne)
+  | PeanoSucc (p0, q0) ->
+    PeanoSucc ((succ (XO p0)), (PeanoSucc ((XO p0), (peanoView_xO p0 q0))))
   
-  (** val peanoView_xI :
-      positive
-      ->
-      coq_PeanoView
-      ->
-      coq_PeanoView **)
+  (** val peanoView_xI : positive -> coq_PeanoView -> coq_PeanoView **)
   
   let rec peanoView_xI p = function
-  | PeanoOne ->
-    PeanoSucc
-      ((succ
-         XH),
-      (PeanoSucc
-      (XH,
-      PeanoOne)))
-  | PeanoSucc (p0,
-               q0) ->
-    PeanoSucc
-      ((succ
-         (XI
-         p0)),
-      (PeanoSucc
-      ((XI
-      p0),
-      (peanoView_xI
-        p0
-        q0))))
+  | PeanoOne -> PeanoSucc ((succ XH), (PeanoSucc (XH, PeanoOne)))
+  | PeanoSucc (p0, q0) ->
+    PeanoSucc ((succ (XI p0)), (PeanoSucc ((XI p0), (peanoView_xI p0 q0))))
   
-  (** val peanoView :
-      positive
-      ->
-      coq_PeanoView **)
+  (** val peanoView : positive -> coq_PeanoView **)
   
   let rec peanoView = function
-  | XI p0 ->
-    peanoView_xI
-      p0
-      (peanoView
-        p0)
-  | XO p0 ->
-    peanoView_xO
-      p0
-      (peanoView
-        p0)
-  | XH ->
-    PeanoOne
+  | XI p0 -> peanoView_xI p0 (peanoView p0)
+  | XO p0 -> peanoView_xO p0 (peanoView p0)
+  | XH -> PeanoOne
   
   (** val coq_PeanoView_iter :
-      'a1
-      ->
-      (positive
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      positive
-      ->
-      coq_PeanoView
-      ->
-      'a1 **)
+      'a1 -> (positive -> 'a1 -> 'a1) -> positive -> coq_PeanoView -> 'a1 **)
   
   let rec coq_PeanoView_iter a f p = function
-  | PeanoOne ->
-    a
-  | PeanoSucc (p0,
-               q0) ->
-    f
-      p0
-      (coq_PeanoView_iter
-        a
-        f
-        p0
-        q0)
+  | PeanoOne -> a
+  | PeanoSucc (p0, q0) -> f p0 (coq_PeanoView_iter a f p0 q0)
   
-  (** val eqb_spec :
-      positive
-      ->
-      positive
-      ->
-      reflect **)
+  (** val eqb_spec : positive -> positive -> reflect **)
   
   let eqb_spec x y =
-    iff_reflect
-      (eqb
-        x
-        y)
+    iff_reflect (eqb x y)
   
-  (** val switch_Eq :
-      comparison
-      ->
-      comparison
-      ->
-      comparison **)
+  (** val switch_Eq : comparison -> comparison -> comparison **)
   
   let switch_Eq c = function
-  | Eq ->
-    c
-  | x ->
-    x
+  | Eq -> c
+  | x -> x
   
-  (** val mask2cmp :
-      mask
-      ->
-      comparison **)
+  (** val mask2cmp : mask -> comparison **)
   
   let mask2cmp = function
-  | IsNul ->
-    Eq
-  | IsPos p0 ->
-    Gt
-  | IsNeg ->
-    Lt
+  | IsNul -> Eq
+  | IsPos p0 -> Gt
+  | IsNeg -> Lt
   
-  (** val leb_spec0 :
-      positive
-      ->
-      positive
-      ->
-      reflect **)
+  (** val leb_spec0 : positive -> positive -> reflect **)
   
   let leb_spec0 x y =
-    iff_reflect
-      (leb
-        x
-        y)
+    iff_reflect (leb x y)
   
-  (** val ltb_spec0 :
-      positive
-      ->
-      positive
-      ->
-      reflect **)
+  (** val ltb_spec0 : positive -> positive -> reflect **)
   
   let ltb_spec0 x y =
-    iff_reflect
-      (ltb
-        x
-        y)
+    iff_reflect (ltb x y)
   
   module Private_Tac = 
    struct 
@@ -1708,312 +1432,78 @@ module Coq_Pos =
   module Private_Dec = 
    struct 
     (** val max_case_strong :
-        positive
-        ->
-        positive
-        ->
-        (positive
-        ->
-        positive
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        'a1 **)
+        positive -> positive -> (positive -> positive -> __ -> 'a1 -> 'a1) ->
+        (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
     
     let max_case_strong n0 m compat hl hr =
-      let c =
-        compSpec2Type
-          n0
-          m
-          (compare
-            n0
-            m)
-      in
+      let c = compSpec2Type n0 m (compare n0 m) in
       (match c with
-       | CompGtT ->
-         compat
-           n0
-           (max
-             n0
-             m)
-           __
-           (hl
-             __)
-       | _ ->
-         compat
-           m
-           (max
-             n0
-             m)
-           __
-           (hr
-             __))
+       | CompGtT -> compat n0 (max n0 m) __ (hl __)
+       | _ -> compat m (max n0 m) __ (hr __))
     
     (** val max_case :
-        positive
-        ->
-        positive
-        ->
-        (positive
-        ->
-        positive
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        'a1
-        ->
-        'a1
-        ->
-        'a1 **)
+        positive -> positive -> (positive -> positive -> __ -> 'a1 -> 'a1) ->
+        'a1 -> 'a1 -> 'a1 **)
     
     let max_case n0 m x x0 x1 =
-      max_case_strong
-        n0
-        m
-        x
-        (fun _ ->
-        x0)
-        (fun _ ->
-        x1)
+      max_case_strong n0 m x (fun _ -> x0) (fun _ -> x1)
     
-    (** val max_dec :
-        positive
-        ->
-        positive
-        ->
-        bool **)
+    (** val max_dec : positive -> positive -> bool **)
     
     let max_dec n0 m =
-      max_case
-        n0
-        m
-        (fun x y _ h0 ->
-        h0)
-        true
-        false
+      max_case n0 m (fun x y _ h0 -> h0) true false
     
     (** val min_case_strong :
-        positive
-        ->
-        positive
-        ->
-        (positive
-        ->
-        positive
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        'a1 **)
+        positive -> positive -> (positive -> positive -> __ -> 'a1 -> 'a1) ->
+        (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
     
     let min_case_strong n0 m compat hl hr =
-      let c =
-        compSpec2Type
-          n0
-          m
-          (compare
-            n0
-            m)
-      in
+      let c = compSpec2Type n0 m (compare n0 m) in
       (match c with
-       | CompGtT ->
-         compat
-           m
-           (min
-             n0
-             m)
-           __
-           (hr
-             __)
-       | _ ->
-         compat
-           n0
-           (min
-             n0
-             m)
-           __
-           (hl
-             __))
+       | CompGtT -> compat m (min n0 m) __ (hr __)
+       | _ -> compat n0 (min n0 m) __ (hl __))
     
     (** val min_case :
-        positive
-        ->
-        positive
-        ->
-        (positive
-        ->
-        positive
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        'a1
-        ->
-        'a1
-        ->
-        'a1 **)
+        positive -> positive -> (positive -> positive -> __ -> 'a1 -> 'a1) ->
+        'a1 -> 'a1 -> 'a1 **)
     
     let min_case n0 m x x0 x1 =
-      min_case_strong
-        n0
-        m
-        x
-        (fun _ ->
-        x0)
-        (fun _ ->
-        x1)
+      min_case_strong n0 m x (fun _ -> x0) (fun _ -> x1)
     
-    (** val min_dec :
-        positive
-        ->
-        positive
-        ->
-        bool **)
+    (** val min_dec : positive -> positive -> bool **)
     
     let min_dec n0 m =
-      min_case
-        n0
-        m
-        (fun x y _ h0 ->
-        h0)
-        true
-        false
+      min_case n0 m (fun x y _ h0 -> h0) true false
    end
   
   (** val max_case_strong :
-      positive
-      ->
-      positive
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      'a1 **)
+      positive -> positive -> (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
   
   let max_case_strong n0 m x x0 =
-    Private_Dec.max_case_strong
-      n0
-      m
-      (fun x1 y _ x2 ->
-      x2)
-      x
-      x0
+    Private_Dec.max_case_strong n0 m (fun x1 y _ x2 -> x2) x x0
   
-  (** val max_case :
-      positive
-      ->
-      positive
-      ->
-      'a1
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val max_case : positive -> positive -> 'a1 -> 'a1 -> 'a1 **)
   
   let max_case n0 m x x0 =
-    max_case_strong
-      n0
-      m
-      (fun _ ->
-      x)
-      (fun _ ->
-      x0)
+    max_case_strong n0 m (fun _ -> x) (fun _ -> x0)
   
-  (** val max_dec :
-      positive
-      ->
-      positive
-      ->
-      bool **)
+  (** val max_dec : positive -> positive -> bool **)
   
   let max_dec =
     Private_Dec.max_dec
   
   (** val min_case_strong :
-      positive
-      ->
-      positive
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      'a1 **)
+      positive -> positive -> (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
   
   let min_case_strong n0 m x x0 =
-    Private_Dec.min_case_strong
-      n0
-      m
-      (fun x1 y _ x2 ->
-      x2)
-      x
-      x0
+    Private_Dec.min_case_strong n0 m (fun x1 y _ x2 -> x2) x x0
   
-  (** val min_case :
-      positive
-      ->
-      positive
-      ->
-      'a1
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val min_case : positive -> positive -> 'a1 -> 'a1 -> 'a1 **)
   
   let min_case n0 m x x0 =
-    min_case_strong
-      n0
-      m
-      (fun _ ->
-      x)
-      (fun _ ->
-      x0)
+    min_case_strong n0 m (fun _ -> x) (fun _ -> x0)
   
-  (** val min_dec :
-      positive
-      ->
-      positive
-      ->
-      bool **)
+  (** val min_dec : positive -> positive -> bool **)
   
   let min_dec =
     Private_Dec.min_dec
@@ -2021,1071 +1511,456 @@ module Coq_Pos =
 
 module N = 
  struct 
-  type t
-    =
-    n
+  type t = n
   
-  (** val zero :
-      n **)
+  (** val zero : n **)
   
   let zero =
     N0
   
-  (** val one :
-      n **)
+  (** val one : n **)
   
   let one =
-    Npos
-      XH
+    Npos XH
   
-  (** val two :
-      n **)
+  (** val two : n **)
   
   let two =
-    Npos
-      (XO
-      XH)
+    Npos (XO XH)
   
-  (** val succ_double :
-      n
-      ->
-      n **)
+  (** val succ_double : n -> n **)
   
   let succ_double = function
-  | N0 ->
-    Npos
-      XH
-  | Npos p ->
-    Npos
-      (XI
-      p)
+  | N0 -> Npos XH
+  | Npos p -> Npos (XI p)
   
-  (** val double :
-      n
-      ->
-      n **)
+  (** val double : n -> n **)
   
   let double = function
-  | N0 ->
-    N0
-  | Npos p ->
-    Npos
-      (XO
-      p)
+  | N0 -> N0
+  | Npos p -> Npos (XO p)
   
-  (** val succ :
-      n
-      ->
-      n **)
+  (** val succ : n -> n **)
   
   let succ = function
-  | N0 ->
-    Npos
-      XH
-  | Npos p ->
-    Npos
-      (Coq_Pos.succ
-        p)
+  | N0 -> Npos XH
+  | Npos p -> Npos (Coq_Pos.succ p)
   
-  (** val pred :
-      n
-      ->
-      n **)
+  (** val pred : n -> n **)
   
   let pred = function
-  | N0 ->
-    N0
-  | Npos p ->
-    Coq_Pos.pred_N
-      p
+  | N0 -> N0
+  | Npos p -> Coq_Pos.pred_N p
   
-  (** val succ_pos :
-      n
-      ->
-      positive **)
+  (** val succ_pos : n -> positive **)
   
   let succ_pos = function
-  | N0 ->
-    XH
-  | Npos p ->
-    Coq_Pos.succ
-      p
+  | N0 -> XH
+  | Npos p -> Coq_Pos.succ p
   
-  (** val add :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val add : n -> n -> n **)
   
   let add n0 m =
     match n0 with
-    | N0 ->
-      m
+    | N0 -> m
     | Npos p ->
       (match m with
-       | N0 ->
-         n0
-       | Npos q ->
-         Npos
-           (Coq_Pos.add
-             p
-             q))
+       | N0 -> n0
+       | Npos q -> Npos (Coq_Pos.add p q))
   
-  (** val sub :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val sub : n -> n -> n **)
   
   let sub n0 m =
     match n0 with
-    | N0 ->
-      N0
+    | N0 -> N0
     | Npos n' ->
       (match m with
-       | N0 ->
-         n0
+       | N0 -> n0
        | Npos m' ->
-         (match Coq_Pos.sub_mask
-                  n'
-                  m' with
-          | Coq_Pos.IsPos p ->
-            Npos
-              p
-          | _ ->
-            N0))
+         (match Coq_Pos.sub_mask n' m' with
+          | Coq_Pos.IsPos p -> Npos p
+          | _ -> N0))
   
-  (** val mul :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val mul : n -> n -> n **)
   
   let mul n0 m =
     match n0 with
-    | N0 ->
-      N0
+    | N0 -> N0
     | Npos p ->
       (match m with
-       | N0 ->
-         N0
-       | Npos q ->
-         Npos
-           (Coq_Pos.mul
-             p
-             q))
+       | N0 -> N0
+       | Npos q -> Npos (Coq_Pos.mul p q))
   
-  (** val compare :
-      n
-      ->
-      n
-      ->
-      comparison **)
+  (** val compare : n -> n -> comparison **)
   
   let compare n0 m =
     match n0 with
     | N0 ->
       (match m with
-       | N0 ->
-         Eq
-       | Npos m' ->
-         Lt)
+       | N0 -> Eq
+       | Npos m' -> Lt)
     | Npos n' ->
       (match m with
-       | N0 ->
-         Gt
-       | Npos m' ->
-         Coq_Pos.compare
-           n'
-           m')
+       | N0 -> Gt
+       | Npos m' -> Coq_Pos.compare n' m')
   
-  (** val eqb :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val eqb : n -> n -> bool **)
   
   let rec eqb n0 m =
     match n0 with
     | N0 ->
       (match m with
-       | N0 ->
-         true
-       | Npos p ->
-         false)
+       | N0 -> true
+       | Npos p -> false)
     | Npos p ->
       (match m with
-       | N0 ->
-         false
-       | Npos q ->
-         Coq_Pos.eqb
-           p
-           q)
+       | N0 -> false
+       | Npos q -> Coq_Pos.eqb p q)
   
-  (** val leb :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val leb : n -> n -> bool **)
   
   let leb x y =
-    match compare
-            x
-            y with
-    | Gt ->
-      false
-    | _ ->
-      true
+    match compare x y with
+    | Gt -> false
+    | _ -> true
   
-  (** val ltb :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val ltb : n -> n -> bool **)
   
   let ltb x y =
-    match compare
-            x
-            y with
-    | Lt ->
-      true
-    | _ ->
-      false
+    match compare x y with
+    | Lt -> true
+    | _ -> false
   
-  (** val min :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val min : n -> n -> n **)
   
   let min n0 n' =
-    match compare
-            n0
-            n' with
-    | Gt ->
-      n'
-    | _ ->
-      n0
+    match compare n0 n' with
+    | Gt -> n'
+    | _ -> n0
   
-  (** val max :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val max : n -> n -> n **)
   
   let max n0 n' =
-    match compare
-            n0
-            n' with
-    | Gt ->
-      n0
-    | _ ->
-      n'
+    match compare n0 n' with
+    | Gt -> n0
+    | _ -> n'
   
-  (** val div2 :
-      n
-      ->
-      n **)
+  (** val div2 : n -> n **)
   
   let div2 = function
-  | N0 ->
-    N0
+  | N0 -> N0
   | Npos p0 ->
     (match p0 with
-     | XI p ->
-       Npos
-         p
-     | XO p ->
-       Npos
-         p
-     | XH ->
-       N0)
+     | XI p -> Npos p
+     | XO p -> Npos p
+     | XH -> N0)
   
-  (** val even :
-      n
-      ->
-      bool **)
+  (** val even : n -> bool **)
   
   let even = function
-  | N0 ->
-    true
+  | N0 -> true
   | Npos p ->
     (match p with
-     | XO p0 ->
-       true
-     | _ ->
-       false)
+     | XO p0 -> true
+     | _ -> false)
   
-  (** val odd :
-      n
-      ->
-      bool **)
+  (** val odd : n -> bool **)
   
   let odd n0 =
-    negb
-      (even
-        n0)
+    negb (even n0)
   
-  (** val pow :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val pow : n -> n -> n **)
   
   let pow n0 = function
-  | N0 ->
-    Npos
-      XH
+  | N0 -> Npos XH
   | Npos p0 ->
     (match n0 with
-     | N0 ->
-       N0
-     | Npos q ->
-       Npos
-         (Coq_Pos.pow
-           q
-           p0))
+     | N0 -> N0
+     | Npos q -> Npos (Coq_Pos.pow q p0))
   
-  (** val square :
-      n
-      ->
-      n **)
+  (** val square : n -> n **)
   
   let square = function
-  | N0 ->
-    N0
-  | Npos p ->
-    Npos
-      (Coq_Pos.square
-        p)
+  | N0 -> N0
+  | Npos p -> Npos (Coq_Pos.square p)
   
-  (** val log2 :
-      n
-      ->
-      n **)
+  (** val log2 : n -> n **)
   
   let log2 = function
-  | N0 ->
-    N0
+  | N0 -> N0
   | Npos p0 ->
     (match p0 with
-     | XI p ->
-       Npos
-         (Coq_Pos.size
-           p)
-     | XO p ->
-       Npos
-         (Coq_Pos.size
-           p)
-     | XH ->
-       N0)
+     | XI p -> Npos (Coq_Pos.size p)
+     | XO p -> Npos (Coq_Pos.size p)
+     | XH -> N0)
   
-  (** val size :
-      n
-      ->
-      n **)
+  (** val size : n -> n **)
   
   let size = function
-  | N0 ->
-    N0
-  | Npos p ->
-    Npos
-      (Coq_Pos.size
-        p)
+  | N0 -> N0
+  | Npos p -> Npos (Coq_Pos.size p)
   
-  (** val size_nat :
-      n
-      ->
-      int **)
+  (** val size_nat : n -> int **)
   
   let size_nat = function
-  | N0 ->
-    0
-  | Npos p ->
-    Coq_Pos.size_nat
-      p
+  | N0 -> 0
+  | Npos p -> Coq_Pos.size_nat p
   
-  (** val pos_div_eucl :
-      positive
-      ->
-      n
-      ->
-      (n,
-      n)
-      prod **)
+  (** val pos_div_eucl : positive -> n -> (n, n) prod **)
   
   let rec pos_div_eucl a b =
     match a with
     | XI a' ->
-      let Pair (q,
-                r) =
-        pos_div_eucl
-          a'
-          b
-      in
-      let r' =
-        succ_double
-          r
-      in
-      if leb
-           b
-           r'
-      then Pair
-             ((succ_double
-                q),
-             (sub
-               r'
-               b))
-      else Pair
-             ((double
-                q),
-             r')
+      let Pair (q, r) = pos_div_eucl a' b in
+      let r' = succ_double r in
+      if leb b r'
+      then Pair ((succ_double q), (sub r' b))
+      else Pair ((double q), r')
     | XO a' ->
-      let Pair (q,
-                r) =
-        pos_div_eucl
-          a'
-          b
-      in
-      let r' =
-        double
-          r
-      in
-      if leb
-           b
-           r'
-      then Pair
-             ((succ_double
-                q),
-             (sub
-               r'
-               b))
-      else Pair
-             ((double
-                q),
-             r')
+      let Pair (q, r) = pos_div_eucl a' b in
+      let r' = double r in
+      if leb b r'
+      then Pair ((succ_double q), (sub r' b))
+      else Pair ((double q), r')
     | XH ->
       (match b with
-       | N0 ->
-         Pair
-           (N0,
-           (Npos
-           XH))
+       | N0 -> Pair (N0, (Npos XH))
        | Npos p ->
          (match p with
-          | XH ->
-            Pair
-              ((Npos
-              XH),
-              N0)
-          | _ ->
-            Pair
-              (N0,
-              (Npos
-              XH))))
+          | XH -> Pair ((Npos XH), N0)
+          | _ -> Pair (N0, (Npos XH))))
   
-  (** val div_eucl :
-      n
-      ->
-      n
-      ->
-      (n,
-      n)
-      prod **)
+  (** val div_eucl : n -> n -> (n, n) prod **)
   
   let div_eucl a b =
     match a with
-    | N0 ->
-      Pair
-        (N0,
-        N0)
+    | N0 -> Pair (N0, N0)
     | Npos na ->
       (match b with
-       | N0 ->
-         Pair
-           (N0,
-           a)
-       | Npos p ->
-         pos_div_eucl
-           na
-           b)
+       | N0 -> Pair (N0, a)
+       | Npos p -> pos_div_eucl na b)
   
-  (** val div :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val div : n -> n -> n **)
   
   let div a b =
-    fst
-      (div_eucl
-        a
-        b)
+    fst (div_eucl a b)
   
-  (** val modulo :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val modulo : n -> n -> n **)
   
   let modulo a b =
-    snd
-      (div_eucl
-        a
-        b)
+    snd (div_eucl a b)
   
-  (** val gcd :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val gcd : n -> n -> n **)
   
   let gcd a b =
     match a with
-    | N0 ->
-      b
+    | N0 -> b
     | Npos p ->
       (match b with
-       | N0 ->
-         a
-       | Npos q ->
-         Npos
-           (Coq_Pos.gcd
-             p
-             q))
+       | N0 -> a
+       | Npos q -> Npos (Coq_Pos.gcd p q))
   
-  (** val ggcd :
-      n
-      ->
-      n
-      ->
-      (n,
-      (n,
-      n)
-      prod)
-      prod **)
+  (** val ggcd : n -> n -> (n, (n, n) prod) prod **)
   
   let ggcd a b =
     match a with
-    | N0 ->
-      Pair
-        (b,
-        (Pair
-        (N0,
-        (Npos
-        XH))))
+    | N0 -> Pair (b, (Pair (N0, (Npos XH))))
     | Npos p ->
       (match b with
-       | N0 ->
-         Pair
-           (a,
-           (Pair
-           ((Npos
-           XH),
-           N0)))
+       | N0 -> Pair (a, (Pair ((Npos XH), N0)))
        | Npos q ->
-         let Pair (g,
-                   p0) =
-           Coq_Pos.ggcd
-             p
-             q
-         in
-         let Pair (aa,
-                   bb) =
-           p0
-         in
-         Pair
-         ((Npos
-         g),
-         (Pair
-         ((Npos
-         aa),
-         (Npos
-         bb)))))
+         let Pair (g, p0) = Coq_Pos.ggcd p q in
+         let Pair (aa, bb) = p0 in
+         Pair ((Npos g), (Pair ((Npos aa), (Npos bb)))))
   
-  (** val sqrtrem :
-      n
-      ->
-      (n,
-      n)
-      prod **)
+  (** val sqrtrem : n -> (n, n) prod **)
   
   let sqrtrem = function
-  | N0 ->
-    Pair
-      (N0,
-      N0)
+  | N0 -> Pair (N0, N0)
   | Npos p ->
-    let Pair (s,
-              m) =
-      Coq_Pos.sqrtrem
-        p
-    in
+    let Pair (s, m) = Coq_Pos.sqrtrem p in
     (match m with
-     | Coq_Pos.IsPos r ->
-       Pair
-         ((Npos
-         s),
-         (Npos
-         r))
-     | _ ->
-       Pair
-         ((Npos
-         s),
-         N0))
+     | Coq_Pos.IsPos r -> Pair ((Npos s), (Npos r))
+     | _ -> Pair ((Npos s), N0))
   
-  (** val sqrt :
-      n
-      ->
-      n **)
+  (** val sqrt : n -> n **)
   
   let sqrt = function
-  | N0 ->
-    N0
-  | Npos p ->
-    Npos
-      (Coq_Pos.sqrt
-        p)
+  | N0 -> N0
+  | Npos p -> Npos (Coq_Pos.sqrt p)
   
-  (** val coq_lor :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val coq_lor : n -> n -> n **)
   
   let coq_lor n0 m =
     match n0 with
-    | N0 ->
-      m
+    | N0 -> m
     | Npos p ->
       (match m with
-       | N0 ->
-         n0
-       | Npos q ->
-         Npos
-           (Coq_Pos.coq_lor
-             p
-             q))
+       | N0 -> n0
+       | Npos q -> Npos (Coq_Pos.coq_lor p q))
   
-  (** val coq_land :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val coq_land : n -> n -> n **)
   
   let coq_land n0 m =
     match n0 with
-    | N0 ->
-      N0
+    | N0 -> N0
     | Npos p ->
       (match m with
-       | N0 ->
-         N0
-       | Npos q ->
-         Coq_Pos.coq_land
-           p
-           q)
+       | N0 -> N0
+       | Npos q -> Coq_Pos.coq_land p q)
   
-  (** val ldiff :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val ldiff : n -> n -> n **)
   
   let rec ldiff n0 m =
     match n0 with
-    | N0 ->
-      N0
+    | N0 -> N0
     | Npos p ->
       (match m with
-       | N0 ->
-         n0
-       | Npos q ->
-         Coq_Pos.ldiff
-           p
-           q)
+       | N0 -> n0
+       | Npos q -> Coq_Pos.ldiff p q)
   
-  (** val coq_lxor :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val coq_lxor : n -> n -> n **)
   
   let coq_lxor n0 m =
     match n0 with
-    | N0 ->
-      m
+    | N0 -> m
     | Npos p ->
       (match m with
-       | N0 ->
-         n0
-       | Npos q ->
-         Coq_Pos.coq_lxor
-           p
-           q)
+       | N0 -> n0
+       | Npos q -> Coq_Pos.coq_lxor p q)
   
-  (** val shiftl_nat :
-      n
-      ->
-      int
-      ->
-      n **)
+  (** val shiftl_nat : n -> int -> n **)
   
   let shiftl_nat a n0 =
-    nat_iter
-      n0
-      double
-      a
+    nat_iter n0 double a
   
-  (** val shiftr_nat :
-      n
-      ->
-      int
-      ->
-      n **)
+  (** val shiftr_nat : n -> int -> n **)
   
   let shiftr_nat a n0 =
-    nat_iter
-      n0
-      div2
-      a
+    nat_iter n0 div2 a
   
-  (** val shiftl :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val shiftl : n -> n -> n **)
   
   let shiftl a n0 =
     match a with
-    | N0 ->
-      N0
-    | Npos a0 ->
-      Npos
-        (Coq_Pos.shiftl
-          a0
-          n0)
+    | N0 -> N0
+    | Npos a0 -> Npos (Coq_Pos.shiftl a0 n0)
   
-  (** val shiftr :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val shiftr : n -> n -> n **)
   
   let shiftr a = function
-  | N0 ->
-    a
-  | Npos p ->
-    Coq_Pos.iter
-      p
-      div2
-      a
+  | N0 -> a
+  | Npos p -> Coq_Pos.iter p div2 a
   
-  (** val testbit_nat :
-      n
-      ->
-      int
-      ->
-      bool **)
+  (** val testbit_nat : n -> int -> bool **)
   
   let testbit_nat = function
-  | N0 ->
-    (fun x ->
-      false)
-  | Npos p ->
-    Coq_Pos.testbit_nat
-      p
+  | N0 -> (fun x -> false)
+  | Npos p -> Coq_Pos.testbit_nat p
   
-  (** val testbit :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val testbit : n -> n -> bool **)
   
   let testbit a n0 =
     match a with
-    | N0 ->
-      false
-    | Npos p ->
-      Coq_Pos.testbit
-        p
-        n0
+    | N0 -> false
+    | Npos p -> Coq_Pos.testbit p n0
   
-  (** val to_nat :
-      n
-      ->
-      int **)
+  (** val to_nat : n -> int **)
   
   let to_nat = function
-  | N0 ->
-    0
-  | Npos p ->
-    Coq_Pos.to_nat
-      p
+  | N0 -> 0
+  | Npos p -> Coq_Pos.to_nat p
   
-  (** val of_nat :
-      int
-      ->
-      n **)
+  (** val of_nat : int -> n **)
   
   let of_nat n0 =
     (fun zero succ n ->
       if n=0 then zero () else succ (n-1))
       (fun _ ->
       N0)
-      (fun n' ->
-      Npos
-      (Coq_Pos.of_succ_nat
-        n'))
+      (fun n' -> Npos
+      (Coq_Pos.of_succ_nat n'))
       n0
   
-  (** val iter :
-      n
-      ->
-      ('a1
-      ->
-      'a1)
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val iter : n -> ('a1 -> 'a1) -> 'a1 -> 'a1 **)
   
   let iter n0 f x =
     match n0 with
-    | N0 ->
-      x
-    | Npos p ->
-      Coq_Pos.iter
-        p
-        f
-        x
+    | N0 -> x
+    | Npos p -> Coq_Pos.iter p f x
   
-  (** val eq_dec :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val eq_dec : n -> n -> bool **)
   
   let eq_dec n0 m =
     match n0 with
     | N0 ->
       (match m with
-       | N0 ->
-         true
-       | Npos p ->
-         false)
+       | N0 -> true
+       | Npos p -> false)
     | Npos x ->
       (match m with
-       | N0 ->
-         false
-       | Npos p0 ->
-         Coq_Pos.eq_dec
-           x
-           p0)
+       | N0 -> false
+       | Npos p0 -> Coq_Pos.eq_dec x p0)
   
-  (** val discr :
-      n
-      ->
-      positive
-      sumor **)
+  (** val discr : n -> positive sumor **)
   
   let discr = function
-  | N0 ->
-    Inright
-  | Npos p ->
-    Inleft
-      p
+  | N0 -> Inright
+  | Npos p -> Inleft p
   
   (** val binary_rect :
-      'a1
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      n
-      ->
-      'a1 **)
+      'a1 -> (n -> 'a1 -> 'a1) -> (n -> 'a1 -> 'a1) -> n -> 'a1 **)
   
   let binary_rect f0 f2 fS2 n0 =
-    let f2' =
-      fun p ->
-      f2
-        (Npos
-        p)
-    in
-    let fS2' =
-      fun p ->
-      fS2
-        (Npos
-        p)
-    in
+    let f2' = fun p -> f2 (Npos p) in
+    let fS2' = fun p -> fS2 (Npos p) in
     (match n0 with
-     | N0 ->
-       f0
+     | N0 -> f0
      | Npos p ->
        let rec f = function
-       | XI p1 ->
-         fS2'
-           p1
-           (f
-             p1)
-       | XO p1 ->
-         f2'
-           p1
-           (f
-             p1)
-       | XH ->
-         fS2
-           N0
-           f0
-       in f
-            p)
+       | XI p1 -> fS2' p1 (f p1)
+       | XO p1 -> f2' p1 (f p1)
+       | XH -> fS2 N0 f0
+       in f p)
   
   (** val binary_rec :
-      'a1
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      n
-      ->
-      'a1 **)
+      'a1 -> (n -> 'a1 -> 'a1) -> (n -> 'a1 -> 'a1) -> n -> 'a1 **)
   
   let binary_rec =
     binary_rect
   
-  (** val peano_rect :
-      'a1
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      n
-      ->
-      'a1 **)
+  (** val peano_rect : 'a1 -> (n -> 'a1 -> 'a1) -> n -> 'a1 **)
   
   let peano_rect f0 f n0 =
-    let f' =
-      fun p ->
-      f
-        (Npos
-        p)
-    in
+    let f' = fun p -> f (Npos p) in
     (match n0 with
-     | N0 ->
-       f0
-     | Npos p ->
-       Coq_Pos.peano_rect
-         (f
-           N0
-           f0)
-         f'
-         p)
+     | N0 -> f0
+     | Npos p -> Coq_Pos.peano_rect (f N0 f0) f' p)
   
-  (** val peano_rec :
-      'a1
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      n
-      ->
-      'a1 **)
+  (** val peano_rec : 'a1 -> (n -> 'a1 -> 'a1) -> n -> 'a1 **)
   
   let peano_rec =
     peano_rect
   
-  (** val leb_spec0 :
-      n
-      ->
-      n
-      ->
-      reflect **)
+  (** val leb_spec0 : n -> n -> reflect **)
   
   let leb_spec0 x y =
-    iff_reflect
-      (leb
-        x
-        y)
+    iff_reflect (leb x y)
   
-  (** val ltb_spec0 :
-      n
-      ->
-      n
-      ->
-      reflect **)
+  (** val ltb_spec0 : n -> n -> reflect **)
   
   let ltb_spec0 x y =
-    iff_reflect
-      (ltb
-        x
-        y)
+    iff_reflect (ltb x y)
   
   module Private_BootStrap = 
    struct 
     
    end
   
-  (** val recursion :
-      'a1
-      ->
-      (n
-      ->
-      'a1
-      ->
-      'a1)
-      ->
-      n
-      ->
-      'a1 **)
+  (** val recursion : 'a1 -> (n -> 'a1 -> 'a1) -> n -> 'a1 **)
   
   let recursion x =
-    peano_rect
-      x
+    peano_rect x
   
   module Private_OrderTac = 
    struct 
@@ -3110,141 +1985,60 @@ module N =
     
    end
   
-  (** val sqrt_up :
-      n
-      ->
-      n **)
+  (** val sqrt_up : n -> n **)
   
   let sqrt_up a =
-    match compare
-            N0
-            a with
-    | Lt ->
-      succ
-        (sqrt
-          (pred
-            a))
-    | _ ->
-      N0
+    match compare N0 a with
+    | Lt -> succ (sqrt (pred a))
+    | _ -> N0
   
-  (** val log2_up :
-      n
-      ->
-      n **)
+  (** val log2_up : n -> n **)
   
   let log2_up a =
-    match compare
-            (Npos
-            XH)
-            a with
-    | Lt ->
-      succ
-        (log2
-          (pred
-            a))
-    | _ ->
-      N0
+    match compare (Npos XH) a with
+    | Lt -> succ (log2 (pred a))
+    | _ -> N0
   
   module Private_NZDiv = 
    struct 
     
    end
   
-  (** val lcm :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val lcm : n -> n -> n **)
   
   let lcm a b =
-    mul
-      a
-      (div
-        b
-        (gcd
-          a
-          b))
+    mul a (div b (gcd a b))
   
-  (** val eqb_spec :
-      n
-      ->
-      n
-      ->
-      reflect **)
+  (** val eqb_spec : n -> n -> reflect **)
   
   let eqb_spec x y =
-    iff_reflect
-      (eqb
-        x
-        y)
+    iff_reflect (eqb x y)
   
-  (** val b2n :
-      bool
-      ->
-      n **)
+  (** val b2n : bool -> n **)
   
   let b2n = function
-  | true ->
-    Npos
-      XH
-  | false ->
-    N0
+  | true -> Npos XH
+  | false -> N0
   
-  (** val setbit :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val setbit : n -> n -> n **)
   
   let setbit a n0 =
-    coq_lor
-      a
-      (shiftl
-        (Npos
-        XH)
-        n0)
+    coq_lor a (shiftl (Npos XH) n0)
   
-  (** val clearbit :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val clearbit : n -> n -> n **)
   
   let clearbit a n0 =
-    ldiff
-      a
-      (shiftl
-        (Npos
-        XH)
-        n0)
+    ldiff a (shiftl (Npos XH) n0)
   
-  (** val ones :
-      n
-      ->
-      n **)
+  (** val ones : n -> n **)
   
   let ones n0 =
-    pred
-      (shiftl
-        (Npos
-        XH)
-        n0)
+    pred (shiftl (Npos XH) n0)
   
-  (** val lnot :
-      n
-      ->
-      n
-      ->
-      n **)
+  (** val lnot : n -> n -> n **)
   
   let lnot a n0 =
-    coq_lxor
-      a
-      (ones
-        n0)
+    coq_lxor a (ones n0)
   
   module Private_Tac = 
    struct 
@@ -3254,323 +2048,80 @@ module N =
   module Private_Dec = 
    struct 
     (** val max_case_strong :
-        n
-        ->
-        n
-        ->
-        (n
-        ->
-        n
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        'a1 **)
+        n -> n -> (n -> n -> __ -> 'a1 -> 'a1) -> (__ -> 'a1) -> (__ -> 'a1)
+        -> 'a1 **)
     
     let max_case_strong n0 m compat hl hr =
-      let c =
-        compSpec2Type
-          n0
-          m
-          (compare
-            n0
-            m)
-      in
+      let c = compSpec2Type n0 m (compare n0 m) in
       (match c with
-       | CompGtT ->
-         compat
-           n0
-           (max
-             n0
-             m)
-           __
-           (hl
-             __)
-       | _ ->
-         compat
-           m
-           (max
-             n0
-             m)
-           __
-           (hr
-             __))
+       | CompGtT -> compat n0 (max n0 m) __ (hl __)
+       | _ -> compat m (max n0 m) __ (hr __))
     
     (** val max_case :
-        n
-        ->
-        n
-        ->
-        (n
-        ->
-        n
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        'a1
-        ->
-        'a1
-        ->
-        'a1 **)
+        n -> n -> (n -> n -> __ -> 'a1 -> 'a1) -> 'a1 -> 'a1 -> 'a1 **)
     
     let max_case n0 m x x0 x1 =
-      max_case_strong
-        n0
-        m
-        x
-        (fun _ ->
-        x0)
-        (fun _ ->
-        x1)
+      max_case_strong n0 m x (fun _ -> x0) (fun _ -> x1)
     
-    (** val max_dec :
-        n
-        ->
-        n
-        ->
-        bool **)
+    (** val max_dec : n -> n -> bool **)
     
     let max_dec n0 m =
-      max_case
-        n0
-        m
-        (fun x y _ h0 ->
-        h0)
-        true
-        false
+      max_case n0 m (fun x y _ h0 -> h0) true false
     
     (** val min_case_strong :
-        n
-        ->
-        n
-        ->
-        (n
-        ->
-        n
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        (__
-        ->
-        'a1)
-        ->
-        'a1 **)
+        n -> n -> (n -> n -> __ -> 'a1 -> 'a1) -> (__ -> 'a1) -> (__ -> 'a1)
+        -> 'a1 **)
     
     let min_case_strong n0 m compat hl hr =
-      let c =
-        compSpec2Type
-          n0
-          m
-          (compare
-            n0
-            m)
-      in
+      let c = compSpec2Type n0 m (compare n0 m) in
       (match c with
-       | CompGtT ->
-         compat
-           m
-           (min
-             n0
-             m)
-           __
-           (hr
-             __)
-       | _ ->
-         compat
-           n0
-           (min
-             n0
-             m)
-           __
-           (hl
-             __))
+       | CompGtT -> compat m (min n0 m) __ (hr __)
+       | _ -> compat n0 (min n0 m) __ (hl __))
     
     (** val min_case :
-        n
-        ->
-        n
-        ->
-        (n
-        ->
-        n
-        ->
-        __
-        ->
-        'a1
-        ->
-        'a1)
-        ->
-        'a1
-        ->
-        'a1
-        ->
-        'a1 **)
+        n -> n -> (n -> n -> __ -> 'a1 -> 'a1) -> 'a1 -> 'a1 -> 'a1 **)
     
     let min_case n0 m x x0 x1 =
-      min_case_strong
-        n0
-        m
-        x
-        (fun _ ->
-        x0)
-        (fun _ ->
-        x1)
+      min_case_strong n0 m x (fun _ -> x0) (fun _ -> x1)
     
-    (** val min_dec :
-        n
-        ->
-        n
-        ->
-        bool **)
+    (** val min_dec : n -> n -> bool **)
     
     let min_dec n0 m =
-      min_case
-        n0
-        m
-        (fun x y _ h0 ->
-        h0)
-        true
-        false
+      min_case n0 m (fun x y _ h0 -> h0) true false
    end
   
-  (** val max_case_strong :
-      n
-      ->
-      n
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      'a1 **)
+  (** val max_case_strong : n -> n -> (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
   
   let max_case_strong n0 m x x0 =
-    Private_Dec.max_case_strong
-      n0
-      m
-      (fun x1 y _ x2 ->
-      x2)
-      x
-      x0
+    Private_Dec.max_case_strong n0 m (fun x1 y _ x2 -> x2) x x0
   
-  (** val max_case :
-      n
-      ->
-      n
-      ->
-      'a1
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val max_case : n -> n -> 'a1 -> 'a1 -> 'a1 **)
   
   let max_case n0 m x x0 =
-    max_case_strong
-      n0
-      m
-      (fun _ ->
-      x)
-      (fun _ ->
-      x0)
+    max_case_strong n0 m (fun _ -> x) (fun _ -> x0)
   
-  (** val max_dec :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val max_dec : n -> n -> bool **)
   
   let max_dec =
     Private_Dec.max_dec
   
-  (** val min_case_strong :
-      n
-      ->
-      n
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      (__
-      ->
-      'a1)
-      ->
-      'a1 **)
+  (** val min_case_strong : n -> n -> (__ -> 'a1) -> (__ -> 'a1) -> 'a1 **)
   
   let min_case_strong n0 m x x0 =
-    Private_Dec.min_case_strong
-      n0
-      m
-      (fun x1 y _ x2 ->
-      x2)
-      x
-      x0
+    Private_Dec.min_case_strong n0 m (fun x1 y _ x2 -> x2) x x0
   
-  (** val min_case :
-      n
-      ->
-      n
-      ->
-      'a1
-      ->
-      'a1
-      ->
-      'a1 **)
+  (** val min_case : n -> n -> 'a1 -> 'a1 -> 'a1 **)
   
   let min_case n0 m x x0 =
-    min_case_strong
-      n0
-      m
-      (fun _ ->
-      x)
-      (fun _ ->
-      x0)
+    min_case_strong n0 m (fun _ -> x) (fun _ -> x0)
   
-  (** val min_dec :
-      n
-      ->
-      n
-      ->
-      bool **)
+  (** val min_dec : n -> n -> bool **)
   
   let min_dec =
     Private_Dec.min_dec
  end
 
-(** val eq_nat_dec :
-    int
-    ->
-    int
-    ->
-    bool **)
+(** val eq_nat_dec : int -> int -> bool **)
 
 let rec eq_nat_dec n0 m =
   (fun zero succ n ->
@@ -3589,144 +2140,46 @@ let rec eq_nat_dec n0 m =
       (fun _ ->
       false)
       (fun m0 ->
-      eq_nat_dec
-        n1
-        m0)
+      eq_nat_dec n1 m0)
       m)
     n0
 
-(** val beq_nat :
-    int
-    ->
-    int
-    ->
-    bool **)
+(** val beq_nat : int -> int -> bool **)
 
 let rec beq_nat = ( = )
 
-(** val rev :
-    'a1
-    list
-    ->
-    'a1
-    list **)
+(** val rev : 'a1 list -> 'a1 list **)
 
 let rec rev = function
-| Nil ->
-  Nil
-| Cons (x,
-        l') ->
-  app
-    (rev
-      l')
-    (Cons
-    (x,
-    Nil))
+| Nil -> Nil
+| Cons (x, l') -> app (rev l') (Cons (x, Nil))
 
-(** val map :
-    ('a1
-    ->
-    'a2)
-    ->
-    'a1
-    list
-    ->
-    'a2
-    list **)
+(** val map : ('a1 -> 'a2) -> 'a1 list -> 'a2 list **)
 
 let rec map f = function
-| Nil ->
-  Nil
-| Cons (a,
-        t0) ->
-  Cons
-    ((f
-       a),
-    (map
-      f
-      t0))
+| Nil -> Nil
+| Cons (a, t0) -> Cons ((f a), (map f t0))
 
-(** val fold_left :
-    ('a1
-    ->
-    'a2
-    ->
-    'a1)
-    ->
-    'a2
-    list
-    ->
-    'a1
-    ->
-    'a1 **)
+(** val fold_left : ('a1 -> 'a2 -> 'a1) -> 'a2 list -> 'a1 -> 'a1 **)
 
 let rec fold_left f l a0 =
   match l with
-  | Nil ->
-    a0
-  | Cons (b,
-          t0) ->
-    fold_left
-      f
-      t0
-      (f
-        a0
-        b)
+  | Nil -> a0
+  | Cons (b, t0) -> fold_left f t0 (f a0 b)
 
-(** val fold_right :
-    ('a2
-    ->
-    'a1
-    ->
-    'a1)
-    ->
-    'a1
-    ->
-    'a2
-    list
-    ->
-    'a1 **)
+(** val fold_right : ('a2 -> 'a1 -> 'a1) -> 'a1 -> 'a2 list -> 'a1 **)
 
 let rec fold_right f a0 = function
-| Nil ->
-  a0
-| Cons (b,
-        t0) ->
-  f
-    b
-    (fold_right
-      f
-      a0
-      t0)
+| Nil -> a0
+| Cons (b, t0) -> f b (fold_right f a0 t0)
 
-(** val forallb :
-    ('a1
-    ->
-    bool)
-    ->
-    'a1
-    list
-    ->
-    bool **)
+(** val forallb : ('a1 -> bool) -> 'a1 list -> bool **)
 
 let rec forallb f = function
-| Nil ->
-  true
-| Cons (a,
-        l0) ->
-  if f
-       a
-  then forallb
-         f
-         l0
-  else false
+| Nil -> true
+| Cons (a, l0) -> if f a then forallb f l0 else false
 
-(** val ble_nat :
-    int
-    ->
-    int
-    ->
-    bool **)
+(** val ble_nat : int -> int -> bool **)
 
 let rec ble_nat n0 m =
   (fun zero succ n ->
@@ -3739,9 +2192,7 @@ let rec ble_nat n0 m =
       (fun _ ->
       false)
       (fun m' ->
-      ble_nat
-        n'
-        m')
+      ble_nat n' m')
       m)
     n0
 
@@ -3749,175 +2200,65 @@ type id =
   int
   (* singleton inductive, whose constructor was Id *)
 
-(** val eq_id_dec :
-    id
-    ->
-    id
-    ->
-    bool **)
+(** val eq_id_dec : id -> id -> bool **)
 
 let eq_id_dec id1 id2 =
-  eq_nat_dec
-    id1
-    id2
+  eq_nat_dec id1 id2
 
-type state
-  =
-  id
-  ->
-  int
+type state = id -> int
 
-(** val empty_state :
-    state **)
+(** val empty_state : state **)
 
 let empty_state x =
   0
 
-(** val update :
-    state
-    ->
-    id
-    ->
-    int
-    ->
-    state **)
+(** val update : state -> id -> int -> state **)
 
 let update st x n0 x' =
-  if eq_id_dec
-       x
-       x'
-  then n0
-  else st
-         x'
+  if eq_id_dec x x' then n0 else st x'
 
 type aexp =
 | ANum of int
 | AId of id
-| APlus of aexp
-   * aexp
-| AMinus of aexp
-   * aexp
-| AMult of aexp
-   * aexp
+| APlus of aexp * aexp
+| AMinus of aexp * aexp
+| AMult of aexp * aexp
 
 type bexp =
 | BTrue
 | BFalse
-| BEq of aexp
-   * aexp
-| BLe of aexp
-   * aexp
+| BEq of aexp * aexp
+| BLe of aexp * aexp
 | BNot of bexp
-| BAnd of bexp
-   * bexp
+| BAnd of bexp * bexp
 
-(** val aeval :
-    state
-    ->
-    aexp
-    ->
-    int **)
+(** val aeval : state -> aexp -> int **)
 
 let rec aeval st = function
-| ANum n0 ->
-  n0
-| AId x ->
-  st
-    x
-| APlus (a1,
-         a2) ->
-  plus
-    (aeval
-      st
-      a1)
-    (aeval
-      st
-      a2)
-| AMinus (a1,
-          a2) ->
-  minus
-    (aeval
-      st
-      a1)
-    (aeval
-      st
-      a2)
-| AMult (a1,
-         a2) ->
-  mult
-    (aeval
-      st
-      a1)
-    (aeval
-      st
-      a2)
+| ANum n0 -> n0
+| AId x -> st x
+| APlus (a1, a2) -> plus (aeval st a1) (aeval st a2)
+| AMinus (a1, a2) -> minus (aeval st a1) (aeval st a2)
+| AMult (a1, a2) -> mult (aeval st a1) (aeval st a2)
 
-(** val beval :
-    state
-    ->
-    bexp
-    ->
-    bool **)
+(** val beval : state -> bexp -> bool **)
 
 let rec beval st = function
-| BTrue ->
-  true
-| BFalse ->
-  false
-| BEq (a1,
-       a2) ->
-  beq_nat
-    (aeval
-      st
-      a1)
-    (aeval
-      st
-      a2)
-| BLe (a1,
-       a2) ->
-  ble_nat
-    (aeval
-      st
-      a1)
-    (aeval
-      st
-      a2)
-| BNot b1 ->
-  negb
-    (beval
-      st
-      b1)
-| BAnd (b1,
-        b2) ->
-  if beval
-       st
-       b1
-  then beval
-         st
-         b2
-  else false
+| BTrue -> true
+| BFalse -> false
+| BEq (a1, a2) -> beq_nat (aeval st a1) (aeval st a2)
+| BLe (a1, a2) -> ble_nat (aeval st a1) (aeval st a2)
+| BNot b1 -> negb (beval st b1)
+| BAnd (b1, b2) -> if beval st b1 then beval st b2 else false
 
 type com =
 | CSkip
-| CAss of id
-   * aexp
-| CSeq of com
-   * com
-| CIf of bexp
-   * com
-   * com
-| CWhile of bexp
-   * com
+| CAss of id * aexp
+| CSeq of com * com
+| CIf of bexp * com * com
+| CWhile of bexp * com
 
-(** val ceval_step :
-    state
-    ->
-    com
-    ->
-    int
-    ->
-    state
-    option **)
+(** val ceval_step : state -> com -> int -> state option **)
 
 let rec ceval_step st c i =
   (fun zero succ n ->
@@ -3926,1028 +2267,362 @@ let rec ceval_step st c i =
     None)
     (fun i' ->
     match c with
-    | CSkip ->
-      Some
-        st
-    | CAss (l,
-            a1) ->
-      Some
-        (update
-          st
-          l
-          (aeval
-            st
-            a1))
-    | CSeq (c1,
-            c2) ->
-      (match ceval_step
-               st
-               c1
-               i' with
-       | Some st' ->
-         ceval_step
-           st'
-           c2
-           i'
-       | None ->
-         None)
-    | CIf (b,
-           c1,
-           c2) ->
-      if beval
-           st
-           b
-      then ceval_step
-             st
-             c1
-             i'
-      else ceval_step
-             st
-             c2
-             i'
-    | CWhile (b1,
-              c1) ->
-      if beval
-           st
-           b1
-      then (match ceval_step
-                    st
-                    c1
-                    i' with
-            | Some st' ->
-              ceval_step
-                st'
-                c
-                i'
-            | None ->
-              None)
-      else Some
-             st)
+    | CSkip -> Some st
+    | CAss (l, a1) -> Some (update st l (aeval st a1))
+    | CSeq (c1, c2) ->
+      (match ceval_step st c1 i' with
+       | Some st' -> ceval_step st' c2 i'
+       | None -> None)
+    | CIf (b, c1, c2) ->
+      if beval st b then ceval_step st c1 i' else ceval_step st c2 i'
+    | CWhile (b1, c1) ->
+      if beval st b1
+      then (match ceval_step st c1 i' with
+            | Some st' -> ceval_step st' c i'
+            | None -> None)
+      else Some st)
     i
 
-(** val n_of_digits :
-    bool
-    list
-    ->
-    n **)
+(** val n_of_digits : bool list -> n **)
 
 let rec n_of_digits = function
-| Nil ->
-  N0
-| Cons (b,
-        l') ->
-  N.add
-    (if b
-     then Npos
-            XH
-     else N0)
-    (N.mul
-      (Npos
-      (XO
-      XH))
-      (n_of_digits
-        l'))
+| Nil -> N0
+| Cons (b, l') ->
+  N.add (if b then Npos XH else N0) (N.mul (Npos (XO XH)) (n_of_digits l'))
 
-(** val n_of_ascii :
-    char
-    ->
-    n **)
+(** val n_of_ascii : char -> n **)
 
 let n_of_ascii a =
   (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
     (fun a0 a1 a2 a3 a4 a5 a6 a7 ->
-    n_of_digits
-      (Cons
-      (a0,
-      (Cons
-      (a1,
-      (Cons
-      (a2,
-      (Cons
-      (a3,
-      (Cons
-      (a4,
-      (Cons
-      (a5,
-      (Cons
-      (a6,
-      (Cons
-      (a7,
-      Nil)))))))))))))))))
+    n_of_digits (Cons (a0, (Cons (a1, (Cons (a2, (Cons (a3, (Cons (a4, (Cons
+      (a5, (Cons (a6, (Cons (a7, Nil)))))))))))))))))
     a
 
-(** val nat_of_ascii :
-    char
-    ->
-    int **)
+(** val nat_of_ascii : char -> int **)
 
 let nat_of_ascii a =
-  N.to_nat
-    (n_of_ascii
-      a)
+  N.to_nat (n_of_ascii a)
 
 type string =
 | EmptyString
-| String of char
-   * string
+| String of char * string
 
-(** val string_dec :
-    string
-    ->
-    string
-    ->
-    bool **)
+(** val string_dec : string -> string -> bool **)
 
 let rec string_dec s s0 =
   match s with
   | EmptyString ->
     (match s0 with
-     | EmptyString ->
-       true
-     | String (a,
-               s1) ->
-       false)
-  | String (a,
-            s1) ->
+     | EmptyString -> true
+     | String (a, s1) -> false)
+  | String (a, s1) ->
     (match s0 with
-     | EmptyString ->
-       false
-     | String (a0,
-               s2) ->
-       if (=)
-            a
-            a0
-       then string_dec
-              s1
-              s2
-       else false)
+     | EmptyString -> false
+     | String (a0, s2) -> if (=) a a0 then string_dec s1 s2 else false)
 
-(** val append :
-    string
-    ->
-    string
-    ->
-    string **)
+(** val append : string -> string -> string **)
 
 let rec append s1 s2 =
   match s1 with
-  | EmptyString ->
-    s2
-  | String (c,
-            s1') ->
-    String
-      (c,
-      (append
-        s1'
-        s2))
+  | EmptyString -> s2
+  | String (c, s1') -> String (c, (append s1' s2))
 
-(** val isWhite :
-    char
-    ->
-    bool **)
+(** val isWhite : char -> bool **)
 
 let isWhite c =
-  let n0 =
-    nat_of_ascii
-      c
-  in
-  if if beq_nat
-          n0
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
+  let n0 = nat_of_ascii c in
+  if if beq_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1)
           0))))))))))))))))))))))))))))))))
      then true
-     else beq_nat
-            n0
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            0)))))))))
+     else beq_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1) 0)))))))))
   then true
-  else if beq_nat
-            n0
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            0))))))))))
+  else if beq_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) 0))))))))))
        then true
-       else beq_nat
-              n0
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              0)))))))))))))
+       else beq_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) 0)))))))))))))
 
-(** val isLowerAlpha :
-    char
-    ->
-    bool **)
+(** val isLowerAlpha : char -> bool **)
 
 let isLowerAlpha c =
-  let n0 =
-    nat_of_ascii
-      c
-  in
-  if ble_nat
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
+  let n0 = nat_of_ascii c in
+  if ble_nat ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
        ((fun x -> x + 1)
        0)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
        n0
-  then ble_nat
-         n0
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
+  then ble_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1)
          0))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
   else false
 
-(** val isAlpha :
-    char
-    ->
-    bool **)
+(** val isAlpha : char -> bool **)
 
 let isAlpha c =
-  let n0 =
-    nat_of_ascii
-      c
-  in
-  if if ble_nat
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
-          ((fun x -> x + 1)
+  let n0 = nat_of_ascii c in
+  if if ble_nat ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+          ((fun x -> x + 1) ((fun x -> x + 1)
           0)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
           n0
-     then ble_nat
-            n0
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
+     then ble_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
             0))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
      else false
   then true
-  else if ble_nat
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
-            ((fun x -> x + 1)
+  else if ble_nat ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+            ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
             ((fun x -> x + 1)
             0)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
             n0
-       then ble_nat
-              n0
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
-              ((fun x -> x + 1)
+       then ble_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+              ((fun x -> x + 1) ((fun x -> x + 1)
               0))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
        else false
 
-(** val isDigit :
-    char
-    ->
-    bool **)
+(** val isDigit : char -> bool **)
 
 let isDigit c =
-  let n0 =
-    nat_of_ascii
-      c
-  in
-  if ble_nat
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       ((fun x -> x + 1)
-       0))))))))))))))))))))))))))))))))))))))))))))))))
-       n0
-  then ble_nat
-         n0
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
-         ((fun x -> x + 1)
+  let n0 = nat_of_ascii c in
+  if ble_nat ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+       0)))))))))))))))))))))))))))))))))))))))))))))))) n0
+  then ble_nat n0 ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
+         ((fun x -> x + 1) ((fun x -> x + 1) ((fun x -> x + 1)
          0)))))))))))))))))))))))))))))))))))))))))))))))))))))))))
   else false
 
@@ -4957,2099 +2632,840 @@ type chartype =
 | Digit
 | Other
 
-(** val classifyChar :
-    char
-    ->
-    chartype **)
+(** val classifyChar : char -> chartype **)
 
 let classifyChar c =
-  if isWhite
-       c
+  if isWhite c
   then White
-  else if isAlpha
-            c
-       then Alpha
-       else if isDigit
-                 c
-            then Digit
-            else Other
+  else if isAlpha c then Alpha else if isDigit c then Digit else Other
 
-(** val list_of_string :
-    string
-    ->
-    char
-    list **)
+(** val list_of_string : string -> char list **)
 
 let rec list_of_string = function
-| EmptyString ->
-  Nil
-| String (c,
-          s0) ->
-  Cons
-    (c,
-    (list_of_string
-      s0))
+| EmptyString -> Nil
+| String (c, s0) -> Cons (c, (list_of_string s0))
 
-(** val string_of_list :
-    char
-    list
-    ->
-    string **)
+(** val string_of_list : char list -> string **)
 
 let rec string_of_list xs =
-  fold_right
-    (fun x x0 ->
-    String
-    (x,
-    x0))
-    EmptyString
-    xs
+  fold_right (fun x x0 -> String (x, x0)) EmptyString xs
 
-type token
-  =
-  string
+type token = string
 
 (** val tokenize_helper :
-    chartype
-    ->
-    char
-    list
-    ->
-    char
-    list
-    ->
-    char
-    list
-    list **)
+    chartype -> char list -> char list -> char list list **)
 
 let rec tokenize_helper cls acc xs =
   let tk =
     match acc with
-    | Nil ->
-      Nil
-    | Cons (a,
-            l) ->
-      Cons
-        ((rev
-           acc),
-        Nil)
+    | Nil -> Nil
+    | Cons (a, l) -> Cons ((rev acc), Nil)
   in
   (match xs with
-   | Nil ->
-     tk
-   | Cons (x,
-           xs') ->
+   | Nil -> tk
+   | Cons (x, xs') ->
      (match cls with
       | White ->
-        (match classifyChar
-                 x with
+        (match classifyChar x with
          | White ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs'))
              x
          | Other ->
-           let tp =
-             Other
-           in
+           let tp = Other in
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs'))
              x
          | x0 ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           x0
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                x0
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          x0
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper x0 (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    x0
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper x0 (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         x0
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               x0
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     x0
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper x0
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper x0 (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper x0 (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           x0
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                x0
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          x0
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper x0 (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    x0
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper x0 (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         x0
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               x0
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     x0
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper x0
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper x0 (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper x0 (Cons (x, Nil)) xs'))
              x)
       | Alpha ->
-        (match classifyChar
-                 x with
+        (match classifyChar x with
          | White ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs'))
              x
          | Alpha ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then tokenize_helper
-                         Alpha
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Alpha (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Alpha
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Alpha (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Alpha
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Alpha (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Alpha
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Alpha (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Alpha
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Alpha
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Alpha
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs'
+                                                then tokenize_helper Alpha
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Alpha (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Alpha (Cons (x, acc)) xs'
              else if b0
-                  then tokenize_helper
-                         Alpha
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Alpha (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Alpha
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Alpha (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Alpha
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Alpha (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Alpha
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Alpha (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Alpha
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Alpha
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Alpha
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs')
+                                                then tokenize_helper Alpha
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Alpha (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Alpha (Cons (x, acc)) xs')
              x
          | Digit ->
-           let tp =
-             Digit
-           in
+           let tp = Digit in
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs'))
              x
          | Other ->
-           let tp =
-             Other
-           in
+           let tp = Other in
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs'))
              x)
       | Digit ->
-        (match classifyChar
-                 x with
+        (match classifyChar x with
          | White ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs'))
              x
          | Alpha ->
-           let tp =
-             Alpha
-           in
+           let tp = Alpha in
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs'))
              x
          | Digit ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then tokenize_helper
-                         Digit
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Digit (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Digit
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Digit (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Digit
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Digit (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Digit
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Digit (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Digit
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Digit
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Digit
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs'
+                                                then tokenize_helper Digit
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Digit (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Digit (Cons (x, acc)) xs'
              else if b0
-                  then tokenize_helper
-                         Digit
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Digit (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Digit
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Digit (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Digit
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Digit (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Digit
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Digit (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Digit
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Digit
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Digit
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs')
+                                                then tokenize_helper Digit
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Digit (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Digit (Cons (x, acc)) xs')
              x
          | Other ->
-           let tp =
-             Other
-           in
+           let tp = Other in
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           tp
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                tp
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper tp (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          tp
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper tp (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    tp
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper tp (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         tp
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               tp
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     tp
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper tp
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper tp (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper tp (Cons (x, Nil)) xs'))
              x)
       | Other ->
-        (match classifyChar
-                 x with
+        (match classifyChar x with
          | White ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           White
-                           Nil
-                           xs')
+                  then app tk (tokenize_helper White Nil xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                White
-                                Nil
-                                xs')
+                       then app tk (tokenize_helper White Nil xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          White
-                                          Nil
-                                          xs')
+                                 then app tk (tokenize_helper White Nil xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    White
-                                                    Nil
+                                           then app tk
+                                                  (tokenize_helper White Nil
                                                     xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         White
-                                                         Nil
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               White
-                                               Nil
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     White
-                                     Nil
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper White
+                                                         Nil xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper White Nil xs')
+                            else app tk (tokenize_helper White Nil xs'))
              x
          | Other ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then tokenize_helper
-                         Other
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Other (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Other
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Other (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Other
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Other (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Other
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Other (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Other
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Other
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Other
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs'
+                                                then tokenize_helper Other
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Other (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Other (Cons (x, acc)) xs'
              else if b0
-                  then tokenize_helper
-                         Other
-                         (Cons
-                         (x,
-                         acc))
-                         xs'
+                  then tokenize_helper Other (Cons (x, acc)) xs'
                   else if b1
-                       then tokenize_helper
-                              Other
-                              (Cons
-                              (x,
-                              acc))
-                              xs'
+                       then tokenize_helper Other (Cons (x, acc)) xs'
                        else if b2
                             then if b3
-                                 then tokenize_helper
-                                        Other
-                                        (Cons
-                                        (x,
-                                        acc))
+                                 then tokenize_helper Other (Cons (x, acc))
                                         xs'
                                  else if b4
                                       then if b5
-                                           then tokenize_helper
-                                                  Other
-                                                  (Cons
-                                                  (x,
-                                                  acc))
-                                                  xs'
+                                           then tokenize_helper Other (Cons
+                                                  (x, acc)) xs'
                                            else if b6
-                                                then tokenize_helper
-                                                       Other
-                                                       (Cons
-                                                       (x,
-                                                       acc))
-                                                       xs'
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else tokenize_helper
-                                             Other
-                                             (Cons
-                                             (x,
-                                             acc))
-                                             xs'
-                            else tokenize_helper
-                                   Other
-                                   (Cons
-                                   (x,
-                                   acc))
-                                   xs')
+                                                then tokenize_helper Other
+                                                       (Cons (x, acc)) xs'
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else tokenize_helper Other (Cons (x,
+                                             acc)) xs'
+                            else tokenize_helper Other (Cons (x, acc)) xs')
              x
          | x0 ->
            (* If this appears, you're using Ascii internals. Please don't *) (fun f c -> let n = Char.code c in let h i = (n land (1 lsl i)) <> 0 in f (h 0) (h 1) (h 2) (h 3) (h 4) (h 5) (h 6) (h 7))
              (fun b b0 b1 b2 b3 b4 b5 b6 ->
              if b
              then if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           x0
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                x0
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          x0
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper x0 (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    x0
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper x0 (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         x0
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       (')',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               x0
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     x0
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs')
+                                                then app tk
+                                                       (tokenize_helper x0
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       (')', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper x0 (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper x0 (Cons (x, Nil)) xs')
              else if b0
-                  then app
-                         tk
-                         (tokenize_helper
-                           x0
-                           (Cons
-                           (x,
-                           Nil))
-                           xs')
+                  then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                   else if b1
-                       then app
-                              tk
-                              (tokenize_helper
-                                x0
-                                (Cons
-                                (x,
-                                Nil))
-                                xs')
+                       then app tk (tokenize_helper x0 (Cons (x, Nil)) xs')
                        else if b2
                             then if b3
-                                 then app
-                                        tk
-                                        (tokenize_helper
-                                          x0
-                                          (Cons
-                                          (x,
-                                          Nil))
+                                 then app tk
+                                        (tokenize_helper x0 (Cons (x, Nil))
                                           xs')
                                  else if b4
                                       then if b5
-                                           then app
-                                                  tk
-                                                  (tokenize_helper
-                                                    x0
-                                                    (Cons
-                                                    (x,
-                                                    Nil))
-                                                    xs')
+                                           then app tk
+                                                  (tokenize_helper x0 (Cons
+                                                    (x, Nil)) xs')
                                            else if b6
-                                                then app
-                                                       tk
-                                                       (tokenize_helper
-                                                         x0
-                                                         (Cons
-                                                         (x,
-                                                         Nil))
-                                                         xs')
-                                                else app
-                                                       tk
-                                                       (Cons
-                                                       ((Cons
-                                                       ('(',
-                                                       Nil)),
-                                                       (tokenize_helper
-                                                         Other
-                                                         Nil
-                                                         xs')))
-                                      else app
-                                             tk
-                                             (tokenize_helper
-                                               x0
-                                               (Cons
-                                               (x,
-                                               Nil))
-                                               xs')
-                            else app
-                                   tk
-                                   (tokenize_helper
-                                     x0
-                                     (Cons
-                                     (x,
-                                     Nil))
-                                     xs'))
+                                                then app tk
+                                                       (tokenize_helper x0
+                                                         (Cons (x, Nil)) xs')
+                                                else app tk (Cons ((Cons
+                                                       ('(', Nil)),
+                                                       (tokenize_helper Other
+                                                         Nil xs')))
+                                      else app tk
+                                             (tokenize_helper x0 (Cons (x,
+                                               Nil)) xs')
+                            else app tk
+                                   (tokenize_helper x0 (Cons (x, Nil)) xs'))
              x)))
 
-(** val tokenize :
-    string
-    ->
-    string
-    list **)
+(** val tokenize : string -> string list **)
 
 let tokenize s =
-  map
-    string_of_list
-    (tokenize_helper
-      White
-      Nil
-      (list_of_string
-        s))
+  map string_of_list (tokenize_helper White Nil (list_of_string s))
 
 type 'x optionE =
 | SomeE of 'x
 | NoneE of string
 
-(** val build_symtable :
-    token
-    list
-    ->
-    int
-    ->
-    token
-    ->
-    int **)
+(** val build_symtable : token list -> int -> token -> int **)
 
 let rec build_symtable xs n0 =
   match xs with
-  | Nil ->
-    (fun s ->
-      n0)
-  | Cons (x,
-          xs0) ->
-    if forallb
-         isLowerAlpha
-         (list_of_string
-           x)
+  | Nil -> (fun s -> n0)
+  | Cons (x, xs0) ->
+    if forallb isLowerAlpha (list_of_string x)
     then (fun s ->
-           if string_dec
-                s
-                x
+           if string_dec s x
            then n0
-           else build_symtable
-                  xs0
-                  ((fun x -> x + 1)
-                  n0)
-                  s)
-    else build_symtable
-           xs0
-           n0
+           else build_symtable xs0 ((fun x -> x + 1) n0) s)
+    else build_symtable xs0 n0
 
-type 't parser0
-  =
-  token
-  list
-  ->
-  ('t,
-  token
-  list)
-  prod
-  optionE
+type 't parser0 = token list -> ('t, token list) prod optionE
 
 (** val many_helper :
     'a1 parser0 -> 'a1 list -> int -> token list -> ('a1 list, token list)
